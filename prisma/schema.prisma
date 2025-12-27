@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client"
+  output   = ".generated/"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Admin model - simple authentication with email and secret key
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  secretKey String   
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model TopCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "Craft", "Lists"
+  order       Int      @default(0) // For ordering in sidebar
+  isVisible   Boolean  @default(true)
+  
+  // Relationships
+  subsections Subsection[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+
+model Subsection {
+  id          String   @id @default(cuid())
+  name        String   // e.g., "Writing", "Reading", "Software"
+  slug        String   @unique // e.g., "writing", "reading", "software"
+  icon        String  // Icon identifier 
+  order       Int      @default(0) // For ordering within the top category
+  isVisible   Boolean  @default(true)
+  postCount   Int      @default(0) 
+  
+  topCategoryId String
+  topCategory   TopCategory @relation(fields: [topCategoryId], references: [id], onDelete: Cascade)
+  
+  // Relationships
+  posts       Post[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([topCategoryId])
+  @@index([order])
+}
+
+// Post model - individual blog posts/articles
+model Post {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text // Full content in markdown or rich text
+  excerpt     String?  @db.Text // Short preview
+  coverImage  String?  // URL to cover image
+  
+  // Publishing
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  
+  // Subsection relationship
+  subsectionId String
+  subsection   Subsection @relation(fields: [subsectionId], references: [id])
+  
+  tags        Tag[]
+  
+  // Metadata
+  views       Int      @default(0)
+  readTime    Int?     
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([subsectionId])
+  @@index([published])
+  @@index([publishedAt])
+}
+
+// Tag model - for organizing posts with tags
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
