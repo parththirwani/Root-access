@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
         if (!parsedData.success) {
             return NextResponse.json(
-                { message: "Invalid credentials" },
+                { message: "Invalid input or missing inputs" },
                 { status: 403 }
             )
         }
