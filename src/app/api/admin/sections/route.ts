@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
             )
         }
 
-        const { name, isVisble } = parsedData.data
+        const { name, isVisible } = parsedData.data
 
         const existingSection = await prisma.topCategory.findUnique({
             where: { name }
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         const section = await prisma.topCategory.create({
             data: {
                 name: name,
-                isVisible: isVisble
+                isVisible: isVisible
             }
         })
 

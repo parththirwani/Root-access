@@ -35,7 +35,7 @@ model TopCategory {
 model Subsection {
   id          String   @id @default(cuid())
   name        String   // e.g., "Writing", "Reading", "Software"
-  slug        String   @unique // e.g., "writing", "reading", "software"
+  slug        String   @unique 
   icon        String  // Icon identifier 
   isVisible   Boolean  @default(true)
   postCount   Int      @default(0) 
