@@ -21,7 +21,6 @@ model Admin {
 model TopCategory {
   id          String   @id @default(cuid())
   name        String   @unique // e.g. "Craft", "Lists"
-  order       Int      @default(0) // For ordering in sidebar
   isVisible   Boolean  @default(true)
   
   // Relationships
@@ -30,7 +29,6 @@ model TopCategory {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@index([order])
 }
 
 
@@ -39,7 +37,6 @@ model Subsection {
   name        String   // e.g., "Writing", "Reading", "Software"
   slug        String   @unique // e.g., "writing", "reading", "software"
   icon        String  // Icon identifier 
-  order       Int      @default(0) // For ordering within the top category
   isVisible   Boolean  @default(true)
   postCount   Int      @default(0) 
   
@@ -54,7 +51,6 @@ model Subsection {
 
   @@index([slug])
   @@index([topCategoryId])
-  @@index([order])
 }
 
 // Post model - individual blog posts/articles

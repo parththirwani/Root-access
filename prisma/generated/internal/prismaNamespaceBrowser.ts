@@ -89,7 +89,6 @@ export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof Ad
 export const TopCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  order: 'order',
   isVisible: 'isVisible',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -103,7 +102,6 @@ export const SubsectionScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   icon: 'icon',
-  order: 'order',
   isVisible: 'isVisible',
   postCount: 'postCount',
   topCategoryId: 'topCategoryId',

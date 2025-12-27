@@ -20,24 +20,13 @@ export type TopCategoryModel = runtime.Types.Result.DefaultSelection<Prisma.$Top
 
 export type AggregateTopCategory = {
   _count: TopCategoryCountAggregateOutputType | null
-  _avg: TopCategoryAvgAggregateOutputType | null
-  _sum: TopCategorySumAggregateOutputType | null
   _min: TopCategoryMinAggregateOutputType | null
   _max: TopCategoryMaxAggregateOutputType | null
-}
-
-export type TopCategoryAvgAggregateOutputType = {
-  order: number | null
-}
-
-export type TopCategorySumAggregateOutputType = {
-  order: number | null
 }
 
 export type TopCategoryMinAggregateOutputType = {
   id: string | null
   name: string | null
-  order: number | null
   isVisible: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -46,7 +35,6 @@ export type TopCategoryMinAggregateOutputType = {
 export type TopCategoryMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  order: number | null
   isVisible: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,7 +43,6 @@ export type TopCategoryMaxAggregateOutputType = {
 export type TopCategoryCountAggregateOutputType = {
   id: number
   name: number
-  order: number
   isVisible: number
   createdAt: number
   updatedAt: number
@@ -63,18 +50,9 @@ export type TopCategoryCountAggregateOutputType = {
 }
 
 
-export type TopCategoryAvgAggregateInputType = {
-  order?: true
-}
-
-export type TopCategorySumAggregateInputType = {
-  order?: true
-}
-
 export type TopCategoryMinAggregateInputType = {
   id?: true
   name?: true
-  order?: true
   isVisible?: true
   createdAt?: true
   updatedAt?: true
@@ -83,7 +61,6 @@ export type TopCategoryMinAggregateInputType = {
 export type TopCategoryMaxAggregateInputType = {
   id?: true
   name?: true
-  order?: true
   isVisible?: true
   createdAt?: true
   updatedAt?: true
@@ -92,7 +69,6 @@ export type TopCategoryMaxAggregateInputType = {
 export type TopCategoryCountAggregateInputType = {
   id?: true
   name?: true
-  order?: true
   isVisible?: true
   createdAt?: true
   updatedAt?: true
@@ -137,18 +113,6 @@ export type TopCategoryAggregateArgs<ExtArgs extends runtime.Types.Extensions.In
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: TopCategoryAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: TopCategorySumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: TopCategoryMinAggregateInputType
@@ -179,8 +143,6 @@ export type TopCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   _count?: TopCategoryCountAggregateInputType | true
-  _avg?: TopCategoryAvgAggregateInputType
-  _sum?: TopCategorySumAggregateInputType
   _min?: TopCategoryMinAggregateInputType
   _max?: TopCategoryMaxAggregateInputType
 }
@@ -188,13 +150,10 @@ export type TopCategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 export type TopCategoryGroupByOutputType = {
   id: string
   name: string
-  order: number
   isVisible: boolean
   createdAt: Date
   updatedAt: Date
   _count: TopCategoryCountAggregateOutputType | null
-  _avg: TopCategoryAvgAggregateOutputType | null
-  _sum: TopCategorySumAggregateOutputType | null
   _min: TopCategoryMinAggregateOutputType | null
   _max: TopCategoryMaxAggregateOutputType | null
 }
@@ -220,7 +179,6 @@ export type TopCategoryWhereInput = {
   NOT?: Prisma.TopCategoryWhereInput | Prisma.TopCategoryWhereInput[]
   id?: Prisma.StringFilter<"TopCategory"> | string
   name?: Prisma.StringFilter<"TopCategory"> | string
-  order?: Prisma.IntFilter<"TopCategory"> | number
   isVisible?: Prisma.BoolFilter<"TopCategory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TopCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TopCategory"> | Date | string
@@ -230,7 +188,6 @@ export type TopCategoryWhereInput = {
 export type TopCategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -243,7 +200,6 @@ export type TopCategoryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TopCategoryWhereInput | Prisma.TopCategoryWhereInput[]
   OR?: Prisma.TopCategoryWhereInput[]
   NOT?: Prisma.TopCategoryWhereInput | Prisma.TopCategoryWhereInput[]
-  order?: Prisma.IntFilter<"TopCategory"> | number
   isVisible?: Prisma.BoolFilter<"TopCategory"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TopCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TopCategory"> | Date | string
@@ -253,15 +209,12 @@ export type TopCategoryWhereUniqueInput = Prisma.AtLeast<{
 export type TopCategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TopCategoryCountOrderByAggregateInput
-  _avg?: Prisma.TopCategoryAvgOrderByAggregateInput
   _max?: Prisma.TopCategoryMaxOrderByAggregateInput
   _min?: Prisma.TopCategoryMinOrderByAggregateInput
-  _sum?: Prisma.TopCategorySumOrderByAggregateInput
 }
 
 export type TopCategoryScalarWhereWithAggregatesInput = {
@@ -270,7 +223,6 @@ export type TopCategoryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TopCategoryScalarWhereWithAggregatesInput | Prisma.TopCategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"TopCategory"> | string
   name?: Prisma.StringWithAggregatesFilter<"TopCategory"> | string
-  order?: Prisma.IntWithAggregatesFilter<"TopCategory"> | number
   isVisible?: Prisma.BoolWithAggregatesFilter<"TopCategory"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TopCategory"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TopCategory"> | Date | string
@@ -279,7 +231,6 @@ export type TopCategoryScalarWhereWithAggregatesInput = {
 export type TopCategoryCreateInput = {
   id?: string
   name: string
-  order?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -289,7 +240,6 @@ export type TopCategoryCreateInput = {
 export type TopCategoryUncheckedCreateInput = {
   id?: string
   name: string
-  order?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -299,7 +249,6 @@ export type TopCategoryUncheckedCreateInput = {
 export type TopCategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -309,7 +258,6 @@ export type TopCategoryUpdateInput = {
 export type TopCategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -319,7 +267,6 @@ export type TopCategoryUncheckedUpdateInput = {
 export type TopCategoryCreateManyInput = {
   id?: string
   name: string
-  order?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -328,7 +275,6 @@ export type TopCategoryCreateManyInput = {
 export type TopCategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -337,7 +283,6 @@ export type TopCategoryUpdateManyMutationInput = {
 export type TopCategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -346,20 +291,14 @@ export type TopCategoryUncheckedUpdateManyInput = {
 export type TopCategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type TopCategoryAvgOrderByAggregateInput = {
-  order?: Prisma.SortOrder
-}
-
 export type TopCategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -368,27 +307,14 @@ export type TopCategoryMaxOrderByAggregateInput = {
 export type TopCategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type TopCategorySumOrderByAggregateInput = {
-  order?: Prisma.SortOrder
-}
-
 export type TopCategoryScalarRelationFilter = {
   is?: Prisma.TopCategoryWhereInput
   isNot?: Prisma.TopCategoryWhereInput
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -412,7 +338,6 @@ export type TopCategoryUpdateOneRequiredWithoutSubsectionsNestedInput = {
 export type TopCategoryCreateWithoutSubsectionsInput = {
   id?: string
   name: string
-  order?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -421,7 +346,6 @@ export type TopCategoryCreateWithoutSubsectionsInput = {
 export type TopCategoryUncheckedCreateWithoutSubsectionsInput = {
   id?: string
   name: string
-  order?: number
   isVisible?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -446,7 +370,6 @@ export type TopCategoryUpdateToOneWithWhereWithoutSubsectionsInput = {
 export type TopCategoryUpdateWithoutSubsectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -455,7 +378,6 @@ export type TopCategoryUpdateWithoutSubsectionsInput = {
 export type TopCategoryUncheckedUpdateWithoutSubsectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -495,7 +417,6 @@ export type TopCategoryCountOutputTypeCountSubsectionsArgs<ExtArgs extends runti
 export type TopCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  order?: boolean
   isVisible?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -506,7 +427,6 @@ export type TopCategorySelect<ExtArgs extends runtime.Types.Extensions.InternalA
 export type TopCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  order?: boolean
   isVisible?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -515,7 +435,6 @@ export type TopCategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
 export type TopCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
-  order?: boolean
   isVisible?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -524,13 +443,12 @@ export type TopCategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type TopCategorySelectScalar = {
   id?: boolean
   name?: boolean
-  order?: boolean
   isVisible?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TopCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "order" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["topCategory"]>
+export type TopCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isVisible" | "createdAt" | "updatedAt", ExtArgs["result"]["topCategory"]>
 export type TopCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subsections?: boolean | Prisma.TopCategory$subsectionsArgs<ExtArgs>
   _count?: boolean | Prisma.TopCategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -546,7 +464,6 @@ export type $TopCategoryPayload<ExtArgs extends runtime.Types.Extensions.Interna
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    order: number
     isVisible: boolean
     createdAt: Date
     updatedAt: Date
@@ -976,7 +893,6 @@ export interface Prisma__TopCategoryClient<T, Null = never, ExtArgs extends runt
 export interface TopCategoryFieldRefs {
   readonly id: Prisma.FieldRef<"TopCategory", 'String'>
   readonly name: Prisma.FieldRef<"TopCategory", 'String'>
-  readonly order: Prisma.FieldRef<"TopCategory", 'Int'>
   readonly isVisible: Prisma.FieldRef<"TopCategory", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"TopCategory", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TopCategory", 'DateTime'>

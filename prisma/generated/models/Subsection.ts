@@ -27,12 +27,10 @@ export type AggregateSubsection = {
 }
 
 export type SubsectionAvgAggregateOutputType = {
-  order: number | null
   postCount: number | null
 }
 
 export type SubsectionSumAggregateOutputType = {
-  order: number | null
   postCount: number | null
 }
 
@@ -41,7 +39,6 @@ export type SubsectionMinAggregateOutputType = {
   name: string | null
   slug: string | null
   icon: string | null
-  order: number | null
   isVisible: boolean | null
   postCount: number | null
   topCategoryId: string | null
@@ -54,7 +51,6 @@ export type SubsectionMaxAggregateOutputType = {
   name: string | null
   slug: string | null
   icon: string | null
-  order: number | null
   isVisible: boolean | null
   postCount: number | null
   topCategoryId: string | null
@@ -67,7 +63,6 @@ export type SubsectionCountAggregateOutputType = {
   name: number
   slug: number
   icon: number
-  order: number
   isVisible: number
   postCount: number
   topCategoryId: number
@@ -78,12 +73,10 @@ export type SubsectionCountAggregateOutputType = {
 
 
 export type SubsectionAvgAggregateInputType = {
-  order?: true
   postCount?: true
 }
 
 export type SubsectionSumAggregateInputType = {
-  order?: true
   postCount?: true
 }
 
@@ -92,7 +85,6 @@ export type SubsectionMinAggregateInputType = {
   name?: true
   slug?: true
   icon?: true
-  order?: true
   isVisible?: true
   postCount?: true
   topCategoryId?: true
@@ -105,7 +97,6 @@ export type SubsectionMaxAggregateInputType = {
   name?: true
   slug?: true
   icon?: true
-  order?: true
   isVisible?: true
   postCount?: true
   topCategoryId?: true
@@ -118,7 +109,6 @@ export type SubsectionCountAggregateInputType = {
   name?: true
   slug?: true
   icon?: true
-  order?: true
   isVisible?: true
   postCount?: true
   topCategoryId?: true
@@ -218,7 +208,6 @@ export type SubsectionGroupByOutputType = {
   name: string
   slug: string
   icon: string
-  order: number
   isVisible: boolean
   postCount: number
   topCategoryId: string
@@ -254,7 +243,6 @@ export type SubsectionWhereInput = {
   name?: Prisma.StringFilter<"Subsection"> | string
   slug?: Prisma.StringFilter<"Subsection"> | string
   icon?: Prisma.StringFilter<"Subsection"> | string
-  order?: Prisma.IntFilter<"Subsection"> | number
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
@@ -269,7 +257,6 @@ export type SubsectionOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
@@ -287,7 +274,6 @@ export type SubsectionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SubsectionWhereInput | Prisma.SubsectionWhereInput[]
   name?: Prisma.StringFilter<"Subsection"> | string
   icon?: Prisma.StringFilter<"Subsection"> | string
-  order?: Prisma.IntFilter<"Subsection"> | number
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
@@ -302,7 +288,6 @@ export type SubsectionOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
@@ -323,7 +308,6 @@ export type SubsectionScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
   icon?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
-  order?: Prisma.IntWithAggregatesFilter<"Subsection"> | number
   isVisible?: Prisma.BoolWithAggregatesFilter<"Subsection"> | boolean
   postCount?: Prisma.IntWithAggregatesFilter<"Subsection"> | number
   topCategoryId?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
@@ -336,7 +320,6 @@ export type SubsectionCreateInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   createdAt?: Date | string
@@ -350,7 +333,6 @@ export type SubsectionUncheckedCreateInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   topCategoryId: string
@@ -364,7 +346,6 @@ export type SubsectionUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,7 +359,6 @@ export type SubsectionUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -392,7 +372,6 @@ export type SubsectionCreateManyInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   topCategoryId: string
@@ -405,7 +384,6 @@ export type SubsectionUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -417,7 +395,6 @@ export type SubsectionUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -440,7 +417,6 @@ export type SubsectionCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
@@ -449,7 +425,6 @@ export type SubsectionCountOrderByAggregateInput = {
 }
 
 export type SubsectionAvgOrderByAggregateInput = {
-  order?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
 }
 
@@ -458,7 +433,6 @@ export type SubsectionMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
@@ -471,7 +445,6 @@ export type SubsectionMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   icon?: Prisma.SortOrder
-  order?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
@@ -480,7 +453,6 @@ export type SubsectionMinOrderByAggregateInput = {
 }
 
 export type SubsectionSumOrderByAggregateInput = {
-  order?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
 }
 
@@ -531,6 +503,14 @@ export type SubsectionUncheckedUpdateManyWithoutTopCategoryNestedInput = {
   deleteMany?: Prisma.SubsectionScalarWhereInput | Prisma.SubsectionScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type SubsectionCreateNestedOneWithoutPostsInput = {
   create?: Prisma.XOR<Prisma.SubsectionCreateWithoutPostsInput, Prisma.SubsectionUncheckedCreateWithoutPostsInput>
   connectOrCreate?: Prisma.SubsectionCreateOrConnectWithoutPostsInput
@@ -550,7 +530,6 @@ export type SubsectionCreateWithoutTopCategoryInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   createdAt?: Date | string
@@ -563,7 +542,6 @@ export type SubsectionUncheckedCreateWithoutTopCategoryInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   createdAt?: Date | string
@@ -605,7 +583,6 @@ export type SubsectionScalarWhereInput = {
   name?: Prisma.StringFilter<"Subsection"> | string
   slug?: Prisma.StringFilter<"Subsection"> | string
   icon?: Prisma.StringFilter<"Subsection"> | string
-  order?: Prisma.IntFilter<"Subsection"> | number
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
@@ -618,7 +595,6 @@ export type SubsectionCreateWithoutPostsInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   createdAt?: Date | string
@@ -631,7 +607,6 @@ export type SubsectionUncheckedCreateWithoutPostsInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   topCategoryId: string
@@ -660,7 +635,6 @@ export type SubsectionUpdateWithoutPostsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -673,7 +647,6 @@ export type SubsectionUncheckedUpdateWithoutPostsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -686,7 +659,6 @@ export type SubsectionCreateManyTopCategoryInput = {
   name: string
   slug: string
   icon: string
-  order?: number
   isVisible?: boolean
   postCount?: number
   createdAt?: Date | string
@@ -698,7 +670,6 @@ export type SubsectionUpdateWithoutTopCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -711,7 +682,6 @@ export type SubsectionUncheckedUpdateWithoutTopCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -724,7 +694,6 @@ export type SubsectionUncheckedUpdateManyWithoutTopCategoryInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
-  order?: Prisma.IntFieldUpdateOperationsInput | number
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -767,7 +736,6 @@ export type SubsectionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   name?: boolean
   slug?: boolean
   icon?: boolean
-  order?: boolean
   isVisible?: boolean
   postCount?: boolean
   topCategoryId?: boolean
@@ -783,7 +751,6 @@ export type SubsectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   slug?: boolean
   icon?: boolean
-  order?: boolean
   isVisible?: boolean
   postCount?: boolean
   topCategoryId?: boolean
@@ -797,7 +764,6 @@ export type SubsectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   name?: boolean
   slug?: boolean
   icon?: boolean
-  order?: boolean
   isVisible?: boolean
   postCount?: boolean
   topCategoryId?: boolean
@@ -811,7 +777,6 @@ export type SubsectionSelectScalar = {
   name?: boolean
   slug?: boolean
   icon?: boolean
-  order?: boolean
   isVisible?: boolean
   postCount?: boolean
   topCategoryId?: boolean
@@ -819,7 +784,7 @@ export type SubsectionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type SubsectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "icon" | "order" | "isVisible" | "postCount" | "topCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["subsection"]>
+export type SubsectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "icon" | "isVisible" | "postCount" | "topCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["subsection"]>
 export type SubsectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   topCategory?: boolean | Prisma.TopCategoryDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Subsection$postsArgs<ExtArgs>
@@ -843,7 +808,6 @@ export type $SubsectionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     name: string
     slug: string
     icon: string
-    order: number
     isVisible: boolean
     postCount: number
     topCategoryId: string
@@ -1278,7 +1242,6 @@ export interface SubsectionFieldRefs {
   readonly name: Prisma.FieldRef<"Subsection", 'String'>
   readonly slug: Prisma.FieldRef<"Subsection", 'String'>
   readonly icon: Prisma.FieldRef<"Subsection", 'String'>
-  readonly order: Prisma.FieldRef<"Subsection", 'Int'>
   readonly isVisible: Prisma.FieldRef<"Subsection", 'Boolean'>
   readonly postCount: Prisma.FieldRef<"Subsection", 'Int'>
   readonly topCategoryId: Prisma.FieldRef<"Subsection", 'String'>

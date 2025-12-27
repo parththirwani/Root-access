@@ -1,5 +1,5 @@
 import { prisma } from "@/src/lib/prisma";
-import { signupSchema } from "@/src/schema/adminSchema";
+import { signupSchema } from "@/src/schema/authSchema";
 
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const data = await req.json()
-        if (!data) {
+        if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
             return NextResponse.json(
                 { message: "Credentials are missing" },
                 { status: 400 }

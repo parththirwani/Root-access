@@ -832,7 +832,6 @@ export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof Ad
 export const TopCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  order: 'order',
   isVisible: 'isVisible',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -846,7 +845,6 @@ export const SubsectionScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   icon: 'icon',
-  order: 'order',
   isVisible: 'isVisible',
   postCount: 'postCount',
   topCategoryId: 'topCategoryId',
@@ -948,6 +946,13 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -958,13 +963,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
