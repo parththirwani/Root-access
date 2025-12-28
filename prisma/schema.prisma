@@ -34,7 +34,7 @@ model TopCategory {
 
 model Subsection {
   id          String   @id @default(cuid())
-  name        String   // e.g., "Writing", "Reading", "Software"
+  name        String   @unique
   slug        String   @unique 
   icon        String  // Icon identifier 
   isVisible   Boolean  @default(true)
@@ -57,6 +57,7 @@ model Subsection {
 model Post {
   id          String   @id @default(cuid())
   title       String
+  description String
   slug        String   @unique
   content     String   @db.Text // Full content in markdown or rich text
   excerpt     String?  @db.Text // Short preview

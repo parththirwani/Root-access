@@ -115,6 +115,7 @@ export type SubsectionScalarFieldEnum = (typeof SubsectionScalarFieldEnum)[keyof
 export const PostScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  description: 'description',
   slug: 'slug',
   content: 'content',
   excerpt: 'excerpt',

@@ -268,11 +268,11 @@ export type SubsectionOrderByWithRelationInput = {
 
 export type SubsectionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  name?: string
   slug?: string
   AND?: Prisma.SubsectionWhereInput | Prisma.SubsectionWhereInput[]
   OR?: Prisma.SubsectionWhereInput[]
   NOT?: Prisma.SubsectionWhereInput | Prisma.SubsectionWhereInput[]
-  name?: Prisma.StringFilter<"Subsection"> | string
   icon?: Prisma.StringFilter<"Subsection"> | string
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
@@ -281,7 +281,7 @@ export type SubsectionWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
   topCategory?: Prisma.XOR<Prisma.TopCategoryScalarRelationFilter, Prisma.TopCategoryWhereInput>
   posts?: Prisma.PostListRelationFilter
-}, "id" | "slug">
+}, "id" | "name" | "slug">
 
 export type SubsectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
