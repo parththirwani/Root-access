@@ -25,36 +25,38 @@ export function calculateReadTime(content: string, wordsPerMinute: number = 200)
 
 /**
  * Handle tag creation/retrieval for posts
- * @param tags - Array of tag names
+ * Always stores tags in UPPERCASE for consistency
+ * @param tags - Array of tag names (case-insensitive input)
  * @param prisma - Prisma client instance
  * @returns Array of tag connection objects
  */
 export async function handleTags(tags: string[], prisma: any): Promise<{ id: string }[]> {
   const tagConnections: { id: string }[] = [];
-  
+
   if (!tags || tags.length === 0) {
     return tagConnections;
   }
 
   for (const tagName of tags) {
-    const tagSlug = generateSlug(tagName);
-    
-    // Find or create tag
+    // Convert to uppercase and trim
+    const upperTagName = tagName.trim().toUpperCase();
+
+    const tagSlug = generateSlug(upperTagName);
+
     const tag = await prisma.tag.upsert({
       where: { slug: tagSlug },
-      update: {},
+      update: {}, 
       create: {
-        name: tagName,
-        slug: tagSlug
-      }
+        name: upperTagName,
+        slug: tagSlug,
+      },
     });
-    
+
     tagConnections.push({ id: tag.id });
   }
 
   return tagConnections;
 }
-
 /**
  * Generate excerpt from content if not provided
  * @param content - The full content

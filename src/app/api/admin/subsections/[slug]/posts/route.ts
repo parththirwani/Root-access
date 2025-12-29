@@ -1,7 +1,14 @@
+// app/api/admin/subsections/[slug]/posts/route.ts
+
 import { prisma } from "@/src/lib/prisma";
 import { postsSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
-import { generateSlug, calculateReadTime, handleTags, generateExcerpt } from "@/src/lib/utils";
+import {
+  generateSlug,
+  calculateReadTime,
+  handleTags,
+  generateExcerpt,
+} from "@/src/lib/utils";
 
 export async function POST(
   req: NextRequest,
@@ -9,74 +16,92 @@ export async function POST(
 ) {
   try {
     const { slug } = await params;
-    
-    const data = await req.json();
-    
-    if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
+
+    // Parse and validate request body
+    const body = await req.json();
+
+    if (!body || (typeof body === "object" && Object.keys(body).length === 0)) {
       return NextResponse.json(
-        { message: "Required details missing" },
+        { message: "Request body is required" },
         { status: 400 }
       );
     }
 
-    const parsedData = postsSchema.safeParse(data);
-    
+    const parsedData = postsSchema.safeParse(body);
+
     if (!parsedData.success) {
       return NextResponse.json(
-        { message: "Invalid input or missing inputs"},
+        {
+          message: "Invalid or missing fields",
+          errors: parsedData.error.format(),
+        },
         { status: 400 }
       );
     }
 
-    const { title, content, excerpt, coverImage, published, tags, metaTitle, metaDescription, description } = parsedData.data;
+    const {
+      title,
+      content,
+      excerpt,
+      coverImage,
+      published,
+      tags,
+      metaTitle,
+      metaDescription,
+      description,
+    } = parsedData.data;
 
-    const subSection = await prisma.subsection.findUnique({
-      where: { slug }
+    // Find the subsection by slug
+    const subsection = await prisma.subsection.findUnique({
+      where: { slug },
     });
 
-    if (!subSection) {
+    if (!subsection) {
       return NextResponse.json(
-        { message: `Subsection "${slug}" not found` },
+        { message: `Subsection with slug "${slug}" not found` },
         { status: 404 }
       );
     }
 
+    // Generate slug from title and check for uniqueness
     const postSlug = generateSlug(title);
 
     const existingPost = await prisma.post.findUnique({
-      where: { slug: postSlug }
+      where: { slug: postSlug },
     });
 
     if (existingPost) {
       return NextResponse.json(
-        { message: "A post with this title already exists" },
+        { message: `A post with the title "${title}" already exists (slug conflict)` },
         { status: 409 }
       );
     }
 
+    // Handle tags (creates or connects, now uppercase as per your previous change)
     const tagConnections = await handleTags(tags || [], prisma);
 
+    // Generate read time and excerpt
     const readTime = calculateReadTime(content);
-
     const finalExcerpt = generateExcerpt(content, excerpt);
 
+    // Create the post
     const post = await prisma.post.create({
       data: {
         title,
-        description: description,
+        description,
         slug: postSlug,
         content,
         excerpt: finalExcerpt,
         coverImage,
-        published: published || false,
+        published: published ?? false,
         publishedAt: published ? new Date() : null,
-        subsectionId: subSection.id,
         readTime,
         metaTitle: metaTitle || title,
         metaDescription: metaDescription || finalExcerpt,
+        subsectionId: subsection.id,
         tags: {
-          connect: tagConnections
-        }
+          connect: tagConnections,
+        },
       },
       include: {
         subsection: {
@@ -86,33 +111,39 @@ export async function POST(
             slug: true,
             topCategory: {
               select: {
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
-        tags: true
-      }
+        tags: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
     });
 
+    // Increment post count on subsection
     await prisma.subsection.update({
-      where: { id: subSection.id },
+      where: { id: subsection.id },
       data: {
         postCount: {
-          increment: 1
-        }
-      }
+          increment: 1,
+        },
+      },
     });
 
     return NextResponse.json(
       { message: "Post created successfully", post },
       { status: 201 }
     );
-
   } catch (err) {
     console.error("Error creating post:", err);
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }
@@ -128,8 +159,8 @@ export async function GET(
     const posts = await prisma.post.findMany({
       where: {
         subsection: {
-          slug: slug
-        }
+          slug: slug,
+        },
       },
       include: {
         subsection: {
@@ -139,27 +170,29 @@ export async function GET(
             slug: true,
             topCategory: {
               select: {
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
-        tags: true
+        tags: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: "desc",
+      },
     });
 
-    return NextResponse.json(
-      { posts },
-      { status: 200 }
-    );
-
+    return NextResponse.json({ posts }, { status: 200 });
   } catch (err) {
     console.error("Error fetching posts:", err);
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }

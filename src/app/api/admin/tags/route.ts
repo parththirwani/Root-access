@@ -1,5 +1,4 @@
 import { prisma } from "@/src/lib/prisma";
-import { generateSlug } from "@/src/lib/utils";
 import { tagsSchema } from "@/src/schema/tagSchema";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,7 +12,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
     const parsedData = tagsSchema.safeParse(data);
     if (!parsedData.success) {
       return NextResponse.json(

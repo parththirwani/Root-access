@@ -1,6 +1,5 @@
 import { prisma } from '@/src/lib/prisma';
 import { tagsSchema } from '@/src/schema/tagSchema';
-import { generateSlug } from '@/src/lib/utils';
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
