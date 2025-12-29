@@ -230,7 +230,6 @@ export async function PATCH(
   try {
     const { postSlug } = await params;
     const { published } = await req.json();
-    console.log(typeof published)
 
     if (typeof published !== "boolean") {
       return NextResponse.json(
