@@ -134,8 +134,14 @@ export async function GET(
       include: {
         subsection: {
           select: {
+            id: true,
             name: true,
-            slug: true
+            slug: true,
+            topCategory: {
+              select: {
+                name: true
+              }
+            }
           }
         },
         tags: true
