@@ -11,10 +11,21 @@ datasource db {
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
-  secretKey String   
+  secretKey String
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  profile   Profile?  
+}
+
+model Profile {
+  id             String  @id @default(cuid())
+  xLink          String?
+  instagramLink  String?
+  linkedinLink   String?
+  bio            String?
+  adminId        String  @unique  
+  admin          Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 
@@ -30,7 +41,6 @@ model TopCategory {
   updatedAt   DateTime @updatedAt
 
 }
-
 
 model Subsection {
   id          String   @id @default(cuid())

@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Tag" ALTER COLUMN "name" SET DATA TYPE CITEXT;

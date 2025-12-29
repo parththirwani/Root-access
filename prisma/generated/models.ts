@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Admin'
+export type * from './models/Profile'
 export type * from './models/TopCategory'
 export type * from './models/Subsection'
 export type * from './models/Post'

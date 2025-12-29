@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Admin: 'Admin',
+  Profile: 'Profile',
   TopCategory: 'TopCategory',
   Subsection: 'Subsection',
   Post: 'Post',
@@ -84,6 +85,18 @@ export const AdminScalarFieldEnum = {
 } as const
 
 export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof AdminScalarFieldEnum]
+
+
+export const ProfileScalarFieldEnum = {
+  id: 'id',
+  xLink: 'xLink',
+  instagramLink: 'instagramLink',
+  linkedinLink: 'linkedinLink',
+  bio: 'bio',
+  adminId: 'adminId'
+} as const
+
+export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
 
 
 export const TopCategoryScalarFieldEnum = {

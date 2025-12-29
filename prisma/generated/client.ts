@@ -45,6 +45,11 @@ export { Prisma }
  */
 export type Admin = Prisma.AdminModel
 /**
+ * Model Profile
+ * 
+ */
+export type Profile = Prisma.ProfileModel
+/**
  * Model TopCategory
  * 
  */
