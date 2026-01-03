@@ -1,8 +1,9 @@
 import { prisma } from "@/src/lib/prisma";
 import { subsectionsSchema } from "@/src/schema/subsectionsSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-export async function POST(req: NextRequest) {
+async function postHandler(req: NextRequest) {
   try {
     const data = await req.json();
     
@@ -24,7 +25,6 @@ export async function POST(req: NextRequest) {
 
     const { name, isVisible, icon, topCategoryName } = parsedData.data;
 
-    // Find the top category by name
     const topCategory = await prisma.topCategory.findUnique({
       where: { name: topCategoryName }
     });
@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if subsection already exists in this category
     const existingSubsection = await prisma.subsection.findFirst({
       where: { 
         name,
@@ -51,10 +50,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate slug from name
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 
-    // Create subsection
     const subsection = await prisma.subsection.create({
       data: {
         name,
@@ -85,3 +82,5 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export const POST = withAuth(postHandler);

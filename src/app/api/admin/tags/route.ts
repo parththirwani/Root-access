@@ -1,8 +1,9 @@
 import { prisma } from "@/src/lib/prisma";
 import { tagsSchema } from "@/src/schema/tagSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-export async function POST(req: NextRequest) {
+async function postHandler(req: NextRequest) {
   try {
     const data = await req.json();
 
@@ -35,7 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const slug = name
+    const slug = name;
 
     const existingBySlug = await prisma.tag.findUnique({
       where: { slug },
@@ -64,25 +65,28 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
-    try {
-        const tags = await prisma.tag.findMany({
-            include:{
-                posts: true
-            },
-            orderBy: {
-                createdAt: "desc"
-            }
-        })
-        return NextResponse.json(
-            { message: "Tags retrieved", tags: tags },
-            { status: 200 }
-        )
-    } catch (err) {
-        console.error("Error creating post:", err);
-        return NextResponse.json(
-            { message: "Something went wrong" },
-            { status: 500 }
-        );
-    }
+async function getHandler(req: NextRequest) {
+  try {
+    const tags = await prisma.tag.findMany({
+      include: {
+        posts: true
+      },
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+    return NextResponse.json(
+      { message: "Tags retrieved", tags: tags },
+      { status: 200 }
+    );
+  } catch (err) {
+    console.error("Error fetching tags:", err);
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 }
+    );
+  }
 }
+
+export const POST = withAuth(postHandler);
+export const GET = withAuth(getHandler);

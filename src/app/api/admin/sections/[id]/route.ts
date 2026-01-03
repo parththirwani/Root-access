@@ -1,16 +1,17 @@
 import { prisma } from "@/src/lib/prisma";
 import { updateSectionSchema } from "@/src/schema/sectionSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-export async function PUT(
+async function putHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> } 
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; 
-    
+    const { id } = await params;
+
     const data = await req.json();
-    
+
     if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
       return NextResponse.json(
         { message: "Required details missing" },
@@ -19,10 +20,10 @@ export async function PUT(
     }
 
     const parsedData = updateSectionSchema.safeParse(data);
-    
+
     if (!parsedData.success) {
       return NextResponse.json(
-        { message: "Invalid input or missing inputs"},
+        { message: "Invalid input or missing inputs" },
         { status: 400 }
       );
     }
@@ -30,7 +31,7 @@ export async function PUT(
     const { name, isVisible } = parsedData.data;
 
     const existingSection = await prisma.topCategory.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingSection) {
@@ -40,13 +41,12 @@ export async function PUT(
       );
     }
 
-    // Update the section
     const updatedSection = await prisma.topCategory.update({
       where: { id },
       data: {
         name,
-        isVisible: isVisible
-      }
+        isVisible: isVisible,
+      },
     });
 
     return NextResponse.json(
@@ -62,15 +62,15 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+async function deleteHandler(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params; 
+    const { id } = await params;
 
     const existingSection = await prisma.topCategory.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!existingSection) {
@@ -81,7 +81,7 @@ export async function DELETE(
     }
 
     await prisma.topCategory.delete({
-      where: { id }
+      where: { id },
     });
 
     return NextResponse.json(
@@ -96,3 +96,6 @@ export async function DELETE(
     );
   }
 }
+
+export const PUT = withAuth(putHandler);
+export const DELETE = withAuth(deleteHandler);

@@ -1,8 +1,7 @@
-// app/api/admin/subsections/[slug]/posts/route.ts
-
 import { prisma } from "@/src/lib/prisma";
 import { postsSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 import {
   generateSlug,
   calculateReadTime,
@@ -10,14 +9,13 @@ import {
   generateExcerpt,
 } from "@/src/lib/utils";
 
-export async function POST(
+async function postHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const { slug } = await params;
 
-    // Parse and validate request body
     const body = await req.json();
 
     if (!body || (typeof body === "object" && Object.keys(body).length === 0)) {
@@ -51,7 +49,6 @@ export async function POST(
       description,
     } = parsedData.data;
 
-    // Find the subsection by slug
     const subsection = await prisma.subsection.findUnique({
       where: { slug },
     });
@@ -63,7 +60,6 @@ export async function POST(
       );
     }
 
-    // Generate slug from title and check for uniqueness
     const postSlug = generateSlug(title);
 
     const existingPost = await prisma.post.findUnique({
@@ -77,14 +73,11 @@ export async function POST(
       );
     }
 
-    // Handle tags (creates or connects, now uppercase as per your previous change)
     const tagConnections = await handleTags(tags || [], prisma);
 
-    // Generate read time and excerpt
     const readTime = calculateReadTime(content);
     const finalExcerpt = generateExcerpt(content, excerpt);
 
-    // Create the post
     const post = await prisma.post.create({
       data: {
         title,
@@ -126,7 +119,6 @@ export async function POST(
       },
     });
 
-    // Increment post count on subsection
     await prisma.subsection.update({
       where: { id: subsection.id },
       data: {
@@ -149,7 +141,7 @@ export async function POST(
   }
 }
 
-export async function GET(
+async function getHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
@@ -197,3 +189,6 @@ export async function GET(
     );
   }
 }
+
+export const POST = withAuth(postHandler);
+export const GET = withAuth(getHandler);

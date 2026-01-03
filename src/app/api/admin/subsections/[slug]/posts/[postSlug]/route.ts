@@ -1,9 +1,10 @@
 import { prisma } from "@/src/lib/prisma";
 import { updatePostSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 import { generateSlug, calculateReadTime, handleTags, generateExcerpt } from "@/src/lib/utils";
 
-export async function GET(
+async function getHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
@@ -51,7 +52,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
+async function putHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
@@ -178,7 +179,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+async function deleteHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
@@ -223,7 +224,7 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
+async function patchHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
@@ -273,3 +274,8 @@ export async function PATCH(
     );
   }
 }
+
+export const GET = withAuth(getHandler);
+export const PUT = withAuth(putHandler);
+export const DELETE = withAuth(deleteHandler);
+export const PATCH = withAuth(patchHandler);

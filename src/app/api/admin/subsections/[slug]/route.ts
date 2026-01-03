@@ -1,8 +1,9 @@
 import { prisma } from "@/src/lib/prisma";
 import { updateSubsectionSchema } from "@/src/schema/subsectionsSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-export async function PUT(
+async function putHandler(
   req: NextRequest, 
   { params }: { params: Promise<{ slug: string }> } 
 ) {
@@ -26,7 +27,6 @@ export async function PUT(
       );
     }
 
-    // Check if subsection exists
     const subsection = await prisma.subsection.findUnique({
       where: { slug }
     });
@@ -42,7 +42,6 @@ export async function PUT(
 
     const updateData: any = {};
 
-    // Handle category name if provided
     if (topCategoryName) {
       const topCategory = await prisma.topCategory.findUnique({
         where: { name: topCategoryName }
@@ -58,12 +57,10 @@ export async function PUT(
       updateData.topCategoryId = topCategory.id; 
     }
 
-    // Handle name and slug update
     if (name) {
       updateData.name = name;
       updateData.slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
       
-      // Check if new slug already exists (and it's not the current subsection)
       const slugExists = await prisma.subsection.findUnique({
         where: { slug: updateData.slug }
       });
@@ -76,7 +73,6 @@ export async function PUT(
       }
     }
 
-    // Handle other optional fields
     if (isVisible !== undefined) {
       updateData.isVisible = isVisible;
     }
@@ -85,7 +81,6 @@ export async function PUT(
       updateData.icon = icon;
     }
 
-    // Update the subsection
     const updatedSubSection = await prisma.subsection.update({
       where: { slug }, 
       data: updateData,
@@ -116,7 +111,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+async function deleteHandler(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
@@ -166,3 +161,6 @@ export async function DELETE(
     );
   }
 }
+
+export const PUT = withAuth(putHandler);
+export const DELETE = withAuth(deleteHandler);

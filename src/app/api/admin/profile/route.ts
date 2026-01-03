@@ -2,17 +2,11 @@ import { getServerSession } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
 import { updateProfileSchema } from "@/src/schema/profileSchema";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-
-export async function GET(req: NextRequest) {
+async function getHandler(req: NextRequest) {
   try {
-    const session = await getServerSession(req);
-    if (!session || !session.userId) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const session = (req as any).session; // Attached by withAuth
 
     const profile = await prisma.profile.findUnique({
       where: { adminId: session.userId },
@@ -42,15 +36,9 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PATCH(req: NextRequest) {
+async function patchHandler(req: NextRequest) {
   try {
-    const session = await getServerSession(req);
-    if (!session || !session.userId) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const session = (req as any).session; // Attached by withAuth
 
     const body = await req.json();
     const parsed = updateProfileSchema.safeParse(body);
@@ -64,7 +52,6 @@ export async function PATCH(req: NextRequest) {
 
     const data = parsed.data;
 
-    // Upsert: create if not exists, update if exists
     const profile = await prisma.profile.upsert({
       where: { adminId: session.userId },
       update: {
@@ -94,3 +81,6 @@ export async function PATCH(req: NextRequest) {
     );
   }
 }
+
+export const GET = withAuth(getHandler);
+export const PATCH = withAuth(patchHandler);

@@ -1,8 +1,9 @@
 import { prisma } from '@/src/lib/prisma';
 import { tagsSchema } from '@/src/schema/tagSchema';
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/src/lib/authWrapper";
 
-export async function GET(
+async function getHandler(
   req: NextRequest,
   { params }: { params: Promise<{ tagSlug: string }> }
 ) {
@@ -56,7 +57,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
+async function putHandler(
   req: NextRequest,
   { params }: { params: Promise<{ tagSlug: string }> }
 ) {
@@ -81,7 +82,6 @@ export async function PUT(
 
     let { name } = parsedData.data;
 
-    // Normalize to uppercase and trim
     name = name.trim().toUpperCase();
 
     const foundTag = await prisma.tag.findUnique({
@@ -95,7 +95,6 @@ export async function PUT(
       );
     }
 
-    // Prevent updating to a name that already exists (except itself)
     if (name !== foundTag.name) {
       const existingTagWithName = await prisma.tag.findUnique({
         where: { name },
@@ -109,7 +108,7 @@ export async function PUT(
       }
     }
 
-    const newSlug = name
+    const newSlug = name;
 
     if (newSlug !== tagSlug) {
       const slugExists = await prisma.tag.findUnique({
@@ -150,7 +149,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
+async function deleteHandler(
   req: NextRequest,
   { params }: { params: Promise<{ tagSlug: string }> }
 ) {
@@ -199,3 +198,7 @@ export async function DELETE(
     );
   }
 }
+
+export const GET = withAuth(getHandler);
+export const PUT = withAuth(putHandler);
+export const DELETE = withAuth(deleteHandler);
