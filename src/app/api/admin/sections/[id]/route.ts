@@ -5,10 +5,10 @@ import { withAuth } from "@/src/lib/authWrapper";
 
 async function putHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
 
     const data = await req.json();
 
@@ -64,10 +64,10 @@ async function putHandler(
 
 async function deleteHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
 
     const existingSection = await prisma.topCategory.findUnique({
       where: { id },

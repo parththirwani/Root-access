@@ -5,10 +5,10 @@ import { withAuth } from "@/src/lib/authWrapper";
 
 async function putHandler(
   req: NextRequest, 
-  { params }: { params: Promise<{ slug: string }> } 
+  context: { params: Promise<{ slug: string }> } 
 ) {
   try {
-    const { slug } = await params;
+    const { slug } = await context.params;
     const data = await req.json();
 
     if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
@@ -113,10 +113,10 @@ async function putHandler(
 
 async function deleteHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
+    const { slug } = await context.params;
 
     const subsection = await prisma.subsection.findUnique({
       where: { slug },

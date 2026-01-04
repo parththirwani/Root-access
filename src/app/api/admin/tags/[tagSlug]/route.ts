@@ -5,10 +5,10 @@ import { withAuth } from "@/src/lib/authWrapper";
 
 async function getHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ tagSlug: string }> }
+  context: { params: Promise<{ tagSlug: string }> }
 ) {
   try {
-    const { tagSlug } = await params;
+    const { tagSlug } = await context.params;
 
     const tag = await prisma.tag.findUnique({
       where: { slug: tagSlug },
@@ -59,10 +59,10 @@ async function getHandler(
 
 async function putHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ tagSlug: string }> }
+  context: { params: Promise<{ tagSlug: string }> }
 ) {
   try {
-    const { tagSlug } = await params;
+    const { tagSlug } = await context.params;
     const data = await req.json();
 
     if (!data || (typeof data === "object" && Object.keys(data).length === 0)) {
@@ -151,10 +151,10 @@ async function putHandler(
 
 async function deleteHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ tagSlug: string }> }
+  context: { params: Promise<{ tagSlug: string }> }
 ) {
   try {
-    const { tagSlug } = await params;
+    const { tagSlug } = await context.params;
 
     const foundTag = await prisma.tag.findUnique({
       where: { slug: tagSlug },

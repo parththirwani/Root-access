@@ -11,10 +11,10 @@ import {
 
 async function postHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
+    const { slug } = await context.params;
 
     const body = await req.json();
 
@@ -143,10 +143,10 @@ async function postHandler(
 
 async function getHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params;
+    const { slug } = await context.params;
 
     const posts = await prisma.post.findMany({
       where: {

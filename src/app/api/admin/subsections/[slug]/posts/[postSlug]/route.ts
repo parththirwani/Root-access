@@ -6,10 +6,10 @@ import { generateSlug, calculateReadTime, handleTags, generateExcerpt } from "@/
 
 async function getHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
   try {
-    const { postSlug } = await params;
+    const { postSlug } = await context.params;
 
     const post = await prisma.post.findUnique({
       where: { slug: postSlug },
@@ -54,10 +54,10 @@ async function getHandler(
 
 async function putHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
   try {
-    const { postSlug } = await params;
+    const { postSlug } = await context.params;
     const data = await req.json();
 
     if (!data || Object.keys(data).length === 0) {
@@ -181,10 +181,10 @@ async function putHandler(
 
 async function deleteHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
   try {
-    const { postSlug } = await params;
+    const { postSlug } = await context.params;
 
     const existingPost = await prisma.post.findUnique({
       where: { slug: postSlug }
@@ -226,10 +226,10 @@ async function deleteHandler(
 
 async function patchHandler(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ slug: string; postSlug: string }> }
 ) {
   try {
-    const { postSlug } = await params;
+    const { postSlug } = await context.params;
     const { published } = await req.json();
 
     if (typeof published !== "boolean") {

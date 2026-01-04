@@ -1,10 +1,10 @@
 import { PostPage } from "@/src/components/public/PostPage";
 
-
-export default function Page({ 
+export default async function Page({ 
   params 
 }: { 
-  params: { slug: string; postSlug: string } 
+  params: Promise<{ slug: string; postSlug: string }> 
 }) {
-  return <PostPage slug={params.slug} postSlug={params.postSlug} />;
+  const { slug, postSlug } = await params;
+  return <PostPage slug={slug} postSlug={postSlug} />;
 }

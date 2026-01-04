@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await params; 
+    const { slug } = await context.params; 
 
     const subsection = await prisma.subsection.findUnique({
       where: {
@@ -20,6 +20,7 @@ export async function GET(
           },
           select: {
             title: true,
+            slug: true,
             publishedAt: true,
             excerpt: true,
             tags: {
