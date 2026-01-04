@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { adminApi } from '@/src/lib/api';
-
+import { useAuth } from '@/src/contexts/authContext';
 
 export function AdminLoginPage() {
   const router = useRouter();
+  const { checkAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [secretKey, setSecretKey] = useState('');
   const [error, setError] = useState('');
@@ -19,7 +21,9 @@ export function AdminLoginPage() {
 
     try {
       await adminApi.login({ email, secretKey });
-      router.push('/admin/dashboard');
+      // Update auth state before redirecting
+      await checkAuth();
+      router.push('/admin');
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -28,21 +32,21 @@ export function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
       <div className="w-full max-w-md px-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+        <h1 className="text-[28px] font-normal text-white mb-8 text-center">
           Admin Login
         </h1>
 
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg border border-gray-200">
+        <form onSubmit={handleSubmit} className="bg-[#0a0a0a] p-8 rounded-lg border border-[#1a1a1a]">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-600">
+            <div className="mb-4 p-3 bg-red-950/50 border border-red-900/50 rounded text-[13px] text-red-400">
               {error}
             </div>
           )}
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
               Email
             </label>
             <input
@@ -51,12 +55,12 @@ export function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
             />
           </div>
 
           <div className="mb-6">
-            <label htmlFor="secretKey" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="secretKey" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
               Secret Key
             </label>
             <input
@@ -65,17 +69,24 @@ export function AdminLoginPage() {
               value={secretKey}
               onChange={(e) => setSecretKey(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+            className="w-full bg-white text-[#0a0a0a] py-2 rounded-lg hover:opacity-90 transition disabled:opacity-50 text-[14px] font-medium mb-4"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
+
+          <p className="text-center text-[13px] text-[#707070]">
+            Don't have an account?{' '}
+            <Link href="/admin/signup" className="text-white hover:opacity-70 transition">
+              Sign up
+            </Link>
+          </p>
         </form>
       </div>
     </div>

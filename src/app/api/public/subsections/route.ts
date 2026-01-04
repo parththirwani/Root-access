@@ -13,14 +13,26 @@ export async function GET(req: NextRequest) {
             published: true,
           },
           select: {
+            id: true,
             title: true,
+            slug: true,
             publishedAt: true,
             excerpt: true,
-            tags: {
+            subsection: {
               select: {
+                slug: true,
                 name: true,
               },
             },
+            tags: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+          orderBy: {
+            publishedAt: "desc",
           },
         },
         topCategory: {
@@ -28,6 +40,9 @@ export async function GET(req: NextRequest) {
             name: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 

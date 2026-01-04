@@ -7,12 +7,12 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip auth check for login page
-  if (pathname === '/admin/login') {
+  // Allow public access to login and signup pages
+  if (pathname === '/admin/login' || pathname === '/admin/signup') {
     return NextResponse.next();
   }
 
-  // Check for auth token on all admin routes
+  // Check for auth token on all other admin routes
   if (pathname.startsWith('/admin')) {
     const token = request.cookies.get('auth-token')?.value;
 
@@ -24,7 +24,10 @@ export function middleware(request: NextRequest) {
       jwt.verify(token, JWT_SECRET);
       return NextResponse.next();
     } catch (error) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      // Clear invalid token
+      const response = NextResponse.redirect(new URL('/admin/login', request.url));
+      response.cookies.set('auth-token', '', { maxAge: 0 });
+      return response;
     }
   }
 

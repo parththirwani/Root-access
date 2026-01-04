@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { publicApi } from '@/src/lib/api';
 
-
 interface SubsectionPageProps {
   slug: string;
 }
 
 export function SubsectionPage({ slug }: SubsectionPageProps) {
   const [subsection, setSubsection] = useState<any>(null);
+  const [activeFilter, setActiveFilter] = useState<string>('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -30,19 +30,19 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="text-[#707070]">Loading...</div>
       </div>
     );
   }
 
   if (error || !subsection) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Not Found</h1>
-          <p className="text-gray-600 mb-6">{error || 'Subsection not found'}</p>
-          <Link href="/" className="text-gray-900 underline">
+          <h1 className="text-xl font-medium text-white mb-2">Not Found</h1>
+          <p className="text-[#707070] mb-6 text-[14px]">{error || 'Subsection not found'}</p>
+          <Link href="/" className="text-[#e5e5e5] hover:text-white transition text-[14px] underline">
             Go back home
           </Link>
         </div>
@@ -50,65 +50,110 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-white">
-      <main className="max-w-3xl mx-auto px-6 py-16">
-        <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 mb-8 inline-block">
-          ← Back
-        </Link>
+  // Get unique tags from posts
+  const allTags = new Set<string>();
+  subsection.posts?.forEach((post: any) => {
+    post.tags?.forEach((tag: any) => allTags.add(tag.name));
+  });
+  const uniqueTags = ['All', ...Array.from(allTags)];
 
-        <header className="mb-12">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-3xl">{subsection.icon}</span>
-            <h1 className="text-4xl font-bold text-gray-900">
+  // Filter posts based on active filter
+  const filteredPosts = activeFilter === 'All' 
+    ? subsection.posts 
+    : subsection.posts?.filter((post: any) => 
+        post.tags?.some((tag: any) => tag.name === activeFilter)
+      );
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="max-w-170 mx-auto px-6">
+        <main className="py-12">
+          {/* Subsection Title */}
+          <div className="mb-12">
+            <Link
+              href="/"
+              className="text-[#707070] hover:text-white transition text-[13px] mb-4 inline-block"
+            >
+              ← Home
+            </Link>
+            <h1 className="text-white text-[28px] font-normal mb-2">
               {subsection.name}
             </h1>
+            {subsection.topCategory && (
+              <p className="text-[#707070] text-[14px]">{subsection.topCategory.name}</p>
+            )}
           </div>
-          {subsection.topCategory && (
-            <p className="text-gray-600">{subsection.topCategory.name}</p>
-          )}
-        </header>
 
-        {subsection.posts && subsection.posts.length > 0 ? (
-          <div className="space-y-8">
-            {subsection.posts.map((post: any) => (
-              <article key={post.title} className="border-b border-gray-200 pb-8 last:border-0">
-                <Link href={`/${slug}/${post.slug}`} className="group">
-                  <time className="text-sm text-gray-500">
-                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
-                  </time>
-                  <h2 className="text-2xl font-semibold text-gray-900 mt-2 group-hover:underline">
-                    {post.title}
-                  </h2>
-                  {post.excerpt && (
-                    <p className="text-gray-700 mt-2 leading-relaxed">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex gap-2 mt-3">
-                      {post.tags.map((tag: any) => (
-                        <span
-                          key={tag.name}
-                          className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded"
-                        >
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </Link>
-              </article>
-            ))}
+          {/* Filter Tabs */}
+          {uniqueTags.length > 1 && (
+            <div className="mb-8 border-b border-[#1a1a1a]">
+              <div className="flex gap-6 overflow-x-auto">
+                {uniqueTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setActiveFilter(tag)}
+                    className={`pb-3 text-[14px] whitespace-nowrap border-b-2 transition ${
+                      activeFilter === tag
+                        ? 'text-white border-white'
+                        : 'text-[#707070] hover:text-white border-transparent'
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Year Header */}
+          <div className="mb-4">
+            <h2 className="text-[#707070] text-[13px] font-normal">
+              {new Date().getFullYear()}
+            </h2>
           </div>
-        ) : (
-          <p className="text-gray-600">No posts yet.</p>
-        )}
-      </main>
+
+          {/* Posts List */}
+          {filteredPosts && filteredPosts.length > 0 ? (
+            <div className="space-y-0">
+              {filteredPosts.map((post: any) => (
+                <Link
+                  key={post.title}
+                  href={`/${slug}/${post.slug}`}
+                  className="block py-4 border-b border-[#1a1a1a] hover:opacity-70 transition group"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <time className="text-[#707070] text-[13px] mb-1 block">
+                        {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </time>
+                      <h3 className="text-[#e5e5e5] text-[15px] font-normal group-hover:text-white transition">
+                        {post.title}
+                      </h3>
+                    </div>
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex gap-2 shrink-0">
+                        {post.tags.slice(0, 3).map((tag: any) => (
+                          <span
+                            key={tag.name}
+                            className="px-2 py-0.5 bg-[#1a1a1a] text-[#707070] text-[11px] rounded"
+                          >
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[#707070] text-[14px]">No posts yet.</p>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

@@ -1,2 +1,38 @@
 @import "tailwindcss";
 
+@layer base {
+  body {
+    @apply bg-[#0a0a0a] text-[#e5e5e5];
+  }
+}
+
+@layer utilities {
+  .prose {
+    @apply text-[#e5e5e5];
+  }
+  
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply text-white;
+  }
+  
+  .prose a {
+    @apply text-[#e5e5e5] hover:text-white;
+  }
+  
+  .prose strong {
+    @apply text-white;
+  }
+  
+  .prose code {
+    @apply text-white bg-[#1a1a1a];
+  }
+  
+  .prose pre {
+    @apply bg-[#1a1a1a];
+  }
+}

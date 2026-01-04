@@ -24,6 +24,7 @@ export interface Subsection {
   topCategory?: {
     name: string;
   };
+  posts?: Post[];
 }
 
 export interface Post {
