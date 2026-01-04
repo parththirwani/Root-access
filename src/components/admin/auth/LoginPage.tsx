@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { adminApi } from '@/src/lib/api';
@@ -8,11 +8,18 @@ import { useAuth } from '@/src/contexts/authContext';
 
 export function AdminLoginPage() {
   const router = useRouter();
-  const { checkAuth } = useAuth();
+  const { isAuthenticated, isLoading, checkAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [secretKey, setSecretKey] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push('/admin');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,15 +28,29 @@ export function AdminLoginPage() {
 
     try {
       await adminApi.login({ email, secretKey });
-      // Update auth state before redirecting
+      // Update auth state
       await checkAuth();
-      router.push('/admin');
+      // Router will redirect via useEffect above
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+        <div className="text-[#707070]">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't show login form if already authenticated
+  if (isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">

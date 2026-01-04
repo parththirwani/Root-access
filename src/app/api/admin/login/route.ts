@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     // Find the admin
     const user = await prisma.admin.findUnique({
       where: { email },
-      include: { profile: true }, // Include profile to check if it exists
+      include: { profile: true },
     });
 
     if (!user) {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify secret key (acting as password)
+    // Verify secret key
     const isPasswordCorrect = await bcrypt.compare(secretKey, user.secretKey);
     if (!isPasswordCorrect) {
       return NextResponse.json(
@@ -73,7 +73,10 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
 
-    response.cookies.set("auth-token", token, {
+    // Set cookie with explicit options
+    response.cookies.set({
+      name: "auth-token",
+      value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

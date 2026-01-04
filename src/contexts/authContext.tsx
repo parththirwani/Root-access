@@ -1,7 +1,6 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -20,36 +19,16 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const pathname = usePathname();
 
   const checkAuth = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch('/api/admin/profile', {
         credentials: 'include',
       });
       
-      if (response.ok) {
-        setIsAuthenticated(true);
-        return;
-      } else {
-        setIsAuthenticated(false);
-        // Only redirect if on a protected admin page
-        if (pathname?.startsWith('/admin') && 
-            pathname !== '/admin/login' && 
-            pathname !== '/admin/signup') {
-          router.push('/admin/login');
-        }
-      }
+      setIsAuthenticated(response.ok);
     } catch (error) {
       setIsAuthenticated(false);
-      // Only redirect if on a protected admin page
-      if (pathname?.startsWith('/admin') && 
-          pathname !== '/admin/login' && 
-          pathname !== '/admin/signup') {
-        router.push('/admin/login');
-      }
     } finally {
       setIsLoading(false);
     }
@@ -60,19 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Skip auth check for login and signup pages
-    if (pathname === '/admin/login' || pathname === '/admin/signup') {
-      setIsLoading(false);
-      return;
-    }
-
-    // Only check auth for admin pages
-    if (pathname?.startsWith('/admin')) {
-      checkAuth();
-    } else {
-      setIsLoading(false);
-    }
-  }, [pathname]);
+    checkAuth();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, isLoading, checkAuth, setAuthenticated }}>

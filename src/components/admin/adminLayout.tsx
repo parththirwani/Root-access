@@ -13,28 +13,31 @@ interface AdminLayoutProps {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, checkAuth } = useAuth();
 
   useEffect(() => {
-    // Skip redirect check for login and signup pages
+    // Don't redirect from login/signup pages
     if (pathname === '/admin/login' || pathname === '/admin/signup') {
       return;
     }
 
+    // Only redirect if not loading and not authenticated
     if (!isLoading && !isAuthenticated) {
       router.push('/admin/login');
     }
-  }, [isAuthenticated, isLoading, router, pathname]);
+  }, [isAuthenticated, isLoading, pathname, router]);
 
   const handleLogout = async () => {
     try {
       await adminApi.logout();
+      await checkAuth(); // Update auth state
       router.push('/admin/login');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
+  // Show loading state
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -43,6 +46,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     );
   }
 
+  // Don't render admin content if not authenticated
   if (!isAuthenticated) {
     return null;
   }
