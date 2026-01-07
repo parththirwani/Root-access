@@ -1,3 +1,4 @@
+// src/app/api/admin/subsections/[slug]/posts/route.ts
 import { prisma } from "@/src/lib/prisma";
 import { postsSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,6 +9,7 @@ import {
   handleTags,
   generateExcerpt,
 } from "@/src/lib/utils";
+import { markdownToHtml, generateMarkdownExcerpt } from "@/src/lib/markdown";
 
 async function postHandler(
   req: NextRequest,
@@ -15,7 +17,6 @@ async function postHandler(
 ) {
   try {
     const { slug } = await context.params;
-
     const body = await req.json();
 
     if (!body || (typeof body === "object" && Object.keys(body).length === 0)) {
@@ -75,15 +76,17 @@ async function postHandler(
 
     const tagConnections = await handleTags(tags || [], prisma);
 
+    // Convert markdown to HTML
+    const htmlContent = markdownToHtml(content);
     const readTime = calculateReadTime(content);
-    const finalExcerpt = generateExcerpt(content, excerpt);
+    const finalExcerpt = excerpt || generateMarkdownExcerpt(content);
 
     const post = await prisma.post.create({
       data: {
         title,
         description,
         slug: postSlug,
-        content,
+        content: htmlContent, // Store as HTML
         excerpt: finalExcerpt,
         coverImage,
         published: published ?? false,

@@ -16,12 +16,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const { isAuthenticated, isLoading, checkAuth } = useAuth();
 
   useEffect(() => {
-    // Don't redirect from login/signup pages
     if (pathname === '/admin/login' || pathname === '/admin/signup') {
       return;
     }
 
-    // Only redirect if not loading and not authenticated
     if (!isLoading && !isAuthenticated) {
       router.push('/admin/login');
     }
@@ -30,14 +28,13 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const handleLogout = async () => {
     try {
       await adminApi.logout();
-      await checkAuth(); // Update auth state
+      await checkAuth();
       router.push('/admin/login');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
-  // Show loading state
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -46,57 +43,72 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     );
   }
 
-  // Don't render admin content if not authenticated
   if (!isAuthenticated) {
     return null;
   }
 
   const navItems = [
-    { href: '/admin', label: 'Dashboard' },
-    { href: '/admin/sections', label: 'Sections' },
-    { href: '/admin/subsections', label: 'Subsections' },
-    { href: '/admin/posts', label: 'Posts' },
-    { href: '/admin/tags', label: 'Tags' },
-    { href: '/admin/profile', label: 'Profile' },
+    { href: '/admin', label: 'Dashboard', icon: '📊' },
+    { href: '/admin/sections', label: 'Sections', icon: '📁' },
+    { href: '/admin/subsections', label: 'Subsections', icon: '📂' },
+    { href: '/admin/posts', label: 'Posts', icon: '📝' },
+    { href: '/admin/tags', label: 'Tags', icon: '🏷️' },
+    { href: '/admin/profile', label: 'Profile', icon: '👤' },
   ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <nav className="bg-[#0a0a0a] border-b border-[#1a1a1a]">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <Link href="/admin" className="text-[15px] font-medium text-white">
-                Admin
-              </Link>
-              <div className="flex gap-6">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`text-[13px] ${
-                      pathname === item.href
-                        ? 'text-white'
-                        : 'text-[#707070] hover:text-white'
-                    } transition`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+      {/* Sidebar */}
+      <aside className="w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0 border-r border-[#1a1a1a]">
+        <div className="p-6">
+          {/* Admin Header */}
+          <div className="mb-8">
+            <Link href="/admin" className="flex items-center gap-2 hover:opacity-70 transition">
+              <div className="w-5 h-5 rounded-full bg-neutral-700 flex items-center justify-center">
+                <span className="text-[10px]">⚙️</span>
               </div>
-            </div>
+              <span className="text-white text-[14px] font-normal">Admin</span>
+            </Link>
+          </div>
+
+          {/* Navigation */}
+          <nav className="space-y-1">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] transition ${
+                    isActive
+                      ? 'bg-[#1a1a1a] text-white'
+                      : 'text-[#707070] hover:text-white hover:bg-[#1a1a1a]'
+                  }`}
+                >
+                  <span className="opacity-60">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Logout Button */}
+          <div className="absolute bottom-6 left-6 right-6">
             <button
               onClick={handleLogout}
-              className="text-[13px] text-[#707070] hover:text-white transition"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] text-[#707070] hover:text-white hover:bg-[#1a1a1a] transition"
             >
-              Logout
+              <span>Logout</span>
             </button>
           </div>
         </div>
-      </nav>
+      </aside>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {children}
+      {/* Main Content */}
+      <main className="ml-48 min-h-screen">
+        <div className="p-8">
+          {children}
+        </div>
       </main>
     </div>
   );

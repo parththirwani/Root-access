@@ -4,7 +4,6 @@ import { adminApi } from '@/src/lib/api';
 import { TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
 
-
 export function SubsectionsManager() {
   const [sections, setSections] = useState<TopCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,61 +67,66 @@ export function SubsectionsManager() {
   );
 
   if (loading) {
-    return <div className="text-gray-500">Loading...</div>;
+    return <div className="text-[#707070] text-[14px]">Loading subsections...</div>;
   }
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Subsections</h1>
+        <h1 className="text-[28px] font-normal text-white">Subsections</h1>
         <button
-          onClick={() => setShowForm(!showForm)}
-          className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+          onClick={() => {
+            setShowForm(!showForm);
+            setEditingSlug(null);
+            setFormData({ name: '', icon: '', topCategoryName: '', isVisible: true });
+          }}
+          className="px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium"
         >
-          {showForm ? 'Cancel' : 'New Subsection'}
+          {showForm ? 'Cancel' : '+ New Subsection'}
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg border border-gray-200 mb-8">
+        <form onSubmit={handleSubmit} className="bg-[#101010] p-6 rounded-xl border border-[#1a1a1a] mb-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-600">
+            <div className="mb-4 p-3 bg-red-950/50 border border-red-900/50 rounded-lg text-[13px] text-red-400">
               {error}
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                placeholder="e.g., Blog Posts"
+                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Icon (emoji)</label>
+              <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Icon (emoji)</label>
               <input
                 type="text"
                 value={formData.icon}
                 onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                 required
                 placeholder="📝"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
               />
             </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Section</label>
+            <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Section</label>
             <select
               value={formData.topCategoryName}
               onChange={(e) => setFormData({ ...formData, topCategoryName: e.target.value })}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
             >
               <option value="">Select a section</option>
               {sections.map((section) => (
@@ -133,62 +137,77 @@ export function SubsectionsManager() {
             </select>
           </div>
 
-          <div className="mb-4">
-            <label className="flex items-center gap-2">
+          <div className="mb-6">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.isVisible}
                 onChange={(e) => setFormData({ ...formData, isVisible: e.target.checked })}
-                className="w-4 h-4"
+                className="w-4 h-4 rounded"
               />
-              <span className="text-sm text-gray-700">Visible</span>
+              <span className="text-[13px] text-[#e5e5e5]">Visible on public site</span>
             </label>
           </div>
 
           <button
             type="submit"
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
+            className="px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium"
           >
-            {editingSlug ? 'Update' : 'Create'} Subsection
+            {editingSlug ? 'Update Subsection' : 'Create Subsection'}
           </button>
         </form>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-700">Name</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-700">Section</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-700">Posts</th>
-              <th className="text-left px-6 py-3 text-sm font-medium text-gray-700">Visible</th>
-              <th className="text-right px-6 py-3 text-sm font-medium text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allSubsections.map((subsection) => (
-              <tr key={subsection.id} className="border-b border-gray-200 last:border-0">
-                <td className="px-6 py-4 text-sm text-gray-900">
-                  <span className="mr-2">{subsection.icon}</span>
-                  {subsection.name}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{subsection.categoryName}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{subsection.postCount}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">
-                  {subsection.isVisible ? 'Yes' : 'No'}
-                </td>
-                <td className="px-6 py-4 text-sm text-right">
-                  <button
-                    onClick={() => handleDelete(subsection.slug)}
-                    className="text-red-600 hover:text-red-700"
+      {/* Subsections List */}
+      <div className="space-y-3">
+        {allSubsections.map((subsection) => (
+          <div
+            key={subsection.id}
+            className="bg-[#101010] p-5 rounded-xl border border-[#1a1a1a] hover:border-[#2a2a2a] transition"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="text-xl opacity-60">{subsection.icon}</span>
+                  <h3 className="text-[15px] text-white font-medium">{subsection.name}</h3>
+                  <span
+                    className={`px-2 py-0.5 rounded text-[11px] ${
+                      subsection.isVisible
+                        ? 'bg-green-950/50 text-green-400'
+                        : 'bg-[#1a1a1a] text-[#707070]'
+                    }`}
                   >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    {subsection.isVisible ? 'Visible' : 'Hidden'}
+                  </span>
+                </div>
+                <div className="text-[13px] text-[#707070]">
+                  {subsection.categoryName} • {subsection.postCount} posts
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => handleDelete(subsection.slug)}
+                  className="text-[13px] text-red-400 hover:text-red-300 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {allSubsections.length === 0 && (
+          <div className="bg-[#101010] p-8 rounded-xl border border-[#1a1a1a] text-center">
+            <p className="text-[14px] text-[#707070] mb-4">No subsections yet</p>
+            <button
+              onClick={() => setShowForm(true)}
+              className="text-[13px] text-white hover:opacity-70 transition"
+            >
+              Create your first subsection
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
