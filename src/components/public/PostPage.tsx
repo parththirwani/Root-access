@@ -20,17 +20,18 @@ export function PostPage({ slug, postSlug }: PostPageProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchPost = async () => {
       try {
-        const postRes = await publicApi.getPost(postSlug);
-        setPost((postRes as { post: Post }).post);
+        const res = await publicApi.getPost(postSlug);
+        setPost((res as { post: Post }).post);
       } catch (err: any) {
         setError(err.message || 'Failed to load post');
       } finally {
         setLoading(false);
       }
-    }
-    fetchData();
+    };
+
+    fetchPost();
   }, [postSlug]);
 
   const handleCopyPage = async () => {
@@ -39,38 +40,37 @@ export function PostPage({ slug, postSlug }: PostPageProps) {
     const formattedDate = post.publishedAt
       ? new Date(post.publishedAt).toLocaleDateString('en-US', {
           month: 'long',
-          day: 'numeric',
           year: 'numeric',
         })
       : '';
 
-    const plainContent = post.content.replace(/<[^>]*>/g, '');
-    const textToCopy = `${post.title}\n${formattedDate}\n\n${plainContent}`;
+    const text = `${post.title}\n${formattedDate}\n\n${post.content.replace(
+      /<[^>]*>/g,
+      ''
+    )}`;
 
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-neutral-500">Loading...</div>
+        <span className="text-neutral-500 text-sm">Loading…</span>
       </div>
     );
   }
 
-  if (error || !post) {
+  if (!post || error) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-xl font-normal text-white mb-2">Not Found</h1>
-          <p className="text-neutral-500 mb-6 text-[14px]">{error || 'Post not found'}</p>
-          <Link href="/" className="text-neutral-400 hover:text-white transition text-[14px] underline">
+          <h1 className="text-white text-xl mb-2">Not Found</h1>
+          <p className="text-neutral-500 text-sm mb-6">
+            {error || 'Post not found'}
+          </p>
+          <Link href="/" className="underline text-sm text-neutral-400">
             Go back home
           </Link>
         </div>
@@ -79,97 +79,104 @@ export function PostPage({ slug, postSlug }: PostPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-      <div className="flex">
-        {/* Sidebar */}
-        <PublicSidebar />
+    <div className="min-h-screen bg-[#0a0a0a] flex">
+      <PublicSidebar />
 
-        {/* Main Content with rounded corners */}
-        <main className="ml-48 flex-1 min-h-screen">
-          <div className="p-6">
-            <div className="bg-[#101010] rounded-2xl overflow-hidden border border-black shadow-[0_0_0_1px_rgba(0,0,0,0.5)]">
-              {/* Breadcrumb Navigation - Sticky */}
-              <BreadcrumbNav 
-                items={[
-                  { label: post.subsection.name, href: `/${slug}` },
-                  { label: post.title }
-                ]}
-              />
+      <main className="flex-1 lg:ml-48">
+        <div className="p-4 sm:p-6">
 
-              {/* Article Content */}
-              <div className="flex justify-center px-20 py-16">
-                <article className="w-full max-w-170">
-                  {/* Copy Page Button - Top Right */}
+          {/* Sticky Breadcrumb */}
+          <div className="sticky top-0 z-50 bg-[#101010]/95 backdrop-blur border-b border-black rounded-t-2xl">
+            <BreadcrumbNav
+              items={[
+                { label: post.subsection.name, href: `/${slug}` },
+                { label: post.title },
+              ]}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="bg-[#101010] rounded-b-2xl border border-black">
+            <div className="overflow-hidden">
+              <div className="flex justify-center px-4 sm:px-8 lg:px-20 py-10 sm:py-16">
+                <article className="w-full max-w-3xl">
+
+                  {/* Copy Button */}
                   <div className="flex justify-end mb-6">
                     <button
                       onClick={handleCopyPage}
-                      className="flex items-center gap-2 text-[13px] text-neutral-500 hover:text-white transition"
+                      className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white cursor-pointer transition"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        />
                       </svg>
-                      <span>{copied ? 'Copied!' : 'Copy page'}</span>
+                      {copied ? 'Copied!' : 'Copy page'}
                     </button>
                   </div>
 
-                  {/* Article Header */}
+                  {/* Header */}
                   <header className="mb-12">
-                    <h1 className="text-white text-[40px] font-normal mb-3 leading-[1.1] tracking-tight">
+                    <h1 className="text-white text-3xl sm:text-[40px] leading-tight mb-3">
                       {post.title}
                     </h1>
-                    
+
                     {post.description && (
-                      <p className="text-neutral-400 text-[16px] leading-relaxed mb-4">
+                      <p className="text-neutral-400 mb-4">
                         {post.description}
                       </p>
                     )}
 
-                    <time className="text-neutral-500 text-[13px] block">
-                      {post.publishedAt &&
-                        new Date(post.publishedAt).toLocaleDateString('en-US', {
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                    </time>
+                    {post.publishedAt && (
+                      <time className="text-neutral-500 text-xs">
+                        {new Date(post.publishedAt).toLocaleDateString(
+                          'en-US',
+                          {
+                            month: 'long',
+                            year: 'numeric',
+                          }
+                        )}
+                      </time>
+                    )}
                   </header>
 
-                  {/* Cover Image */}
+                  {/* Image */}
                   {post.coverImage && (
-                    <div className="mb-12">
-                      <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="w-full rounded-lg"
-                      />
-                    </div>
+                    <img
+                      src={post.coverImage}
+                      alt={post.title}
+                      className="rounded-lg mb-12"
+                    />
                   )}
 
-                  {/* Post Content */}
-                  <div 
+                  {/* Body */}
+                  <div
                     className="prose prose-invert max-w-none mb-12"
-                    style={{
-                      color: '#a3a3a3',
-                      fontSize: '16px',
-                      lineHeight: '1.7',
-                    }}
                     dangerouslySetInnerHTML={{ __html: post.content }}
                   />
 
-                  {/* Post Footer */}
-                  <footer className="pt-8 border-t border-black">
-                    <div className="flex items-center justify-end">
-                      <span className="text-[13px] text-neutral-500">
-                        {post.views.toLocaleString()} views
-                      </span>
-                    </div>
+                  {/* Footer */}
+                  <footer className="border-t border-black pt-6 flex justify-end">
+                    <span className="text-xs text-neutral-500">
+                      {post.views.toLocaleString()} views
+                    </span>
                   </footer>
                 </article>
               </div>
             </div>
           </div>
-        </main>
-      </div>
+
+        </div>
+      </main>
     </div>
   );
 }
