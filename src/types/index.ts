@@ -27,6 +27,8 @@ export interface Subsection {
   posts?: Post[];
 }
 
+export type DisplayStyle = "blog" | "project" | "title-only";
+
 export interface Post {
   id: string;
   title: string;
@@ -41,6 +43,11 @@ export interface Post {
   readTime: number | null;
   metaTitle: string | null;
   metaDescription: string | null;
+  
+  // NEW: Display style fields
+  displayStyle: DisplayStyle;
+  projectLink: string | null;
+  
   subsection: {
     name: string;
     slug: string;

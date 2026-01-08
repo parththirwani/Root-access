@@ -1,4 +1,3 @@
-// src/app/api/admin/subsections/[slug]/posts/route.ts
 import { prisma } from "@/src/lib/prisma";
 import { postsSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
@@ -48,6 +47,8 @@ async function postHandler(
       metaTitle,
       metaDescription,
       description,
+      displayStyle,
+      projectLink,
     } = parsedData.data;
 
     const subsection = await prisma.subsection.findUnique({
@@ -76,17 +77,19 @@ async function postHandler(
 
     const tagConnections = await handleTags(tags || [], prisma);
 
-    // Convert markdown to HTML
-    const htmlContent = markdownToHtml(content);
-    const readTime = calculateReadTime(content);
-    const finalExcerpt = excerpt || generateMarkdownExcerpt(content);
+    // Convert markdown to HTML for blog/project styles
+    const htmlContent = displayStyle === "title-only" ? "" : markdownToHtml(content);
+    const readTime = displayStyle === "title-only" ? 0 : calculateReadTime(content);
+    const finalExcerpt = displayStyle === "title-only" 
+      ? null 
+      : (excerpt || generateMarkdownExcerpt(content));
 
     const post = await prisma.post.create({
       data: {
         title,
         description,
         slug: postSlug,
-        content: htmlContent, // Store as HTML
+        content: htmlContent,
         excerpt: finalExcerpt,
         coverImage,
         published: published ?? false,
@@ -94,6 +97,8 @@ async function postHandler(
         readTime,
         metaTitle: metaTitle || title,
         metaDescription: metaDescription || finalExcerpt,
+        displayStyle: displayStyle || "blog",
+        projectLink: projectLink || null,
         subsectionId: subsection.id,
         tags: {
           connect: tagConnections,

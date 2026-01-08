@@ -28,32 +28,28 @@ model Profile {
   admin          Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
-
 model TopCategory {
   id          String   @id @default(cuid())
-  name        String   @unique // e.g. "Craft", "Lists"
+  name        String   @unique
   isVisible   Boolean  @default(true)
   
-  // Relationships
   subsections Subsection[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
 }
 
 model Subsection {
   id          String   @id @default(cuid())
   name        String   @unique
   slug        String   @unique 
-  icon        String  // Icon identifier 
+  icon        String
   isVisible   Boolean  @default(true)
   postCount   Int      @default(0) 
   
   topCategoryId String
   topCategory   TopCategory @relation(fields: [topCategoryId], references: [id], onDelete: Cascade)
   
-  // Relationships
   posts       Post[]
   
   createdAt   DateTime @default(now())
@@ -63,21 +59,23 @@ model Subsection {
   @@index([topCategoryId])
 }
 
-// Post model - individual blog posts/articles
+// Post model with display style
 model Post {
   id          String   @id @default(cuid())
   title       String
   description String
   slug        String   @unique
-  content     String   @db.Text // Full content in markdown or rich text
-  excerpt     String?  @db.Text // Short preview
-  coverImage  String?  // URL to cover image
+  content     String   @db.Text
+  excerpt     String?  @db.Text
+  coverImage  String?
+  
+  displayStyle String  @default("blog") // "blog", "project", "title-only"
+  projectLink  String? 
   
   // Publishing
   published   Boolean  @default(false)
   publishedAt DateTime?
   
-  // Subsection relationship
   subsectionId String
   subsection   Subsection @relation(fields: [subsectionId], references: [id])
   
@@ -98,9 +96,9 @@ model Post {
   @@index([subsectionId])
   @@index([published])
   @@index([publishedAt])
+  @@index([displayStyle])
 }
 
-// Tag model - for organizing posts with tags
 model Tag {
   id    String @id @default(cuid())
   name  String @unique 

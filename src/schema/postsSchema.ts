@@ -1,4 +1,3 @@
-// src/schema/postsSchema.ts
 import { z } from "zod";
 
 export const postsSchema = z.object({
@@ -10,7 +9,11 @@ export const postsSchema = z.object({
   published: z.boolean().default(false),
   tags: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),
-  metaDescription: z.string().optional()
+  metaDescription: z.string().optional(),
+  
+  // NEW: Display style and project fields
+  displayStyle: z.enum(["blog", "project", "title-only"]).default("blog"),
+  projectLink: z.string().url().optional().or(z.literal("")),
 });
 
 export const updatePostSchema = z.object({
@@ -21,5 +24,9 @@ export const updatePostSchema = z.object({
   published: z.boolean().optional(),
   tags: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),
-  metaDescription: z.string().optional()
+  metaDescription: z.string().optional(),
+  
+  // NEW: Display style and project fields
+  displayStyle: z.enum(["blog", "project", "title-only"]).optional(),
+  projectLink: z.string().url().optional().or(z.literal("")),
 });
