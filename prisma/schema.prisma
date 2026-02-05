@@ -7,7 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// Admin model - simple authentication with email and secret key
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -59,18 +58,19 @@ model Subsection {
   @@index([topCategoryId])
 }
 
-// Post model with display style
+
 model Post {
   id          String   @id @default(cuid())
   title       String
-  description String
+  description String   
   slug        String   @unique
-  content     String   @db.Text
+  content     String   @db.Text  // Full content (optional for some display styles)
   excerpt     String?  @db.Text
   coverImage  String?
   
-  displayStyle String  @default("blog") // "blog", "project", "title-only"
-  projectLink  String? 
+  // Display style configuration
+  displayStyle DisplayStyle
+  projectLink  String?
   
   // Publishing
   published   Boolean  @default(false)
@@ -97,6 +97,11 @@ model Post {
   @@index([published])
   @@index([publishedAt])
   @@index([displayStyle])
+}
+enum DisplayStyle {
+  blog
+  project
+  title_only
 }
 
 model Tag {

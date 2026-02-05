@@ -27,14 +27,16 @@ export interface Subsection {
   posts?: Post[];
 }
 
-export type DisplayStyle = "blog" | "project" | "title-only";
+// Display style enum - defines how a post is rendered
+// Must match Prisma enum: blog, project, title_only
+export type DisplayStyle = "blog" | "project" | "title_only";
 
 export interface Post {
   id: string;
   title: string;
-  description: string;
+  description: string;  // Short description (always required)
   slug: string;
-  content: string;
+  content: string;      // Full content (may be empty for some styles)
   excerpt: string | null;
   coverImage: string | null;
   published: boolean;
@@ -44,9 +46,9 @@ export interface Post {
   metaTitle: string | null;
   metaDescription: string | null;
   
-  // NEW: Display style fields
-  displayStyle: DisplayStyle;
-  projectLink: string | null;
+  // Display style fields
+  displayStyle: DisplayStyle;  // How this post should be displayed
+  projectLink: string | null;  // External link (for project style)
   
   subsection: {
     name: string;

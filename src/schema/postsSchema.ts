@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const postsSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
   description: z.string().min(1, "Description is required"),
+  content: z.string().optional(), // Optional for some display styles
   excerpt: z.string().optional(),
   coverImage: z.string().url().optional().or(z.literal("")),
   published: z.boolean().default(false),
@@ -11,14 +11,15 @@ export const postsSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   
-  // NEW: Display style and project fields
-  displayStyle: z.enum(["blog", "project", "title-only"]).default("blog"),
+  // Display style configuration
+  displayStyle: z.enum(["blog", "project", "title_only"]).default("blog"),
   projectLink: z.string().url().optional().or(z.literal("")),
 });
 
 export const updatePostSchema = z.object({
   title: z.string().min(1).optional(),
-  content: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  content: z.string().optional(),
   excerpt: z.string().optional(),
   coverImage: z.string().url().optional().or(z.literal("")),
   published: z.boolean().optional(),
@@ -26,7 +27,7 @@ export const updatePostSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   
-  // NEW: Display style and project fields
-  displayStyle: z.enum(["blog", "project", "title-only"]).optional(),
+  // Display style configuration
+  displayStyle: z.enum(["blog", "project", "title_only"]).optional(),
   projectLink: z.string().url().optional().or(z.literal("")),
 });

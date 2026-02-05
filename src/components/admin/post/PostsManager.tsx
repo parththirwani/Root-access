@@ -68,9 +68,13 @@ export function PostsManager() {
       return;
     }
 
-    // Validate project link if display style is project
     if (formData.displayStyle === 'project' && !formData.projectLink) {
       setError('Project link is required for project display style');
+      return;
+    }
+
+    if (formData.displayStyle === 'blog' && !formData.content) {
+      setError('Content is required for blog display style');
       return;
     }
 
@@ -124,7 +128,7 @@ export function PostsManager() {
     const styles = {
       blog: { bg: 'bg-blue-950/50', text: 'text-blue-400', label: 'Blog' },
       project: { bg: 'bg-purple-950/50', text: 'text-purple-400', label: 'Project' },
-      'title-only': { bg: 'bg-gray-950/50', text: 'text-gray-400', label: 'Title Only' },
+      title_only: { bg: 'bg-gray-950/50', text: 'text-gray-400', label: 'Title Only' },
     };
     const s = styles[style];
     return (
@@ -234,9 +238,9 @@ export function PostsManager() {
 
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, displayStyle: 'title-only' })}
+                onClick={() => setFormData({ ...formData, displayStyle: 'title_only' })}
                 className={`p-4 rounded-lg border-2 transition ${
-                  formData.displayStyle === 'title-only'
+                  formData.displayStyle === 'title_only'
                     ? 'border-white bg-[#1a1a1a]'
                     : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#3a3a3a]'
                 }`}
@@ -262,7 +266,7 @@ export function PostsManager() {
               />
             </div>
 
-            {formData.displayStyle !== 'title-only' && (
+            {formData.displayStyle === 'blog' && (
               <div>
                 <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Cover Image URL</label>
                 <input
@@ -278,13 +282,13 @@ export function PostsManager() {
 
           <div className="mb-4">
             <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Description *</label>
-            <input
-              type="text"
+            <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
               placeholder="A brief description"
-              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+              rows={2}
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition resize-none"
             />
           </div>
 
@@ -303,8 +307,8 @@ export function PostsManager() {
             </div>
           )}
 
-          {/* Content (not needed for title-only) */}
-          {formData.displayStyle !== 'title-only' && (
+          {/* Content (only for blog styles) */}
+          {formData.displayStyle === 'blog' && (
             <div className="mb-4">
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
                 Content (Markdown) *
@@ -316,7 +320,7 @@ export function PostsManager() {
             </div>
           )}
 
-          {formData.displayStyle !== 'title-only' && (
+          {formData.displayStyle !== 'title_only' && (
             <div className="mb-4">
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Excerpt (optional)</label>
               <textarea

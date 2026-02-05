@@ -113,7 +113,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
     });
 
     // Title Only Style
-    if (post.displayStyle === 'title-only') {
+    if (post.displayStyle === 'title_only') {
       return (
         <div key={post.slug} className="block group">
           <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
