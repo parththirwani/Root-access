@@ -18,6 +18,8 @@ const INITIAL_FORM_DATA = {
   projectLink: '',
 };
 
+type DisplayStyleInput = 'blog' | 'project' | 'title_only';
+
 export function PostsManager() {
   const [sections, setSections] = useState<TopCategory[]>([]);
   const [selectedSubsection, setSelectedSubsection] = useState('');
@@ -62,11 +64,19 @@ export function PostsManager() {
     }
   };
 
-  const getSubsectionDisplayStyle = (subsectionSlug: string) => {
+  const getSubsectionDisplayStyle = (subsectionSlug: string): DisplayStyleInput => {
     const subsection = sections
       .flatMap(s => s.subsections || [])
       .find(sub => sub.slug === subsectionSlug);
-    return subsection?.displayStyle || 'blog';
+    
+    // Map Prisma enum to form input
+    const displayStyleMap: Record<string, DisplayStyleInput> = {
+      'BLOG': 'blog',
+      'PROJECT': 'project',
+      'TITLE_ONLY': 'title_only'
+    };
+    
+    return displayStyleMap[subsection?.displayStyle || 'BLOG'] || 'blog';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

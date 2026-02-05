@@ -1,4 +1,4 @@
-import { Post, DisplayStyle } from '@/src/types';
+import { Post } from '@/src/types';
 
 interface PostListItemProps {
   post: Post;
@@ -7,13 +7,16 @@ interface PostListItemProps {
 }
 
 export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemProps) {
-  const getDisplayStyleBadge = (style: DisplayStyle) => {
-    const styles = {
-      blog: { bg: 'bg-blue-950/50', text: 'text-blue-400', label: '📝 Blog' },
-      project: { bg: 'bg-purple-950/50', text: 'text-purple-400', label: '🚀 Project' },
-      title_only: { bg: 'bg-gray-950/50', text: 'text-gray-400', label: '📌 Title' },
+  const getDisplayStyleBadge = (style: string) => {
+    const styles: Record<string, { bg: string; text: string; label: string }> = {
+      'BLOG': { bg: 'bg-blue-950/50', text: 'text-blue-400', label: '📝 Blog' },
+      'PROJECT': { bg: 'bg-purple-950/50', text: 'text-purple-400', label: '🚀 Project' },
+      'TITLE_ONLY': { bg: 'bg-gray-950/50', text: 'text-gray-400', label: '📌 Title' },
+      'blog': { bg: 'bg-blue-950/50', text: 'text-blue-400', label: '📝 Blog' },
+      'project': { bg: 'bg-purple-950/50', text: 'text-purple-400', label: '🚀 Project' },
+      'title_only': { bg: 'bg-gray-950/50', text: 'text-gray-400', label: '📌 Title' },
     };
-    const s = styles[style];
+    const s = styles[style] || styles['BLOG'];
     return (
       <span className={`px-2 py-0.5 rounded text-[11px] ${s.bg} ${s.text}`}>
         {s.label}
@@ -40,7 +43,7 @@ export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemPr
           </div>
           <div className="text-[13px] text-[#707070] mb-1">
             {post.subsection.name} • {post.views} views
-            {post.subsection.displayStyle === 'project' && post.projectLink && (
+            {post.subsection.displayStyle === 'PROJECT' && post.projectLink && (
               <span className="ml-2">
                 • <a href={post.projectLink} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">View Project →</a>
               </span>

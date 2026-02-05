@@ -2,6 +2,8 @@ import { prisma } from "@/src/lib/prisma";
 import { updateSubsectionSchema } from "@/src/schema/subsectionsSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/src/lib/authWrapper";
+import { DisplayStyle } from "@/prisma/generated/client";
+
 
 async function putHandler(
   req: NextRequest, 
@@ -22,7 +24,7 @@ async function putHandler(
 
     if (!parsedData.success) {
       return NextResponse.json(
-        { message: "Invalid input or missing inputs"},
+        { message: "Invalid input or missing inputs", errors: parsedData.error.format() },
         { status: 400 }
       );
     }
@@ -82,7 +84,14 @@ async function putHandler(
     }
 
     if (displayStyle) {
-      updateData.displayStyle = displayStyle;
+      // Map the input displayStyle to Prisma enum
+      const displayStyleMap: Record<string, DisplayStyle> = {
+        'blog': 'BLOG',
+        'project': 'PROJECT',
+        'title_only': 'TITLE_ONLY'
+      };
+
+      updateData.displayStyle = displayStyleMap[displayStyle] || 'BLOG';
     }
 
     const updatedSubSection = await prisma.subsection.update({

@@ -1,8 +1,10 @@
 'use client';
 
 import { adminApi } from '@/src/lib/api';
-import { Subsection, TopCategory, DisplayStyle } from '@/src/types';
+import { Subsection, TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
+
+type DisplayStyleInput = 'blog' | 'project' | 'title_only';
 
 export function SubsectionsManager() {
   const [sections, setSections] = useState<TopCategory[]>([]);
@@ -14,7 +16,7 @@ export function SubsectionsManager() {
     isVisible: true,
     icon: '📄',
     topCategoryName: '',
-    displayStyle: 'blog' as DisplayStyle,
+    displayStyle: 'blog' as DisplayStyleInput,
   });
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -63,12 +65,19 @@ export function SubsectionsManager() {
   };
 
   const handleEdit = (subsection: Subsection) => {
+    // Map Prisma enum to form input
+    const displayStyleMap: Record<string, DisplayStyleInput> = {
+      'BLOG': 'blog',
+      'PROJECT': 'project',
+      'TITLE_ONLY': 'title_only'
+    };
+
     setFormData({
       name: subsection.name,
       isVisible: subsection.isVisible,
       icon: subsection.icon,
       topCategoryName: subsection.topCategory?.name || '',
-      displayStyle: subsection.displayStyle,
+      displayStyle: displayStyleMap[subsection.displayStyle] || 'blog',
     });
     setEditingSlug(subsection.slug);
     setShowForm(true);
@@ -92,13 +101,16 @@ export function SubsectionsManager() {
     setError('');
   };
 
-  const getDisplayStyleLabel = (style: DisplayStyle) => {
-    const labels = {
-      blog: { emoji: '📝', label: 'Blog Posts' },
-      project: { emoji: '🚀', label: 'Project Cards' },
-      title_only: { emoji: '📌', label: 'Title List' },
+  const getDisplayStyleLabel = (style: string) => {
+    const labels: Record<string, { emoji: string; label: string }> = {
+      'BLOG': { emoji: '📝', label: 'Blog Posts' },
+      'PROJECT': { emoji: '🚀', label: 'Project Cards' },
+      'TITLE_ONLY': { emoji: '📌', label: 'Title List' },
+      'blog': { emoji: '📝', label: 'Blog Posts' },
+      'project': { emoji: '🚀', label: 'Project Cards' },
+      'title_only': { emoji: '📌', label: 'Title List' },
     };
-    return labels[style];
+    return labels[style] || labels['blog'];
   };
 
   if (loading) {

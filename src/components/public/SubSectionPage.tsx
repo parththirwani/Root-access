@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { publicApi } from '@/src/lib/api';
 import { PublicSidebar } from './Sidebar';
-import { Post, DisplayStyle } from '@/src/types';
+import { Post } from '@/src/types';
 
 interface SubsectionPageProps {
   slug: string;
@@ -12,7 +12,7 @@ interface SubsectionPageProps {
 
 interface Subsection {
   name: string;
-  displayStyle: DisplayStyle;
+  displayStyle: string; // Prisma enum
   posts?: Post[];
   topCategory?: {
     name: string;
@@ -90,7 +90,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
 
   const sortedYears = Object.keys(postsByYear).sort((a, b) => +b - +a);
 
-  // Use subsection's display style
+  // Use subsection's display style (Prisma enum)
   const displayStyle = subsection.displayStyle;
 
   // Render post based on subsection's display style
@@ -102,7 +102,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
     });
 
     // Title Only Style - Simple list item (non-clickable)
-    if (displayStyle === 'title_only') {
+    if (displayStyle === 'TITLE_ONLY') {
       return (
         <div key={post.slug} className="block">
           <div className="flex items-start gap-4">
@@ -135,7 +135,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
     }
 
     // Project Card Style - Grid card with hover effect
-    if (displayStyle === 'project') {
+    if (displayStyle === 'PROJECT') {
       return (
         <a
           key={post.slug}
@@ -262,7 +262,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
             )}
 
             {/* Posts Layout - Based on Subsection Display Style */}
-            {displayStyle === 'project' ? (
+            {displayStyle === 'PROJECT' ? (
               // Grid layout for project style
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredPosts.map(post => renderPost(post))}

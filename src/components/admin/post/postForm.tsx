@@ -1,4 +1,3 @@
-import { DisplayStyle } from '@/src/types';
 import { MarkdownEditor } from '../post/MarkDownEditor';
 
 interface PostFormData {
@@ -12,16 +11,24 @@ interface PostFormData {
   projectLink: string;
 }
 
+type DisplayStyleInput = 'blog' | 'project' | 'title_only';
+
 interface PostFormProps {
   formData: PostFormData;
   onChange: (data: PostFormData) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
-  subsections: Array<{ id: string; slug: string; name: string; icon: string; displayStyle: DisplayStyle }>;
+  subsections: Array<{ 
+    id: string; 
+    slug: string; 
+    name: string; 
+    icon: string; 
+    displayStyle: string; // Can be Prisma enum or form input
+  }>;
   selectedSubsection: string;
   onSubsectionChange: (slug: string) => void;
   error?: string;
-  displayStyle: DisplayStyle;
+  displayStyle: DisplayStyleInput;
 }
 
 export function PostForm({
@@ -35,13 +42,16 @@ export function PostForm({
   error,
   displayStyle
 }: PostFormProps) {
-  const getDisplayStyleInfo = (style: DisplayStyle) => {
-    const info = {
-      blog: { emoji: '📝', label: 'Blog Post', desc: 'Full article with content' },
-      project: { emoji: '🚀', label: 'Project', desc: 'Card with external link' },
-      title_only: { emoji: '📌', label: 'Title Only', desc: 'Simple title list' },
+  const getDisplayStyleInfo = (style: string) => {
+    const info: Record<string, { emoji: string; label: string; desc: string }> = {
+      'blog': { emoji: '📝', label: 'Blog Post', desc: 'Full article with content' },
+      'project': { emoji: '🚀', label: 'Project', desc: 'Card with external link' },
+      'title_only': { emoji: '📌', label: 'Title Only', desc: 'Simple title list' },
+      'BLOG': { emoji: '📝', label: 'Blog Post', desc: 'Full article with content' },
+      'PROJECT': { emoji: '🚀', label: 'Project', desc: 'Card with external link' },
+      'TITLE_ONLY': { emoji: '📌', label: 'Title Only', desc: 'Simple title list' },
     };
-    return info[style];
+    return info[style] || info['blog'];
   };
 
   const styleInfo = getDisplayStyleInfo(displayStyle);

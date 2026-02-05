@@ -1,3 +1,5 @@
+import { DisplayStyle } from "@/prisma/generated/client";
+
 export interface Profile {
   id: string;
   bio: string | null;
@@ -13,8 +15,6 @@ export interface TopCategory {
   subsections: Subsection[];
 }
 
-// Display style enum - defines how posts in a subsection are rendered
-export type DisplayStyle = "blog" | "project" | "title_only";
 
 export interface Subsection {
   id: string;
@@ -23,7 +23,7 @@ export interface Subsection {
   icon: string;
   isVisible: boolean;
   postCount: number;
-  displayStyle: DisplayStyle;  // Display style for this subsection
+  displayStyle: DisplayStyle;
   topCategoryId: string;
   topCategory?: {
     name: string;
@@ -34,9 +34,9 @@ export interface Subsection {
 export interface Post {
   id: string;
   title: string;
-  description: string;  // Short description (always required)
+  description: string;
   slug: string;
-  content: string;      // Full content (may be empty for some styles)
+  content: string;
   excerpt: string | null;
   coverImage: string | null;
   published: boolean;
@@ -45,14 +45,12 @@ export interface Post {
   readTime: number | null;
   metaTitle: string | null;
   metaDescription: string | null;
-  
   // Project-specific field
-  projectLink: string | null;  // External link (for project style)
-  
+  projectLink: string | null;
   subsection: {
     name: string;
     slug: string;
-    displayStyle: DisplayStyle;  // Inherited from subsection
+    displayStyle: DisplayStyle;
     topCategory?: {
       name: string;
     };

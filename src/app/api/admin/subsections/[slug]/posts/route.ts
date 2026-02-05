@@ -80,9 +80,9 @@ async function postHandler(
     const displayStyle = subsection.displayStyle;
 
     // Convert markdown to HTML for blog style
-    const htmlContent = displayStyle === 'blog' ? markdownToHtml(content || '') : '';
-    const readTime = displayStyle === 'blog' ? calculateReadTime(content || '') : 0;
-    const finalExcerpt = displayStyle === 'title_only' 
+    const htmlContent = displayStyle === 'BLOG' ? markdownToHtml(content || '') : '';
+    const readTime = displayStyle === 'BLOG' ? calculateReadTime(content || '') : 0;
+    const finalExcerpt = displayStyle === 'TITLE_ONLY' 
       ? null 
       : (excerpt || (content ? generateMarkdownExcerpt(content) : description));
 

@@ -2,6 +2,8 @@ import { prisma } from "@/src/lib/prisma";
 import { subsectionsSchema } from "@/src/schema/subsectionsSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/src/lib/authWrapper";
+import { DisplayStyle } from "@/prisma/generated/client";
+
 
 async function postHandler(req: NextRequest) {
   try {
@@ -18,7 +20,7 @@ async function postHandler(req: NextRequest) {
     
     if (!parsedData.success) {
       return NextResponse.json(
-        { message: "Invalid input or missing inputs"},
+        { message: "Invalid input or missing inputs", errors: parsedData.error.format() },
         { status: 400 }
       );
     }
@@ -52,13 +54,22 @@ async function postHandler(req: NextRequest) {
 
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 
+    // Map the input displayStyle to Prisma enum
+    const displayStyleMap: Record<string, DisplayStyle> = {
+      'blog': 'BLOG',
+      'project': 'PROJECT',
+      'title_only': 'TITLE_ONLY'
+    };
+
+    const prismaDisplayStyle = displayStyleMap[displayStyle || 'blog'] || 'BLOG';
+
     const subsection = await prisma.subsection.create({
       data: {
         name,
         slug,
         isVisible,
         icon,
-        displayStyle: displayStyle || 'blog',
+        displayStyle: prismaDisplayStyle,
         topCategoryId: topCategory.id 
       },
       include: {
