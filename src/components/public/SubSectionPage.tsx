@@ -96,6 +96,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
           post.tags?.some(tag => tag.name === activeFilter)
         ) ?? [];
 
+  // Group posts by year
   const postsByYear: Record<string, Post[]> = {};
   filteredPosts.forEach(post => {
     const year = new Date(post.publishedAt).getFullYear().toString();
@@ -104,43 +105,39 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
 
   const sortedYears = Object.keys(postsByYear).sort((a, b) => +b - +a);
 
+  // Check if all posts in this section are projects (for grid layout)
+  const isProjectSection = filteredPosts.every(p => p.displayStyle === 'project');
+
   // Render different post styles
   const renderPost = (post: Post) => {
     const tags = post.tags ?? [];
     const date = new Date(post.publishedAt).toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      month: 'short'
     });
 
-    // Title Only Style
+    // Title Only Style - Simple list item (non-clickable)
     if (post.displayStyle === 'title_only') {
       return (
-        <div key={post.slug} className="block group">
-          <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6">
+        <div key={post.slug} className="block">
+          <div className="flex items-start gap-4">
+            <time className="text-xs text-neutral-600 pt-1 w-12 shrink-0">{date}</time>
             <div className="flex-1 min-w-0">
-              <time className="block text-xs text-neutral-500 mb-1">{date}</time>
-              <h3 className="text-lg font-light text-neutral-300 group-hover:text-white transition leading-snug">
+              <h3 className="text-[15px] font-normal text-neutral-300 leading-snug mb-1">
                 {post.title}
               </h3>
+              {post.description && (
+                <p className="text-[13px] text-neutral-500 leading-relaxed">
+                  {post.description}
+                </p>
+              )}
             </div>
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 md:max-w-[40%] md:justify-end">
-                {tags.slice(0, 4).map(tag => (
-                  <span
-                    key={tag.name}
-                    className="px-3 py-1 text-xs rounded-lg bg-[#1a1a1a] text-neutral-500"
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       );
     }
 
-    // Project Card Style
+    // Project Card Style - Grid card with hover effect
     if (post.displayStyle === 'project') {
       return (
         <a
@@ -150,23 +147,34 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
           rel="noopener noreferrer"
           className="block group"
         >
-          <div className="bg-[#101010] rounded-xl border border-[#1a1a1a] p-6 hover:border-[#2a2a2a] transition">
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="text-lg font-medium text-white group-hover:text-white/80 transition flex items-center gap-2">
-                {post.title}
-                <svg className="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </h3>
-              <time className="text-xs text-neutral-500 whitespace-nowrap">{date}</time>
+          <div className="bg-[#101010] rounded-2xl border border-[#1a1a1a] p-6 hover:border-[#2a2a2a] transition-all duration-200 h-full flex flex-col">
+            <div className="flex items-start justify-between mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#1a1a1a] flex items-center justify-center text-lg">
+                {post.coverImage ? (
+                  <img src={post.coverImage} alt="" className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  '🚀'
+                )}
+              </div>
+              <svg className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
             </div>
-            <p className="text-sm text-neutral-400 mb-4 line-clamp-2">{post.description}</p>
+            
+            <h3 className="text-[15px] font-normal text-white mb-2 group-hover:text-neutral-300 transition">
+              {post.title}
+            </h3>
+            
+            <p className="text-[13px] text-neutral-500 leading-relaxed mb-4 flex-1">
+              {post.description}
+            </p>
+            
             {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {tags.slice(0, 4).map(tag => (
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-[#1a1a1a]">
+                {tags.slice(0, 3).map(tag => (
                   <span
                     key={tag.name}
-                    className="px-3 py-1 text-xs rounded-lg bg-[#1a1a1a] text-neutral-500"
+                    className="px-2 py-1 text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
                   >
                     {tag.name}
                   </span>
@@ -178,37 +186,30 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
       );
     }
 
-    // Blog Style (default)
+    // Blog Style (default) - Timeline list with date
     return (
       <Link
         key={post.slug}
         href={`/${slug}/${post.slug}`}
         className="block group"
       >
-        <div className="flex flex-col md:flex-row md:items-start gap-3 md:gap-6">
-          {post.coverImage && (
-            <div className="w-full md:w-32 h-32 rounded-lg overflow-hidden bg-[#1a1a1a] shrink-0">
-              <img 
-                src={post.coverImage} 
-                alt={post.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-              />
-            </div>
-          )}
+        <div className="flex items-start gap-4">
+          <time className="text-xs text-neutral-600 pt-1 w-12 shrink-0">{date}</time>
           <div className="flex-1 min-w-0">
-            <time className="block text-xs text-neutral-500 mb-1">{date}</time>
-            <h3 className="text-lg font-light text-neutral-300 group-hover:text-white transition leading-snug mb-2">
+            <h3 className="text-[15px] font-normal text-neutral-300 group-hover:text-white transition leading-snug mb-1">
               {post.title}
             </h3>
-            {post.excerpt && (
-              <p className="text-sm text-neutral-500 line-clamp-2 mb-3">{post.excerpt}</p>
+            {post.description && (
+              <p className="text-[13px] text-neutral-500 leading-relaxed mb-2">
+                {post.description}
+              </p>
             )}
             {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {tags.slice(0, 4).map(tag => (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {tags.slice(0, 3).map(tag => (
                   <span
                     key={tag.name}
-                    className="px-3 py-1 text-xs rounded-lg bg-[#1a1a1a] text-neutral-500"
+                    className="px-2 py-1 text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
                   >
                     {tag.name}
                   </span>
@@ -263,20 +264,28 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
               </div>
             )}
 
-            {/* Posts by Year */}
-            <div className="space-y-20 md:space-y-24">
-              {sortedYears.map(year => (
-                <div key={year} className="space-y-6">
-                  <h2 className="text-sm uppercase tracking-wider text-neutral-500">
-                    {year}
-                  </h2>
+            {/* Posts Layout */}
+            {isProjectSection ? (
+              // Grid layout for all-project sections
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredPosts.map(post => renderPost(post))}
+              </div>
+            ) : (
+              // Timeline layout for mixed or blog-only sections
+              <div className="space-y-20 md:space-y-24">
+                {sortedYears.map(year => (
+                  <div key={year} className="space-y-6">
+                    <h2 className="text-sm uppercase tracking-wider text-neutral-500">
+                      {year}
+                    </h2>
 
-                  <div className="space-y-8">
-                    {postsByYear[year].map(post => renderPost(post))}
+                    <div className="space-y-8">
+                      {postsByYear[year].map(post => renderPost(post))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {filteredPosts.length === 0 && (
               <p className="text-sm text-neutral-500 mt-20 text-center">
