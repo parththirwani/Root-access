@@ -47,7 +47,6 @@ async function postHandler(
       metaTitle,
       metaDescription,
       description,
-      displayStyle,
       projectLink,
     } = parsedData.data;
 
@@ -77,12 +76,15 @@ async function postHandler(
 
     const tagConnections = await handleTags(tags || [], prisma);
 
-    // Convert markdown to HTML for blog/project styles
-    const htmlContent = displayStyle === "title-only" ? "" : markdownToHtml(content);
-    const readTime = displayStyle === "title-only" ? 0 : calculateReadTime(content);
-    const finalExcerpt = displayStyle === "title-only" 
+    // Use subsection's display style to determine how to process content
+    const displayStyle = subsection.displayStyle;
+
+    // Convert markdown to HTML for blog style
+    const htmlContent = displayStyle === 'blog' ? markdownToHtml(content || '') : '';
+    const readTime = displayStyle === 'blog' ? calculateReadTime(content || '') : 0;
+    const finalExcerpt = displayStyle === 'title_only' 
       ? null 
-      : (excerpt || generateMarkdownExcerpt(content));
+      : (excerpt || (content ? generateMarkdownExcerpt(content) : description));
 
     const post = await prisma.post.create({
       data: {
@@ -91,13 +93,12 @@ async function postHandler(
         slug: postSlug,
         content: htmlContent,
         excerpt: finalExcerpt,
-        coverImage,
+        coverImage: coverImage || null,
         published: published ?? false,
         publishedAt: published ? new Date() : null,
         readTime,
         metaTitle: metaTitle || title,
         metaDescription: metaDescription || finalExcerpt,
-        displayStyle: displayStyle || "blog",
         projectLink: projectLink || null,
         subsectionId: subsection.id,
         tags: {
@@ -110,6 +111,7 @@ async function postHandler(
             id: true,
             name: true,
             slug: true,
+            displayStyle: true,
             topCategory: {
               select: {
                 name: true,
@@ -168,6 +170,7 @@ async function getHandler(
             id: true,
             name: true,
             slug: true,
+            displayStyle: true,
             topCategory: {
               select: {
                 name: true,

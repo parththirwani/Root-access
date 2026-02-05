@@ -38,7 +38,7 @@ async function putHandler(
       );
     }
 
-    const { name, isVisible, icon, topCategoryName } = parsedData.data;
+    const { name, isVisible, icon, topCategoryName, displayStyle } = parsedData.data;
 
     const updateData: any = {};
 
@@ -79,6 +79,10 @@ async function putHandler(
 
     if (icon) {
       updateData.icon = icon;
+    }
+
+    if (displayStyle) {
+      updateData.displayStyle = displayStyle;
     }
 
     const updatedSubSection = await prisma.subsection.update({

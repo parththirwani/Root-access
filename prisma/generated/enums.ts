@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const DisplayStyle = {
+  BLOG: 'BLOG',
+  PROJECT: 'PROJECT',
+  TITLE_ONLY: 'TITLE_ONLY'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type DisplayStyle = (typeof DisplayStyle)[keyof typeof DisplayStyle]

@@ -13,6 +13,9 @@ export interface TopCategory {
   subsections: Subsection[];
 }
 
+// Display style enum - defines how posts in a subsection are rendered
+export type DisplayStyle = "blog" | "project" | "title_only";
+
 export interface Subsection {
   id: string;
   name: string;
@@ -20,16 +23,13 @@ export interface Subsection {
   icon: string;
   isVisible: boolean;
   postCount: number;
+  displayStyle: DisplayStyle;  // Display style for this subsection
   topCategoryId: string;
   topCategory?: {
     name: string;
   };
   posts?: Post[];
 }
-
-// Display style enum - defines how a post is rendered
-// Must match Prisma enum: blog, project, title_only
-export type DisplayStyle = "blog" | "project" | "title_only";
 
 export interface Post {
   id: string;
@@ -46,13 +46,13 @@ export interface Post {
   metaTitle: string | null;
   metaDescription: string | null;
   
-  // Display style fields
-  displayStyle: DisplayStyle;  // How this post should be displayed
+  // Project-specific field
   projectLink: string | null;  // External link (for project style)
   
   subsection: {
     name: string;
     slug: string;
+    displayStyle: DisplayStyle;  // Inherited from subsection
     topCategory?: {
       name: string;
     };

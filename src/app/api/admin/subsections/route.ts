@@ -23,7 +23,7 @@ async function postHandler(req: NextRequest) {
       );
     }
 
-    const { name, isVisible, icon, topCategoryName } = parsedData.data;
+    const { name, isVisible, icon, topCategoryName, displayStyle } = parsedData.data;
 
     const topCategory = await prisma.topCategory.findUnique({
       where: { name: topCategoryName }
@@ -58,6 +58,7 @@ async function postHandler(req: NextRequest) {
         slug,
         isVisible,
         icon,
+        displayStyle: displayStyle || 'blog',
         topCategoryId: topCategory.id 
       },
       include: {

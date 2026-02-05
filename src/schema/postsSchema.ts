@@ -3,7 +3,7 @@ import { z } from "zod";
 export const postsSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  content: z.string().optional(), // Optional for some display styles
+  content: z.string().optional(), // Optional - may be empty for project/title_only subsections
   excerpt: z.string().optional(),
   coverImage: z.string().url().optional().or(z.literal("")),
   published: z.boolean().default(false),
@@ -11,8 +11,7 @@ export const postsSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   
-  // Display style configuration
-  displayStyle: z.enum(["blog", "project", "title_only"]).default("blog"),
+  // Project-specific field (only used when subsection displayStyle is 'project')
   projectLink: z.string().url().optional().or(z.literal("")),
 });
 
@@ -27,7 +26,6 @@ export const updatePostSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   
-  // Display style configuration
-  displayStyle: z.enum(["blog", "project", "title_only"]).optional(),
+  // Project-specific field
   projectLink: z.string().url().optional().or(z.literal("")),
 });

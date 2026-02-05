@@ -4,30 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { publicApi } from '@/src/lib/api';
 import { PublicSidebar } from './Sidebar';
-import { DisplayStyle } from '@/src/types';
+import { Post, DisplayStyle } from '@/src/types';
 
 interface SubsectionPageProps {
   slug: string;
 }
 
-interface Tag {
-  name: string;
-}
-
-interface Post {
-  slug: string;
-  title: string;
-  description: string;
-  publishedAt: string;
-  excerpt: string | null;
-  coverImage: string | null;
-  displayStyle: DisplayStyle;
-  projectLink: string | null;
-  tags?: Tag[];
-}
-
 interface Subsection {
   name: string;
+  displayStyle: DisplayStyle;
   posts?: Post[];
   topCategory?: {
     name: string;
@@ -96,28 +81,28 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
           post.tags?.some(tag => tag.name === activeFilter)
         ) ?? [];
 
-  // Group posts by year
+  // Group posts by year for timeline layouts
   const postsByYear: Record<string, Post[]> = {};
   filteredPosts.forEach(post => {
-    const year = new Date(post.publishedAt).getFullYear().toString();
+    const year = new Date(post.publishedAt ?? Date.now()).getFullYear().toString();
     (postsByYear[year] ??= []).push(post);
   });
 
   const sortedYears = Object.keys(postsByYear).sort((a, b) => +b - +a);
 
-  // Check if all posts in this section are projects (for grid layout)
-  const isProjectSection = filteredPosts.every(p => p.displayStyle === 'project');
+  // Use subsection's display style
+  const displayStyle = subsection.displayStyle;
 
-  // Render different post styles
+  // Render post based on subsection's display style
   const renderPost = (post: Post) => {
     const tags = post.tags ?? [];
-    const date = new Date(post.publishedAt).toLocaleDateString('en-US', {
+    const date = new Date(post.publishedAt ?? Date.now()).toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short'
     });
 
     // Title Only Style - Simple list item (non-clickable)
-    if (post.displayStyle === 'title_only') {
+    if (displayStyle === 'title_only') {
       return (
         <div key={post.slug} className="block">
           <div className="flex items-start gap-4">
@@ -131,6 +116,18 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
                   {post.description}
                 </p>
               )}
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {tags.slice(0, 3).map(tag => (
+                    <span
+                      key={tag.name}
+                      className="px-2 py-1 text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -138,7 +135,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
     }
 
     // Project Card Style - Grid card with hover effect
-    if (post.displayStyle === 'project') {
+    if (displayStyle === 'project') {
       return (
         <a
           key={post.slug}
@@ -186,7 +183,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
       );
     }
 
-    // Blog Style (default) - Timeline list with date
+    // Blog Style (default) - Timeline list with date and clickable to full post
     return (
       <Link
         key={post.slug}
@@ -264,14 +261,14 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
               </div>
             )}
 
-            {/* Posts Layout */}
-            {isProjectSection ? (
-              // Grid layout for all-project sections
+            {/* Posts Layout - Based on Subsection Display Style */}
+            {displayStyle === 'project' ? (
+              // Grid layout for project style
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredPosts.map(post => renderPost(post))}
               </div>
             ) : (
-              // Timeline layout for mixed or blog-only sections
+              // Timeline layout for blog and title_only styles
               <div className="space-y-20 md:space-y-24">
                 {sortedYears.map(year => (
                   <div key={year} className="space-y-6">

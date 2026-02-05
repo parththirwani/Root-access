@@ -39,13 +39,10 @@ export type PostSumAggregateOutputType = {
 export type PostMinAggregateOutputType = {
   id: string | null
   title: string | null
-  description: string | null
   slug: string | null
   content: string | null
   excerpt: string | null
   coverImage: string | null
-  displayStyle: string | null
-  projectLink: string | null
   published: boolean | null
   publishedAt: Date | null
   subsectionId: string | null
@@ -55,18 +52,17 @@ export type PostMinAggregateOutputType = {
   metaDescription: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  description: string | null
+  projectLink: string | null
 }
 
 export type PostMaxAggregateOutputType = {
   id: string | null
   title: string | null
-  description: string | null
   slug: string | null
   content: string | null
   excerpt: string | null
   coverImage: string | null
-  displayStyle: string | null
-  projectLink: string | null
   published: boolean | null
   publishedAt: Date | null
   subsectionId: string | null
@@ -76,18 +72,17 @@ export type PostMaxAggregateOutputType = {
   metaDescription: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  description: string | null
+  projectLink: string | null
 }
 
 export type PostCountAggregateOutputType = {
   id: number
   title: number
-  description: number
   slug: number
   content: number
   excerpt: number
   coverImage: number
-  displayStyle: number
-  projectLink: number
   published: number
   publishedAt: number
   subsectionId: number
@@ -97,6 +92,8 @@ export type PostCountAggregateOutputType = {
   metaDescription: number
   createdAt: number
   updatedAt: number
+  description: number
+  projectLink: number
   _all: number
 }
 
@@ -114,13 +111,10 @@ export type PostSumAggregateInputType = {
 export type PostMinAggregateInputType = {
   id?: true
   title?: true
-  description?: true
   slug?: true
   content?: true
   excerpt?: true
   coverImage?: true
-  displayStyle?: true
-  projectLink?: true
   published?: true
   publishedAt?: true
   subsectionId?: true
@@ -130,18 +124,17 @@ export type PostMinAggregateInputType = {
   metaDescription?: true
   createdAt?: true
   updatedAt?: true
+  description?: true
+  projectLink?: true
 }
 
 export type PostMaxAggregateInputType = {
   id?: true
   title?: true
-  description?: true
   slug?: true
   content?: true
   excerpt?: true
   coverImage?: true
-  displayStyle?: true
-  projectLink?: true
   published?: true
   publishedAt?: true
   subsectionId?: true
@@ -151,18 +144,17 @@ export type PostMaxAggregateInputType = {
   metaDescription?: true
   createdAt?: true
   updatedAt?: true
+  description?: true
+  projectLink?: true
 }
 
 export type PostCountAggregateInputType = {
   id?: true
   title?: true
-  description?: true
   slug?: true
   content?: true
   excerpt?: true
   coverImage?: true
-  displayStyle?: true
-  projectLink?: true
   published?: true
   publishedAt?: true
   subsectionId?: true
@@ -172,6 +164,8 @@ export type PostCountAggregateInputType = {
   metaDescription?: true
   createdAt?: true
   updatedAt?: true
+  description?: true
+  projectLink?: true
   _all?: true
 }
 
@@ -264,13 +258,10 @@ export type PostGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type PostGroupByOutputType = {
   id: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt: string | null
   coverImage: string | null
-  displayStyle: string
-  projectLink: string | null
   published: boolean
   publishedAt: Date | null
   subsectionId: string
@@ -280,6 +271,8 @@ export type PostGroupByOutputType = {
   metaDescription: string | null
   createdAt: Date
   updatedAt: Date
+  description: string
+  projectLink: string | null
   _count: PostCountAggregateOutputType | null
   _avg: PostAvgAggregateOutputType | null
   _sum: PostSumAggregateOutputType | null
@@ -308,13 +301,10 @@ export type PostWhereInput = {
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   id?: Prisma.StringFilter<"Post"> | string
   title?: Prisma.StringFilter<"Post"> | string
-  description?: Prisma.StringFilter<"Post"> | string
   slug?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   excerpt?: Prisma.StringNullableFilter<"Post"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  displayStyle?: Prisma.StringFilter<"Post"> | string
-  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
@@ -324,6 +314,8 @@ export type PostWhereInput = {
   metaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  description?: Prisma.StringFilter<"Post"> | string
+  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
   subsection?: Prisma.XOR<Prisma.SubsectionScalarRelationFilter, Prisma.SubsectionWhereInput>
   tags?: Prisma.TagListRelationFilter
 }
@@ -331,13 +323,10 @@ export type PostWhereInput = {
 export type PostOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
-  displayStyle?: Prisma.SortOrder
-  projectLink?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
@@ -347,6 +336,8 @@ export type PostOrderByWithRelationInput = {
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  projectLink?: Prisma.SortOrderInput | Prisma.SortOrder
   subsection?: Prisma.SubsectionOrderByWithRelationInput
   tags?: Prisma.TagOrderByRelationAggregateInput
 }
@@ -358,12 +349,9 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PostWhereInput[]
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   title?: Prisma.StringFilter<"Post"> | string
-  description?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   excerpt?: Prisma.StringNullableFilter<"Post"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  displayStyle?: Prisma.StringFilter<"Post"> | string
-  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
@@ -373,6 +361,8 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   metaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  description?: Prisma.StringFilter<"Post"> | string
+  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
   subsection?: Prisma.XOR<Prisma.SubsectionScalarRelationFilter, Prisma.SubsectionWhereInput>
   tags?: Prisma.TagListRelationFilter
 }, "id" | "slug">
@@ -380,13 +370,10 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
 export type PostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
-  displayStyle?: Prisma.SortOrder
-  projectLink?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
@@ -396,6 +383,8 @@ export type PostOrderByWithAggregationInput = {
   metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  projectLink?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PostCountOrderByAggregateInput
   _avg?: Prisma.PostAvgOrderByAggregateInput
   _max?: Prisma.PostMaxOrderByAggregateInput
@@ -409,13 +398,10 @@ export type PostScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PostScalarWhereWithAggregatesInput | Prisma.PostScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Post"> | string
   title?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  description?: Prisma.StringWithAggregatesFilter<"Post"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Post"> | string
   content?: Prisma.StringWithAggregatesFilter<"Post"> | string
   excerpt?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
-  displayStyle?: Prisma.StringWithAggregatesFilter<"Post"> | string
-  projectLink?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
   subsectionId?: Prisma.StringWithAggregatesFilter<"Post"> | string
@@ -425,18 +411,17 @@ export type PostScalarWhereWithAggregatesInput = {
   metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
+  description?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  projectLink?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
 }
 
 export type PostCreateInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   views?: number
@@ -445,6 +430,8 @@ export type PostCreateInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
   subsection: Prisma.SubsectionCreateNestedOneWithoutPostsInput
   tags?: Prisma.TagCreateNestedManyWithoutPostsInput
 }
@@ -452,13 +439,10 @@ export type PostCreateInput = {
 export type PostUncheckedCreateInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   subsectionId: string
@@ -468,19 +452,18 @@ export type PostUncheckedCreateInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutPostsInput
 }
 
 export type PostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -489,6 +472,8 @@ export type PostUpdateInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subsection?: Prisma.SubsectionUpdateOneRequiredWithoutPostsNestedInput
   tags?: Prisma.TagUpdateManyWithoutPostsNestedInput
 }
@@ -496,13 +481,10 @@ export type PostUpdateInput = {
 export type PostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -512,19 +494,18 @@ export type PostUncheckedUpdateInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.TagUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostCreateManyInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   subsectionId: string
@@ -534,18 +515,17 @@ export type PostCreateManyInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
 }
 
 export type PostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -554,18 +534,17 @@ export type PostUpdateManyMutationInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PostUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -575,6 +554,8 @@ export type PostUncheckedUpdateManyInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PostListRelationFilter = {
@@ -590,13 +571,10 @@ export type PostOrderByRelationAggregateInput = {
 export type PostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
-  displayStyle?: Prisma.SortOrder
-  projectLink?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
@@ -606,6 +584,8 @@ export type PostCountOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  projectLink?: Prisma.SortOrder
 }
 
 export type PostAvgOrderByAggregateInput = {
@@ -616,13 +596,10 @@ export type PostAvgOrderByAggregateInput = {
 export type PostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
-  displayStyle?: Prisma.SortOrder
-  projectLink?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
@@ -632,18 +609,17 @@ export type PostMaxOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  projectLink?: Prisma.SortOrder
 }
 
 export type PostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   content?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
-  displayStyle?: Prisma.SortOrder
-  projectLink?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
@@ -653,6 +629,8 @@ export type PostMinOrderByAggregateInput = {
   metaDescription?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  projectLink?: Prisma.SortOrder
 }
 
 export type PostSumOrderByAggregateInput = {
@@ -755,13 +733,10 @@ export type PostUncheckedUpdateManyWithoutTagsNestedInput = {
 export type PostCreateWithoutSubsectionInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   views?: number
@@ -770,19 +745,18 @@ export type PostCreateWithoutSubsectionInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
   tags?: Prisma.TagCreateNestedManyWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutSubsectionInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   views?: number
@@ -791,6 +765,8 @@ export type PostUncheckedCreateWithoutSubsectionInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
   tags?: Prisma.TagUncheckedCreateNestedManyWithoutPostsInput
 }
 
@@ -826,13 +802,10 @@ export type PostScalarWhereInput = {
   NOT?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
   id?: Prisma.StringFilter<"Post"> | string
   title?: Prisma.StringFilter<"Post"> | string
-  description?: Prisma.StringFilter<"Post"> | string
   slug?: Prisma.StringFilter<"Post"> | string
   content?: Prisma.StringFilter<"Post"> | string
   excerpt?: Prisma.StringNullableFilter<"Post"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
-  displayStyle?: Prisma.StringFilter<"Post"> | string
-  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
@@ -842,18 +815,17 @@ export type PostScalarWhereInput = {
   metaDescription?: Prisma.StringNullableFilter<"Post"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
+  description?: Prisma.StringFilter<"Post"> | string
+  projectLink?: Prisma.StringNullableFilter<"Post"> | string | null
 }
 
 export type PostCreateWithoutTagsInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   views?: number
@@ -862,19 +834,18 @@ export type PostCreateWithoutTagsInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
   subsection: Prisma.SubsectionCreateNestedOneWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutTagsInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   subsectionId: string
@@ -884,6 +855,8 @@ export type PostUncheckedCreateWithoutTagsInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
 }
 
 export type PostCreateOrConnectWithoutTagsInput = {
@@ -910,13 +883,10 @@ export type PostUpdateManyWithWhereWithoutTagsInput = {
 export type PostCreateManySubsectionInput = {
   id?: string
   title: string
-  description: string
   slug: string
   content: string
   excerpt?: string | null
   coverImage?: string | null
-  displayStyle?: string
-  projectLink?: string | null
   published?: boolean
   publishedAt?: Date | string | null
   views?: number
@@ -925,18 +895,17 @@ export type PostCreateManySubsectionInput = {
   metaDescription?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  description: string
+  projectLink?: string | null
 }
 
 export type PostUpdateWithoutSubsectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -945,19 +914,18 @@ export type PostUpdateWithoutSubsectionInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.TagUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutSubsectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -966,19 +934,18 @@ export type PostUncheckedUpdateWithoutSubsectionInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.TagUncheckedUpdateManyWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateManyWithoutSubsectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -987,18 +954,17 @@ export type PostUncheckedUpdateManyWithoutSubsectionInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PostUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1007,19 +973,18 @@ export type PostUpdateWithoutTagsInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subsection?: Prisma.SubsectionUpdateOneRequiredWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1029,18 +994,17 @@ export type PostUncheckedUpdateWithoutTagsInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PostUncheckedUpdateManyWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  displayStyle?: Prisma.StringFieldUpdateOperationsInput | string
-  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1050,6 +1014,8 @@ export type PostUncheckedUpdateManyWithoutTagsInput = {
   metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  projectLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1086,13 +1052,10 @@ export type PostCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Exten
 export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  description?: boolean
   slug?: boolean
   content?: boolean
   excerpt?: boolean
   coverImage?: boolean
-  displayStyle?: boolean
-  projectLink?: boolean
   published?: boolean
   publishedAt?: boolean
   subsectionId?: boolean
@@ -1102,6 +1065,8 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   metaDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  description?: boolean
+  projectLink?: boolean
   subsection?: boolean | Prisma.SubsectionDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>
@@ -1110,13 +1075,10 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  description?: boolean
   slug?: boolean
   content?: boolean
   excerpt?: boolean
   coverImage?: boolean
-  displayStyle?: boolean
-  projectLink?: boolean
   published?: boolean
   publishedAt?: boolean
   subsectionId?: boolean
@@ -1126,19 +1088,18 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   metaDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  description?: boolean
+  projectLink?: boolean
   subsection?: boolean | Prisma.SubsectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
-  description?: boolean
   slug?: boolean
   content?: boolean
   excerpt?: boolean
   coverImage?: boolean
-  displayStyle?: boolean
-  projectLink?: boolean
   published?: boolean
   publishedAt?: boolean
   subsectionId?: boolean
@@ -1148,19 +1109,18 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   metaDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  description?: boolean
+  projectLink?: boolean
   subsection?: boolean | Prisma.SubsectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectScalar = {
   id?: boolean
   title?: boolean
-  description?: boolean
   slug?: boolean
   content?: boolean
   excerpt?: boolean
   coverImage?: boolean
-  displayStyle?: boolean
-  projectLink?: boolean
   published?: boolean
   publishedAt?: boolean
   subsectionId?: boolean
@@ -1170,9 +1130,11 @@ export type PostSelectScalar = {
   metaDescription?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  description?: boolean
+  projectLink?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "slug" | "content" | "excerpt" | "coverImage" | "displayStyle" | "projectLink" | "published" | "publishedAt" | "subsectionId" | "views" | "readTime" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "excerpt" | "coverImage" | "published" | "publishedAt" | "subsectionId" | "views" | "readTime" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt" | "description" | "projectLink", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subsection?: boolean | Prisma.SubsectionDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>
@@ -1194,13 +1156,10 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
-    description: string
     slug: string
     content: string
     excerpt: string | null
     coverImage: string | null
-    displayStyle: string
-    projectLink: string | null
     published: boolean
     publishedAt: Date | null
     subsectionId: string
@@ -1210,6 +1169,8 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     metaDescription: string | null
     createdAt: Date
     updatedAt: Date
+    description: string
+    projectLink: string | null
   }, ExtArgs["result"]["post"]>
   composites: {}
 }
@@ -1637,13 +1598,10 @@ export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface PostFieldRefs {
   readonly id: Prisma.FieldRef<"Post", 'String'>
   readonly title: Prisma.FieldRef<"Post", 'String'>
-  readonly description: Prisma.FieldRef<"Post", 'String'>
   readonly slug: Prisma.FieldRef<"Post", 'String'>
   readonly content: Prisma.FieldRef<"Post", 'String'>
   readonly excerpt: Prisma.FieldRef<"Post", 'String'>
   readonly coverImage: Prisma.FieldRef<"Post", 'String'>
-  readonly displayStyle: Prisma.FieldRef<"Post", 'String'>
-  readonly projectLink: Prisma.FieldRef<"Post", 'String'>
   readonly published: Prisma.FieldRef<"Post", 'Boolean'>
   readonly publishedAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly subsectionId: Prisma.FieldRef<"Post", 'String'>
@@ -1653,6 +1611,8 @@ export interface PostFieldRefs {
   readonly metaDescription: Prisma.FieldRef<"Post", 'String'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Post", 'DateTime'>
+  readonly description: Prisma.FieldRef<"Post", 'String'>
+  readonly projectLink: Prisma.FieldRef<"Post", 'String'>
 }
     
 

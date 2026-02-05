@@ -14,45 +14,41 @@ model Admin {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  profile   Profile?  
+  profile   Profile?
 }
 
 model Profile {
-  id             String  @id @default(cuid())
-  xLink          String?
-  instagramLink  String?
-  linkedinLink   String?
-  bio            String?
-  adminId        String  @unique  
-  admin          Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  id            String  @id @default(cuid())
+  xLink         String?
+  instagramLink String?
+  linkedinLink  String?
+  bio           String?
+  adminId       String  @unique
+  admin         Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 model TopCategory {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  isVisible   Boolean  @default(true)
-  
+  id          String       @id @default(cuid())
+  name        String       @unique
+  isVisible   Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   subsections Subsection[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Subsection {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique 
-  icon        String
-  isVisible   Boolean  @default(true)
-  postCount   Int      @default(0) 
-  
+  id            String      @id @default(cuid())
+  name          String      @unique
+  slug          String      @unique
+  icon          String
+  isVisible     Boolean     @default(true)
+  postCount     Int         @default(0)
+  displayStyle  DisplayStyle
   topCategoryId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  posts         Post[]
   topCategory   TopCategory @relation(fields: [topCategoryId], references: [id], onDelete: Cascade)
-  
-  posts       Post[]
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
   @@index([slug])
   @@index([topCategoryId])
@@ -60,58 +56,46 @@ model Subsection {
 
 
 model Post {
-  id          String   @id @default(cuid())
-  title       String
-  description String   
-  slug        String   @unique
-  content     String   @db.Text  // Full content (optional for some display styles)
-  excerpt     String?  @db.Text
-  coverImage  String?
-  
-  // Display style configuration
-  displayStyle DisplayStyle
-  projectLink  String?
-  
-  // Publishing
-  published   Boolean  @default(false)
-  publishedAt DateTime?
-  
-  subsectionId String
-  subsection   Subsection @relation(fields: [subsectionId], references: [id])
-  
-  tags        Tag[]
-  
-  // Metadata
-  views       Int      @default(0)
-  readTime    Int?     
-  
-  // SEO
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  content         String
+  excerpt         String?
+  coverImage      String?
+  published       Boolean    @default(false)
+  publishedAt     DateTime?
+  subsectionId    String
+  views           Int        @default(0)
+  readTime        Int?
   metaTitle       String?
   metaDescription String?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  description     String
+
+  projectLink     String?
+  subsection      Subsection @relation(fields: [subsectionId], references: [id])
+  tags            Tag[]      @relation("PostToTag")
 
   @@index([slug])
   @@index([subsectionId])
   @@index([published])
   @@index([publishedAt])
-  @@index([displayStyle])
-}
-enum DisplayStyle {
-  blog
-  project
-  title_only
 }
 
 model Tag {
-  id    String @id @default(cuid())
-  name  String @unique 
-  slug  String @unique
-  posts Post[]
-
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  posts     Post[]   @relation("PostToTag")
 
   @@index([slug])
+}
+
+enum DisplayStyle {
+  BLOG
+  PROJECT
+  TITLE_ONLY
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { DisplayStyle } from '@/src/types';
 import { MarkdownEditor } from '../post/MarkDownEditor';
 
@@ -10,7 +9,6 @@ interface PostFormData {
   coverImage: string;
   published: boolean;
   tags: string;
-  displayStyle: DisplayStyle;
   projectLink: string;
 }
 
@@ -19,10 +17,11 @@ interface PostFormProps {
   onChange: (data: PostFormData) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
-  subsections: Array<{ id: string; slug: string; name: string; icon: string }>;
+  subsections: Array<{ id: string; slug: string; name: string; icon: string; displayStyle: DisplayStyle }>;
   selectedSubsection: string;
   onSubsectionChange: (slug: string) => void;
   error?: string;
+  displayStyle: DisplayStyle;
 }
 
 export function PostForm({
@@ -33,8 +32,20 @@ export function PostForm({
   subsections,
   selectedSubsection,
   onSubsectionChange,
-  error
+  error,
+  displayStyle
 }: PostFormProps) {
+  const getDisplayStyleInfo = (style: DisplayStyle) => {
+    const info = {
+      blog: { emoji: '📝', label: 'Blog Post', desc: 'Full article with content' },
+      project: { emoji: '🚀', label: 'Project', desc: 'Card with external link' },
+      title_only: { emoji: '📌', label: 'Title Only', desc: 'Simple title list' },
+    };
+    return info[style];
+  };
+
+  const styleInfo = getDisplayStyleInfo(displayStyle);
+
   return (
     <form onSubmit={onSubmit} className="bg-[#101010] p-6 rounded-xl border border-[#1a1a1a] mb-6">
       {error && (
@@ -53,64 +64,29 @@ export function PostForm({
           className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
         >
           <option value="">Select a subsection</option>
-          {subsections.map((sub) => (
-            <option key={sub.id} value={sub.slug}>
-              {sub.icon} {sub.name}
-            </option>
-          ))}
+          {subsections.map((sub) => {
+            const subStyleInfo = getDisplayStyleInfo(sub.displayStyle);
+            return (
+              <option key={sub.id} value={sub.slug}>
+                {sub.icon} {sub.name} ({subStyleInfo.emoji} {subStyleInfo.label})
+              </option>
+            );
+          })}
         </select>
       </div>
 
-      {/* Display Style Selector */}
-      <div className="mb-4">
-        <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Display Style *</label>
-        <div className="grid grid-cols-3 gap-3">
-          <button
-            type="button"
-            onClick={() => onChange({ ...formData, displayStyle: 'blog' })}
-            className={`p-4 rounded-lg border-2 transition ${
-              formData.displayStyle === 'blog'
-                ? 'border-white bg-[#1a1a1a]'
-                : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#3a3a3a]'
-            }`}
-          >
-            <div className="text-left">
-              <div className="text-[14px] font-medium text-white mb-1">📝 Blog</div>
-              <div className="text-[11px] text-[#707070]">Full article with content</div>
+      {/* Display Style Info */}
+      {selectedSubsection && (
+        <div className="mb-4 p-4 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
+          <div className="flex items-center gap-2 text-[13px]">
+            <span className="text-lg">{styleInfo.emoji}</span>
+            <div>
+              <div className="text-white font-medium">{styleInfo.label}</div>
+              <div className="text-[#707070]">{styleInfo.desc}</div>
             </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onChange({ ...formData, displayStyle: 'project' })}
-            className={`p-4 rounded-lg border-2 transition ${
-              formData.displayStyle === 'project'
-                ? 'border-white bg-[#1a1a1a]'
-                : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#3a3a3a]'
-            }`}
-          >
-            <div className="text-left">
-              <div className="text-[14px] font-medium text-white mb-1">🚀 Project</div>
-              <div className="text-[11px] text-[#707070]">Card with external link</div>
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onChange({ ...formData, displayStyle: 'title_only' })}
-            className={`p-4 rounded-lg border-2 transition ${
-              formData.displayStyle === 'title_only'
-                ? 'border-white bg-[#1a1a1a]'
-                : 'border-[#2a2a2a] bg-[#0a0a0a] hover:border-[#3a3a3a]'
-            }`}
-          >
-            <div className="text-left">
-              <div className="text-[14px] font-medium text-white mb-1">📌 Title Only</div>
-              <div className="text-[11px] text-[#707070]">Just title and tags</div>
-            </div>
-          </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Title and Cover Image */}
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -126,9 +102,22 @@ export function PostForm({
           />
         </div>
 
-        {formData.displayStyle === 'blog' && (
+        {displayStyle === 'blog' && (
           <div>
             <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Cover Image URL</label>
+            <input
+              type="url"
+              value={formData.coverImage}
+              onChange={(e) => onChange({ ...formData, coverImage: e.target.value })}
+              placeholder="https://..."
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+            />
+          </div>
+        )}
+
+        {displayStyle === 'project' && (
+          <div>
+            <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Cover Image/Icon URL</label>
             <input
               type="url"
               value={formData.coverImage}
@@ -154,7 +143,7 @@ export function PostForm({
       </div>
 
       {/* Project Link (only for project style) */}
-      {formData.displayStyle === 'project' && (
+      {displayStyle === 'project' && (
         <div className="mb-4">
           <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Project Link *</label>
           <input
@@ -168,8 +157,8 @@ export function PostForm({
         </div>
       )}
 
-      {/* Content (only for blog styles) */}
-      {formData.displayStyle === 'blog' && (
+      {/* Content (only for blog style) */}
+      {displayStyle === 'blog' && (
         <div className="mb-4">
           <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
             Content (Markdown) *
@@ -181,8 +170,8 @@ export function PostForm({
         </div>
       )}
 
-      {/* Excerpt */}
-      {formData.displayStyle !== 'title_only' && (
+      {/* Excerpt (optional for blog and project) */}
+      {displayStyle !== 'title_only' && (
         <div className="mb-4">
           <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Excerpt (optional)</label>
           <textarea

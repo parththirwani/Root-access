@@ -9,9 +9,9 @@ interface PostListItemProps {
 export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemProps) {
   const getDisplayStyleBadge = (style: DisplayStyle) => {
     const styles = {
-      blog: { bg: 'bg-blue-950/50', text: 'text-blue-400', label: 'Blog' },
-      project: { bg: 'bg-purple-950/50', text: 'text-purple-400', label: 'Project' },
-      title_only: { bg: 'bg-gray-950/50', text: 'text-gray-400', label: 'Title Only' },
+      blog: { bg: 'bg-blue-950/50', text: 'text-blue-400', label: '📝 Blog' },
+      project: { bg: 'bg-purple-950/50', text: 'text-purple-400', label: '🚀 Project' },
+      title_only: { bg: 'bg-gray-950/50', text: 'text-gray-400', label: '📌 Title' },
     };
     const s = styles[style];
     return (
@@ -27,7 +27,7 @@ export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemPr
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <h3 className="text-[15px] text-white font-medium truncate">{post.title}</h3>
-            {getDisplayStyleBadge(post.displayStyle)}
+            {getDisplayStyleBadge(post.subsection.displayStyle)}
             <span
               className={`px-2 py-0.5 rounded text-[11px] shrink-0 ${
                 post.published
@@ -40,7 +40,7 @@ export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemPr
           </div>
           <div className="text-[13px] text-[#707070] mb-1">
             {post.subsection.name} • {post.views} views
-            {post.displayStyle === 'project' && post.projectLink && (
+            {post.subsection.displayStyle === 'project' && post.projectLink && (
               <span className="ml-2">
                 • <a href={post.projectLink} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">View Project →</a>
               </span>

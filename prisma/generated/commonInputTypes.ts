@@ -134,6 +134,13 @@ export type IntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedIntFilter<$PrismaModel> | number
 }
 
+export type EnumDisplayStyleFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisplayStyle | Prisma.EnumDisplayStyleFieldRefInput<$PrismaModel>
+  in?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel> | $Enums.DisplayStyle
+}
+
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -148,6 +155,16 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedIntFilter<$PrismaModel>
   _max?: Prisma.NestedIntFilter<$PrismaModel>
+}
+
+export type EnumDisplayStyleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisplayStyle | Prisma.EnumDisplayStyleFieldRefInput<$PrismaModel>
+  in?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisplayStyleWithAggregatesFilter<$PrismaModel> | $Enums.DisplayStyle
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel>
 }
 
 export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -324,6 +341,13 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type NestedEnumDisplayStyleFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisplayStyle | Prisma.EnumDisplayStyleFieldRefInput<$PrismaModel>
+  in?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel> | $Enums.DisplayStyle
+}
+
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -349,6 +373,16 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumDisplayStyleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DisplayStyle | Prisma.EnumDisplayStyleFieldRefInput<$PrismaModel>
+  in?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DisplayStyle[] | Prisma.ListEnumDisplayStyleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDisplayStyleWithAggregatesFilter<$PrismaModel> | $Enums.DisplayStyle
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDisplayStyleFilter<$PrismaModel>
 }
 
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {

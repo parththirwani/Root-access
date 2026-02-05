@@ -1,7 +1,7 @@
 'use client';
 
 import { adminApi } from '@/src/lib/api';
-import { Post, TopCategory, DisplayStyle } from '@/src/types';
+import { Post, TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
 import { SubsectionFilter } from '../subsections/SubSectionFilter';
 import { PostForm } from './postForm';
@@ -15,7 +15,6 @@ const INITIAL_FORM_DATA = {
   coverImage: '',
   published: false,
   tags: '',
-  displayStyle: 'blog' as DisplayStyle,
   projectLink: '',
 };
 
@@ -63,6 +62,13 @@ export function PostsManager() {
     }
   };
 
+  const getSubsectionDisplayStyle = (subsectionSlug: string) => {
+    const subsection = sections
+      .flatMap(s => s.subsections || [])
+      .find(sub => sub.slug === subsectionSlug);
+    return subsection?.displayStyle || 'blog';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -72,19 +78,25 @@ export function PostsManager() {
       return;
     }
 
-    if (formData.displayStyle === 'project' && !formData.projectLink) {
-      setError('Project link is required for project display style');
+    const displayStyle = getSubsectionDisplayStyle(selectedSubsection);
+
+    // Validate based on subsection's display style
+    if (displayStyle === 'project' && !formData.projectLink) {
+      setError('Project link is required for project-style subsections');
       return;
     }
 
-    if (formData.displayStyle === 'blog' && !formData.content) {
-      setError('Content is required for blog display style');
+    if (displayStyle === 'blog' && !formData.content) {
+      setError('Content is required for blog-style subsections');
       return;
     }
 
     try {
       const tags = formData.tags.split(',').map((t) => t.trim()).filter(Boolean);
-      await adminApi.createPost(selectedSubsection, { ...formData, tags });
+      await adminApi.createPost(selectedSubsection, { 
+        ...formData, 
+        tags,
+      });
       
       setFormData(INITIAL_FORM_DATA);
       setShowForm(false);
@@ -132,6 +144,8 @@ export function PostsManager() {
     postCounts[post.subsection.slug] = (postCounts[post.subsection.slug] || 0) + 1;
   });
 
+  const currentDisplayStyle = selectedSubsection ? getSubsectionDisplayStyle(selectedSubsection) : 'blog';
+
   if (loading) {
     return <div className="text-[#707070] text-[14px]">Loading posts...</div>;
   }
@@ -168,6 +182,7 @@ export function PostsManager() {
           selectedSubsection={selectedSubsection}
           onSubsectionChange={setSelectedSubsection}
           error={error}
+          displayStyle={currentDisplayStyle}
         />
       )}
 

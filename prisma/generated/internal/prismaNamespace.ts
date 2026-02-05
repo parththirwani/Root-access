@@ -934,6 +934,7 @@ export const SubsectionScalarFieldEnum = {
   icon: 'icon',
   isVisible: 'isVisible',
   postCount: 'postCount',
+  displayStyle: 'displayStyle',
   topCategoryId: 'topCategoryId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -945,13 +946,10 @@ export type SubsectionScalarFieldEnum = (typeof SubsectionScalarFieldEnum)[keyof
 export const PostScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  description: 'description',
   slug: 'slug',
   content: 'content',
   excerpt: 'excerpt',
   coverImage: 'coverImage',
-  displayStyle: 'displayStyle',
-  projectLink: 'projectLink',
   published: 'published',
   publishedAt: 'publishedAt',
   subsectionId: 'subsectionId',
@@ -960,7 +958,9 @@ export const PostScalarFieldEnum = {
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  description: 'description',
+  projectLink: 'projectLink'
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
@@ -1053,6 +1053,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DisplayStyle'
+ */
+export type EnumDisplayStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisplayStyle'>
+    
+
+
+/**
+ * Reference to a field of type 'DisplayStyle[]'
+ */
+export type ListEnumDisplayStyleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DisplayStyle[]'>
     
 
 

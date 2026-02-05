@@ -41,6 +41,7 @@ export type SubsectionMinAggregateOutputType = {
   icon: string | null
   isVisible: boolean | null
   postCount: number | null
+  displayStyle: $Enums.DisplayStyle | null
   topCategoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +54,7 @@ export type SubsectionMaxAggregateOutputType = {
   icon: string | null
   isVisible: boolean | null
   postCount: number | null
+  displayStyle: $Enums.DisplayStyle | null
   topCategoryId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +67,7 @@ export type SubsectionCountAggregateOutputType = {
   icon: number
   isVisible: number
   postCount: number
+  displayStyle: number
   topCategoryId: number
   createdAt: number
   updatedAt: number
@@ -87,6 +90,7 @@ export type SubsectionMinAggregateInputType = {
   icon?: true
   isVisible?: true
   postCount?: true
+  displayStyle?: true
   topCategoryId?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +103,7 @@ export type SubsectionMaxAggregateInputType = {
   icon?: true
   isVisible?: true
   postCount?: true
+  displayStyle?: true
   topCategoryId?: true
   createdAt?: true
   updatedAt?: true
@@ -111,6 +116,7 @@ export type SubsectionCountAggregateInputType = {
   icon?: true
   isVisible?: true
   postCount?: true
+  displayStyle?: true
   topCategoryId?: true
   createdAt?: true
   updatedAt?: true
@@ -210,6 +216,7 @@ export type SubsectionGroupByOutputType = {
   icon: string
   isVisible: boolean
   postCount: number
+  displayStyle: $Enums.DisplayStyle
   topCategoryId: string
   createdAt: Date
   updatedAt: Date
@@ -245,11 +252,12 @@ export type SubsectionWhereInput = {
   icon?: Prisma.StringFilter<"Subsection"> | string
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
+  displayStyle?: Prisma.EnumDisplayStyleFilter<"Subsection"> | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
   createdAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
-  topCategory?: Prisma.XOR<Prisma.TopCategoryScalarRelationFilter, Prisma.TopCategoryWhereInput>
   posts?: Prisma.PostListRelationFilter
+  topCategory?: Prisma.XOR<Prisma.TopCategoryScalarRelationFilter, Prisma.TopCategoryWhereInput>
 }
 
 export type SubsectionOrderByWithRelationInput = {
@@ -259,11 +267,12 @@ export type SubsectionOrderByWithRelationInput = {
   icon?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
+  displayStyle?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  topCategory?: Prisma.TopCategoryOrderByWithRelationInput
   posts?: Prisma.PostOrderByRelationAggregateInput
+  topCategory?: Prisma.TopCategoryOrderByWithRelationInput
 }
 
 export type SubsectionWhereUniqueInput = Prisma.AtLeast<{
@@ -276,11 +285,12 @@ export type SubsectionWhereUniqueInput = Prisma.AtLeast<{
   icon?: Prisma.StringFilter<"Subsection"> | string
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
+  displayStyle?: Prisma.EnumDisplayStyleFilter<"Subsection"> | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
   createdAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
-  topCategory?: Prisma.XOR<Prisma.TopCategoryScalarRelationFilter, Prisma.TopCategoryWhereInput>
   posts?: Prisma.PostListRelationFilter
+  topCategory?: Prisma.XOR<Prisma.TopCategoryScalarRelationFilter, Prisma.TopCategoryWhereInput>
 }, "id" | "name" | "slug">
 
 export type SubsectionOrderByWithAggregationInput = {
@@ -290,6 +300,7 @@ export type SubsectionOrderByWithAggregationInput = {
   icon?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
+  displayStyle?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -310,6 +321,7 @@ export type SubsectionScalarWhereWithAggregatesInput = {
   icon?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
   isVisible?: Prisma.BoolWithAggregatesFilter<"Subsection"> | boolean
   postCount?: Prisma.IntWithAggregatesFilter<"Subsection"> | number
+  displayStyle?: Prisma.EnumDisplayStyleWithAggregatesFilter<"Subsection"> | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringWithAggregatesFilter<"Subsection"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subsection"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Subsection"> | Date | string
@@ -322,10 +334,11 @@ export type SubsectionCreateInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   createdAt?: Date | string
   updatedAt?: Date | string
-  topCategory: Prisma.TopCategoryCreateNestedOneWithoutSubsectionsInput
   posts?: Prisma.PostCreateNestedManyWithoutSubsectionInput
+  topCategory: Prisma.TopCategoryCreateNestedOneWithoutSubsectionsInput
 }
 
 export type SubsectionUncheckedCreateInput = {
@@ -335,6 +348,7 @@ export type SubsectionUncheckedCreateInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   topCategoryId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -348,10 +362,11 @@ export type SubsectionUpdateInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  topCategory?: Prisma.TopCategoryUpdateOneRequiredWithoutSubsectionsNestedInput
   posts?: Prisma.PostUpdateManyWithoutSubsectionNestedInput
+  topCategory?: Prisma.TopCategoryUpdateOneRequiredWithoutSubsectionsNestedInput
 }
 
 export type SubsectionUncheckedUpdateInput = {
@@ -361,6 +376,7 @@ export type SubsectionUncheckedUpdateInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -374,6 +390,7 @@ export type SubsectionCreateManyInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   topCategoryId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -386,6 +403,7 @@ export type SubsectionUpdateManyMutationInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -397,6 +415,7 @@ export type SubsectionUncheckedUpdateManyInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -419,6 +438,7 @@ export type SubsectionCountOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
+  displayStyle?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -435,6 +455,7 @@ export type SubsectionMaxOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
+  displayStyle?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -447,6 +468,7 @@ export type SubsectionMinOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   isVisible?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
+  displayStyle?: Prisma.SortOrder
   topCategoryId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -511,6 +533,10 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type EnumDisplayStyleFieldUpdateOperationsInput = {
+  set?: $Enums.DisplayStyle
+}
+
 export type SubsectionCreateNestedOneWithoutPostsInput = {
   create?: Prisma.XOR<Prisma.SubsectionCreateWithoutPostsInput, Prisma.SubsectionUncheckedCreateWithoutPostsInput>
   connectOrCreate?: Prisma.SubsectionCreateOrConnectWithoutPostsInput
@@ -532,6 +558,7 @@ export type SubsectionCreateWithoutTopCategoryInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   createdAt?: Date | string
   updatedAt?: Date | string
   posts?: Prisma.PostCreateNestedManyWithoutSubsectionInput
@@ -544,6 +571,7 @@ export type SubsectionUncheckedCreateWithoutTopCategoryInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   createdAt?: Date | string
   updatedAt?: Date | string
   posts?: Prisma.PostUncheckedCreateNestedManyWithoutSubsectionInput
@@ -585,6 +613,7 @@ export type SubsectionScalarWhereInput = {
   icon?: Prisma.StringFilter<"Subsection"> | string
   isVisible?: Prisma.BoolFilter<"Subsection"> | boolean
   postCount?: Prisma.IntFilter<"Subsection"> | number
+  displayStyle?: Prisma.EnumDisplayStyleFilter<"Subsection"> | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFilter<"Subsection"> | string
   createdAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subsection"> | Date | string
@@ -597,6 +626,7 @@ export type SubsectionCreateWithoutPostsInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   createdAt?: Date | string
   updatedAt?: Date | string
   topCategory: Prisma.TopCategoryCreateNestedOneWithoutSubsectionsInput
@@ -609,6 +639,7 @@ export type SubsectionUncheckedCreateWithoutPostsInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   topCategoryId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -637,6 +668,7 @@ export type SubsectionUpdateWithoutPostsInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topCategory?: Prisma.TopCategoryUpdateOneRequiredWithoutSubsectionsNestedInput
@@ -649,6 +681,7 @@ export type SubsectionUncheckedUpdateWithoutPostsInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   topCategoryId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -661,6 +694,7 @@ export type SubsectionCreateManyTopCategoryInput = {
   icon: string
   isVisible?: boolean
   postCount?: number
+  displayStyle: $Enums.DisplayStyle
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -672,6 +706,7 @@ export type SubsectionUpdateWithoutTopCategoryInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   posts?: Prisma.PostUpdateManyWithoutSubsectionNestedInput
@@ -684,6 +719,7 @@ export type SubsectionUncheckedUpdateWithoutTopCategoryInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   posts?: Prisma.PostUncheckedUpdateManyWithoutSubsectionNestedInput
@@ -696,6 +732,7 @@ export type SubsectionUncheckedUpdateManyWithoutTopCategoryInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   isVisible?: Prisma.BoolFieldUpdateOperationsInput | boolean
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  displayStyle?: Prisma.EnumDisplayStyleFieldUpdateOperationsInput | $Enums.DisplayStyle
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -738,11 +775,12 @@ export type SubsectionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   icon?: boolean
   isVisible?: boolean
   postCount?: boolean
+  displayStyle?: boolean
   topCategoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  topCategory?: boolean | Prisma.TopCategoryDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Subsection$postsArgs<ExtArgs>
+  topCategory?: boolean | Prisma.TopCategoryDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubsectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subsection"]>
 
@@ -753,6 +791,7 @@ export type SubsectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   icon?: boolean
   isVisible?: boolean
   postCount?: boolean
+  displayStyle?: boolean
   topCategoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -766,6 +805,7 @@ export type SubsectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   icon?: boolean
   isVisible?: boolean
   postCount?: boolean
+  displayStyle?: boolean
   topCategoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -779,15 +819,16 @@ export type SubsectionSelectScalar = {
   icon?: boolean
   isVisible?: boolean
   postCount?: boolean
+  displayStyle?: boolean
   topCategoryId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubsectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "icon" | "isVisible" | "postCount" | "topCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["subsection"]>
+export type SubsectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "icon" | "isVisible" | "postCount" | "displayStyle" | "topCategoryId" | "createdAt" | "updatedAt", ExtArgs["result"]["subsection"]>
 export type SubsectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  topCategory?: boolean | Prisma.TopCategoryDefaultArgs<ExtArgs>
   posts?: boolean | Prisma.Subsection$postsArgs<ExtArgs>
+  topCategory?: boolean | Prisma.TopCategoryDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.SubsectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubsectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -800,8 +841,8 @@ export type SubsectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.E
 export type $SubsectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subsection"
   objects: {
-    topCategory: Prisma.$TopCategoryPayload<ExtArgs>
     posts: Prisma.$PostPayload<ExtArgs>[]
+    topCategory: Prisma.$TopCategoryPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -810,6 +851,7 @@ export type $SubsectionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     icon: string
     isVisible: boolean
     postCount: number
+    displayStyle: $Enums.DisplayStyle
     topCategoryId: string
     createdAt: Date
     updatedAt: Date
@@ -1207,8 +1249,8 @@ readonly fields: SubsectionFieldRefs;
  */
 export interface Prisma__SubsectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  topCategory<T extends Prisma.TopCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TopCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__TopCategoryClient<runtime.Types.Result.GetResult<Prisma.$TopCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   posts<T extends Prisma.Subsection$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subsection$postsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  topCategory<T extends Prisma.TopCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TopCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__TopCategoryClient<runtime.Types.Result.GetResult<Prisma.$TopCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1244,6 +1286,7 @@ export interface SubsectionFieldRefs {
   readonly icon: Prisma.FieldRef<"Subsection", 'String'>
   readonly isVisible: Prisma.FieldRef<"Subsection", 'Boolean'>
   readonly postCount: Prisma.FieldRef<"Subsection", 'Int'>
+  readonly displayStyle: Prisma.FieldRef<"Subsection", 'DisplayStyle'>
   readonly topCategoryId: Prisma.FieldRef<"Subsection", 'String'>
   readonly createdAt: Prisma.FieldRef<"Subsection", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Subsection", 'DateTime'>
