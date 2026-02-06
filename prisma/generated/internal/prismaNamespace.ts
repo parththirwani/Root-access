@@ -912,7 +912,8 @@ export const ProfileScalarFieldEnum = {
   instagramLink: 'instagramLink',
   linkedinLink: 'linkedinLink',
   bio: 'bio',
-  adminId: 'adminId'
+  adminId: 'adminId',
+  profilePicture: 'profilePicture'
 } as const
 
 export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]

@@ -7,4 +7,5 @@ export const updateProfileSchema = z.object({
   linkedinLink: z.string().url().nullable().optional(),
   email: z.string().email().nullable().optional(),
   resumeUrl: z.string().url().nullable().optional(),
+  profilePicture: z.string().url().nullable().optional(), 
 });

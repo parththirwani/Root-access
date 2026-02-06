@@ -1,12 +1,14 @@
+// src/components/admin/profile/profileManager.tsx (UPDATED)
 'use client';
 
 import { adminApi } from '@/src/lib/api';
 import { Profile } from '@/src/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export function ProfileManager() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     bio: '',
     xLink: '',
@@ -14,9 +16,11 @@ export function ProfileManager() {
     linkedinLink: '',
     email: '',
     resumeUrl: '',
+    profilePicture: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchProfile();
@@ -33,11 +37,69 @@ export function ProfileManager() {
         linkedinLink: res.profile.linkedinLink || '',
         email: res.profile.email || '',
         resumeUrl: res.profile.resumeUrl || '',
+        profilePicture: res.profile.profilePicture || '',
       });
     } catch (error) {
       console.error('Failed to fetch profile:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
+
+    setUploading(true);
+    setError('');
+
+    try {
+      // Convert to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+
+        // Upload to Cloudinary via API
+        const response = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ image: base64 }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const data = await response.json();
+        
+        // Update form data with new image URL
+        setFormData(prev => ({ ...prev, profilePicture: data.url }));
+        setSuccess('Image uploaded successfully');
+        setTimeout(() => setSuccess(''), 3000);
+      };
+
+      reader.onerror = () => {
+        setError('Failed to read file');
+      };
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload image');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -50,6 +112,7 @@ export function ProfileManager() {
       await adminApi.updateProfile(formData);
       setSuccess('Profile updated successfully');
       setTimeout(() => setSuccess(''), 3000);
+      fetchProfile(); // Refresh profile data
     } catch (err: any) {
       setError(err.message || 'Failed to update profile');
     }
@@ -75,6 +138,52 @@ export function ProfileManager() {
             {success}
           </div>
         )}
+
+        {/* Profile Picture Upload */}
+        <div className="mb-6">
+          <label className="block text-[13px] font-medium text-[#e5e5e5] mb-3">
+            Profile Picture
+          </label>
+          
+          <div className="flex items-center gap-6">
+            {/* Current Picture */}
+            <div className="w-24 h-24 rounded-full bg-neutral-700 flex items-center justify-center overflow-hidden border-2 border-[#2a2a2a]">
+              {formData.profilePicture ? (
+                <img
+                  src={formData.profilePicture}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <svg className="w-12 h-12 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+
+            {/* Upload Button */}
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium disabled:opacity-50"
+              >
+                {uploading ? 'Uploading...' : 'Change Picture'}
+              </button>
+              <p className="text-[11px] text-[#707070] mt-2">
+                JPG, PNG or GIF. Max 5MB.
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="mb-6">
           <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Bio</label>

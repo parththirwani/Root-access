@@ -8,6 +8,7 @@ export interface Profile {
   linkedinLink: string | null;
   email: string | null;
   resumeUrl: string | null;
+  profilePicture: string;
 }
 
 export interface TopCategory {

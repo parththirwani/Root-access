@@ -18,15 +18,16 @@ model Admin {
 }
 
 model Profile {
-  id            String  @id @default(cuid())
-  xLink         String?
-  email         String?
-  resumeUrl     String?
-  instagramLink String?
-  linkedinLink  String?
-  bio           String?
-  adminId       String  @unique
-  admin         Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  id              String  @id @default(cuid())
+  xLink           String?
+  email           String?
+  resumeUrl       String?
+  instagramLink   String?
+  linkedinLink    String?
+  bio             String?
+  adminId         String  @unique
+  profilePicture  String?
+  admin           Admin   @relation(fields: [adminId], references: [id], onDelete: Cascade)
 }
 
 model TopCategory {

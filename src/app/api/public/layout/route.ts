@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
               linkedinLink: true,
               email: true,
               resumeUrl: true,
+              profilePicture: true, 
             },
           },
         },

@@ -1,3 +1,4 @@
+// src/components/public/Sidebar.tsx (UPDATED)
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ interface Profile {
   linkedinLink: string | null;
   email: string | null;
   resumeUrl: string | null;
+  profilePicture: string | null;
 }
 
 interface LayoutData {
@@ -42,7 +44,6 @@ export function PublicSidebar() {
   useEffect(() => {
     async function fetchLayoutData() {
       try {
-        // Single API call to get all layout data
         const response = await fetch('/api/public/layout');
         
         if (response.ok) {
@@ -104,9 +105,17 @@ export function PublicSidebar() {
         <div className="mb-8">
           <Link href="/" className="flex items-center gap-2 hover:opacity-70 transition">
             <div className="w-5 h-5 rounded-full bg-neutral-700 flex items-center justify-center overflow-hidden">
-              <svg className="w-3 h-3 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-              </svg>
+              {layoutData.admin.profile?.profilePicture ? (
+                <img 
+                  src={layoutData.admin.profile.profilePicture} 
+                  alt={layoutData.admin.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <svg className="w-3 h-3 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              )}
             </div>
             <span className="text-white text-[14px] font-normal">{layoutData.admin.name}</span>
           </Link>
@@ -127,7 +136,7 @@ export function PublicSidebar() {
             </Link>
           </div>
 
-          {/* Resume Link - Only show if resume is uploaded */}
+          {/* Resume Link */}
           {hasResume && (
             <div>
               <Link

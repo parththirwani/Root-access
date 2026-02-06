@@ -17,6 +17,7 @@ async function getHandler(req: NextRequest) {
         linkedinLink: true,
         email: true,
         resumeUrl: true,
+        profilePicture: true, 
       },
     });
 
@@ -39,7 +40,7 @@ async function getHandler(req: NextRequest) {
 
 async function patchHandler(req: NextRequest) {
   try {
-    const session = (req as any).session; // Attached by withAuth
+    const session = (req as any).session;
 
     const body = await req.json();
     const parsed = updateProfileSchema.safeParse(body);
@@ -62,6 +63,7 @@ async function patchHandler(req: NextRequest) {
         linkedinLink: data.linkedinLink ?? undefined,
         email: data.email ?? undefined,
         resumeUrl: data.resumeUrl ?? undefined,
+        profilePicture: data.profilePicture ?? undefined, 
       },
       create: {
         adminId: session.userId,
@@ -71,6 +73,7 @@ async function patchHandler(req: NextRequest) {
         linkedinLink: data.linkedinLink ?? null,
         email: data.email ?? null,
         resumeUrl: data.resumeUrl ?? null,
+        profilePicture: data.profilePicture ?? null, 
       },
     });
 
