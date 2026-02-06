@@ -20,6 +20,8 @@ model Admin {
 model Profile {
   id            String  @id @default(cuid())
   xLink         String?
+  email         String?
+  resumeUrl     String?
   instagramLink String?
   linkedinLink  String?
   bio           String?

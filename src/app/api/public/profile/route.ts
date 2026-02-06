@@ -1,11 +1,8 @@
-// src/app/api/public/profile/route.ts (NEW FILE)
-
 import { prisma } from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    // Get the first admin's profile (assuming single admin blog)
     const admin = await prisma.admin.findFirst({
       include: {
         profile: {

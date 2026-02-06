@@ -907,6 +907,8 @@ export type AdminScalarFieldEnum = (typeof AdminScalarFieldEnum)[keyof typeof Ad
 export const ProfileScalarFieldEnum = {
   id: 'id',
   xLink: 'xLink',
+  email: 'email',
+  resumeUrl: 'resumeUrl',
   instagramLink: 'instagramLink',
   linkedinLink: 'linkedinLink',
   bio: 'bio',

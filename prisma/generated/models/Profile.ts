@@ -27,6 +27,8 @@ export type AggregateProfile = {
 export type ProfileMinAggregateOutputType = {
   id: string | null
   xLink: string | null
+  email: string | null
+  resumeUrl: string | null
   instagramLink: string | null
   linkedinLink: string | null
   bio: string | null
@@ -36,6 +38,8 @@ export type ProfileMinAggregateOutputType = {
 export type ProfileMaxAggregateOutputType = {
   id: string | null
   xLink: string | null
+  email: string | null
+  resumeUrl: string | null
   instagramLink: string | null
   linkedinLink: string | null
   bio: string | null
@@ -45,6 +49,8 @@ export type ProfileMaxAggregateOutputType = {
 export type ProfileCountAggregateOutputType = {
   id: number
   xLink: number
+  email: number
+  resumeUrl: number
   instagramLink: number
   linkedinLink: number
   bio: number
@@ -56,6 +62,8 @@ export type ProfileCountAggregateOutputType = {
 export type ProfileMinAggregateInputType = {
   id?: true
   xLink?: true
+  email?: true
+  resumeUrl?: true
   instagramLink?: true
   linkedinLink?: true
   bio?: true
@@ -65,6 +73,8 @@ export type ProfileMinAggregateInputType = {
 export type ProfileMaxAggregateInputType = {
   id?: true
   xLink?: true
+  email?: true
+  resumeUrl?: true
   instagramLink?: true
   linkedinLink?: true
   bio?: true
@@ -74,6 +84,8 @@ export type ProfileMaxAggregateInputType = {
 export type ProfileCountAggregateInputType = {
   id?: true
   xLink?: true
+  email?: true
+  resumeUrl?: true
   instagramLink?: true
   linkedinLink?: true
   bio?: true
@@ -156,6 +168,8 @@ export type ProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type ProfileGroupByOutputType = {
   id: string
   xLink: string | null
+  email: string | null
+  resumeUrl: string | null
   instagramLink: string | null
   linkedinLink: string | null
   bio: string | null
@@ -186,6 +200,8 @@ export type ProfileWhereInput = {
   NOT?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
   id?: Prisma.StringFilter<"Profile"> | string
   xLink?: Prisma.StringNullableFilter<"Profile"> | string | null
+  email?: Prisma.StringNullableFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   instagramLink?: Prisma.StringNullableFilter<"Profile"> | string | null
   linkedinLink?: Prisma.StringNullableFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
@@ -196,6 +212,8 @@ export type ProfileWhereInput = {
 export type ProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   xLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   instagramLink?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedinLink?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -210,6 +228,8 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProfileWhereInput[]
   NOT?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
   xLink?: Prisma.StringNullableFilter<"Profile"> | string | null
+  email?: Prisma.StringNullableFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   instagramLink?: Prisma.StringNullableFilter<"Profile"> | string | null
   linkedinLink?: Prisma.StringNullableFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
@@ -219,6 +239,8 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
 export type ProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   xLink?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   instagramLink?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedinLink?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -234,6 +256,8 @@ export type ProfileScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProfileScalarWhereWithAggregatesInput | Prisma.ProfileScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Profile"> | string
   xLink?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   instagramLink?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   linkedinLink?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
@@ -243,6 +267,8 @@ export type ProfileScalarWhereWithAggregatesInput = {
 export type ProfileCreateInput = {
   id?: string
   xLink?: string | null
+  email?: string | null
+  resumeUrl?: string | null
   instagramLink?: string | null
   linkedinLink?: string | null
   bio?: string | null
@@ -252,6 +278,8 @@ export type ProfileCreateInput = {
 export type ProfileUncheckedCreateInput = {
   id?: string
   xLink?: string | null
+  email?: string | null
+  resumeUrl?: string | null
   instagramLink?: string | null
   linkedinLink?: string | null
   bio?: string | null
@@ -261,6 +289,8 @@ export type ProfileUncheckedCreateInput = {
 export type ProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -270,6 +300,8 @@ export type ProfileUpdateInput = {
 export type ProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -279,6 +311,8 @@ export type ProfileUncheckedUpdateInput = {
 export type ProfileCreateManyInput = {
   id?: string
   xLink?: string | null
+  email?: string | null
+  resumeUrl?: string | null
   instagramLink?: string | null
   linkedinLink?: string | null
   bio?: string | null
@@ -288,6 +322,8 @@ export type ProfileCreateManyInput = {
 export type ProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -296,6 +332,8 @@ export type ProfileUpdateManyMutationInput = {
 export type ProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -310,6 +348,8 @@ export type ProfileNullableScalarRelationFilter = {
 export type ProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   xLink?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
   instagramLink?: Prisma.SortOrder
   linkedinLink?: Prisma.SortOrder
   bio?: Prisma.SortOrder
@@ -319,6 +359,8 @@ export type ProfileCountOrderByAggregateInput = {
 export type ProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   xLink?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
   instagramLink?: Prisma.SortOrder
   linkedinLink?: Prisma.SortOrder
   bio?: Prisma.SortOrder
@@ -328,6 +370,8 @@ export type ProfileMaxOrderByAggregateInput = {
 export type ProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   xLink?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
   instagramLink?: Prisma.SortOrder
   linkedinLink?: Prisma.SortOrder
   bio?: Prisma.SortOrder
@@ -373,6 +417,8 @@ export type NullableStringFieldUpdateOperationsInput = {
 export type ProfileCreateWithoutAdminInput = {
   id?: string
   xLink?: string | null
+  email?: string | null
+  resumeUrl?: string | null
   instagramLink?: string | null
   linkedinLink?: string | null
   bio?: string | null
@@ -381,6 +427,8 @@ export type ProfileCreateWithoutAdminInput = {
 export type ProfileUncheckedCreateWithoutAdminInput = {
   id?: string
   xLink?: string | null
+  email?: string | null
+  resumeUrl?: string | null
   instagramLink?: string | null
   linkedinLink?: string | null
   bio?: string | null
@@ -405,6 +453,8 @@ export type ProfileUpdateToOneWithWhereWithoutAdminInput = {
 export type ProfileUpdateWithoutAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -413,6 +463,8 @@ export type ProfileUpdateWithoutAdminInput = {
 export type ProfileUncheckedUpdateWithoutAdminInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   xLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   instagramLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -423,6 +475,8 @@ export type ProfileUncheckedUpdateWithoutAdminInput = {
 export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   xLink?: boolean
+  email?: boolean
+  resumeUrl?: boolean
   instagramLink?: boolean
   linkedinLink?: boolean
   bio?: boolean
@@ -433,6 +487,8 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   xLink?: boolean
+  email?: boolean
+  resumeUrl?: boolean
   instagramLink?: boolean
   linkedinLink?: boolean
   bio?: boolean
@@ -443,6 +499,8 @@ export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   xLink?: boolean
+  email?: boolean
+  resumeUrl?: boolean
   instagramLink?: boolean
   linkedinLink?: boolean
   bio?: boolean
@@ -453,13 +511,15 @@ export type ProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type ProfileSelectScalar = {
   id?: boolean
   xLink?: boolean
+  email?: boolean
+  resumeUrl?: boolean
   instagramLink?: boolean
   linkedinLink?: boolean
   bio?: boolean
   adminId?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "xLink" | "instagramLink" | "linkedinLink" | "bio" | "adminId", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "xLink" | "email" | "resumeUrl" | "instagramLink" | "linkedinLink" | "bio" | "adminId", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   admin?: boolean | Prisma.AdminDefaultArgs<ExtArgs>
 }
@@ -478,6 +538,8 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     xLink: string | null
+    email: string | null
+    resumeUrl: string | null
     instagramLink: string | null
     linkedinLink: string | null
     bio: string | null
@@ -908,6 +970,8 @@ export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends runtime.
 export interface ProfileFieldRefs {
   readonly id: Prisma.FieldRef<"Profile", 'String'>
   readonly xLink: Prisma.FieldRef<"Profile", 'String'>
+  readonly email: Prisma.FieldRef<"Profile", 'String'>
+  readonly resumeUrl: Prisma.FieldRef<"Profile", 'String'>
   readonly instagramLink: Prisma.FieldRef<"Profile", 'String'>
   readonly linkedinLink: Prisma.FieldRef<"Profile", 'String'>
   readonly bio: Prisma.FieldRef<"Profile", 'String'>

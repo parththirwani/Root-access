@@ -12,6 +12,8 @@ export function ProfileManager() {
     xLink: '',
     instagramLink: '',
     linkedinLink: '',
+    email: '',
+    resumeUrl: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -29,6 +31,8 @@ export function ProfileManager() {
         xLink: res.profile.xLink || '',
         instagramLink: res.profile.instagramLink || '',
         linkedinLink: res.profile.linkedinLink || '',
+        email: res.profile.email || '',
+        resumeUrl: res.profile.resumeUrl || '',
       });
     } catch (error) {
       console.error('Failed to fetch profile:', error);
@@ -87,6 +91,24 @@ export function ProfileManager() {
           <div>
             <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
               <span className="inline-flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Email
+              </span>
+            </label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="your@email.com"
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+              <span className="inline-flex items-center gap-2">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
@@ -136,6 +158,25 @@ export function ProfileManager() {
               placeholder="https://instagram.com/username"
               className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
             />
+          </div>
+
+          <div>
+            <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+              <span className="inline-flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Resume URL
+              </span>
+            </label>
+            <input
+              type="url"
+              value={formData.resumeUrl}
+              onChange={(e) => setFormData({ ...formData, resumeUrl: e.target.value })}
+              placeholder="https://example.com/resume.pdf"
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+            />
+            <p className="text-[11px] text-[#707070] mt-2">Upload your resume to a hosting service (Google Drive, Dropbox, etc.) and paste the public URL here</p>
           </div>
         </div>
 

@@ -6,6 +6,8 @@ export interface Profile {
   xLink: string | null;
   instagramLink: string | null;
   linkedinLink: string | null;
+  email: string | null;
+  resumeUrl: string | null;
 }
 
 export interface TopCategory {

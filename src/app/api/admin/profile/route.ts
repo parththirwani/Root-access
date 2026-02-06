@@ -5,7 +5,7 @@ import { withAuth } from "@/src/lib/authWrapper";
 
 async function getHandler(req: NextRequest) {
   try {
-    const session = (req as any).session; // Attached by withAuth
+    const session = (req as any).session; 
 
     const profile = await prisma.profile.findUnique({
       where: { adminId: session.userId },
@@ -15,6 +15,8 @@ async function getHandler(req: NextRequest) {
         xLink: true,
         instagramLink: true,
         linkedinLink: true,
+        email: true,
+        resumeUrl: true,
       },
     });
 
@@ -58,6 +60,8 @@ async function patchHandler(req: NextRequest) {
         xLink: data.xLink ?? undefined,
         instagramLink: data.instagramLink ?? undefined,
         linkedinLink: data.linkedinLink ?? undefined,
+        email: data.email ?? undefined,
+        resumeUrl: data.resumeUrl ?? undefined,
       },
       create: {
         adminId: session.userId,
@@ -65,6 +69,8 @@ async function patchHandler(req: NextRequest) {
         xLink: data.xLink ?? null,
         instagramLink: data.instagramLink ?? null,
         linkedinLink: data.linkedinLink ?? null,
+        email: data.email ?? null,
+        resumeUrl: data.resumeUrl ?? null,
       },
     });
 

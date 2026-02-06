@@ -14,6 +14,8 @@ export async function GET(req: NextRequest) {
               xLink: true,
               instagramLink: true,
               linkedinLink: true,
+              email: true,
+              resumeUrl: true,
             },
           },
         },
