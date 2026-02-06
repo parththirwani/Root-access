@@ -1,4 +1,3 @@
-import { getServerSession } from "@/src/lib/auth";
 import { prisma } from "@/src/lib/prisma";
 import { updateProfileSchema } from "@/src/schema/profileSchema";
 import { NextRequest, NextResponse } from "next/server";

@@ -22,6 +22,10 @@ async function fetcher<T>(url: string, options?: RequestInit): Promise<T> {
 
 // Public APIs (no auth required)
 export const publicApi = {
+  // Optimized: Single call for layout data (admin, profile, sections)
+  getLayout: () => fetcher('/api/public/layout'),
+  
+  // Legacy endpoints (kept for backward compatibility)
   getProfile: () => fetcher('/api/public/profile'),
   getSubsections: () => fetcher('/api/public/subsections'),
   getSubsection: (slug: string) => fetcher(`/api/public/subsections/${slug}`),
@@ -42,6 +46,9 @@ export const adminApi = {
     fetcher('/api/admin/logout', {
       method: 'POST',
     }),
+
+  // Optimized: Single call for dashboard stats
+  getStats: () => fetcher('/api/admin/stats'),
 
   // Profile
   getProfile: () => fetcher('/api/admin/profile'),

@@ -1,0 +1,72 @@
+import { prisma } from "@/src/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(req: NextRequest) {
+  try {
+    const [admin, sections] = await Promise.all([
+      prisma.admin.findFirst({
+        select: {
+          name: true,
+          profile: {
+            select: {
+              id: true,
+              bio: true,
+              xLink: true,
+              instagramLink: true,
+              linkedinLink: true,
+            },
+          },
+        },
+      }),
+      prisma.topCategory.findMany({
+        where: {
+          isVisible: true,
+        },
+        select: {
+          id: true,
+          name: true,
+          isVisible: true,
+          subsections: {
+            where: {
+              isVisible: true,
+            },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              icon: true,
+              postCount: true,
+            },
+            orderBy: {
+              name: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      }),
+    ]);
+
+    if (!admin) {
+      return NextResponse.json(
+        { message: "Admin not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      admin: {
+        name: admin.name,
+        profile: admin.profile,
+      },
+      sections,
+    }, { status: 200 });
+  } catch (error) {
+    console.error("GET layout data error:", error);
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 }
+    );
+  }
+}

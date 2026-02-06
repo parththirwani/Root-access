@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { adminApi } from '@/src/lib/api';
+
+interface Stats {
+  sections: number;
+  subsections: number;
+  posts: number;
+  tags: number;
+}
 
 export function AdminDashboard() {
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<Stats>({
     sections: 0,
     subsections: 0,
     posts: 0,
@@ -16,30 +22,15 @@ export function AdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [sectionsResponse, tagsResponse] = await Promise.all([
-          adminApi.getSections(),
-          adminApi.getTags(),
-        ]);
-
-        const sections = (sectionsResponse as any).sections;
-        let totalPosts = 0;
-        let subsectionCount = 0;
-
-        sections.forEach((section: any) => {
-          if (section.subsections) {
-            subsectionCount += section.subsections.length;
-            section.subsections.forEach((sub: any) => {
-              totalPosts += sub.postCount || 0;
-            });
-          }
+        // Single API call to get all stats
+        const response = await fetch('/api/admin/stats', {
+          credentials: 'include',
         });
 
-        setStats({
-          sections: sections.length,
-          subsections: subsectionCount,
-          posts: totalPosts,
-          tags: (tagsResponse as any).tags.length,
-        });
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
       } catch (error) {
         console.error('Failed to fetch stats:', error);
       } finally {

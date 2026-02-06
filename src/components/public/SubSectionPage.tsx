@@ -139,13 +139,13 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
       );
     }
 
-    // Project Card Style - Clickable card with link
+    // Project Card Style - Clickable card with external link
     if (displayStyle === 'PROJECT') {
       const projectUrl = post.projectLink || '#';
       
       return (
         <div key={post.slug} className="block group">
-          <a
+          <Link
             href={projectUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -186,7 +186,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
                 </div>
               )}
             </div>
-          </a>
+          </Link>
         </div>
       );
     }

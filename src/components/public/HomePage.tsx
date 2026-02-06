@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { PublicSidebar } from './Sidebar';
 
-
 interface Profile {
   id: string;
   bio: string | null;
@@ -17,13 +16,14 @@ export function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchProfile() {
       try {
-        const profileRes = await fetch('/api/public/profile');
-
-        if (profileRes.ok) {
-          const profileData = await profileRes.json();
-          setProfile(profileData.profile);
+        // Use the combined layout API
+        const response = await fetch('/api/public/layout');
+        
+        if (response.ok) {
+          const data = await response.json();
+          setProfile(data.admin.profile);
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -31,7 +31,7 @@ export function HomePage() {
         setLoading(false);
       }
     }
-    fetchData();
+    fetchProfile();
   }, []);
 
   if (loading) {
