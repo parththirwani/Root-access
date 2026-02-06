@@ -19,7 +19,7 @@ export function PostList({ posts, subsectionSlug }: PostListProps) {
   }
 
   // Check if all posts are projects for grid layout
-  const isProjectSection = posts.every(p => p.displayStyle === 'project');
+  const isProjectSection = posts.every(p => p.subsection.displayStyle === 'PROJECT');
 
   // Render project grid
   if (isProjectSection) {
@@ -52,10 +52,10 @@ export function PostList({ posts, subsectionSlug }: PostListProps) {
 
           <div className="space-y-8">
             {postsByYear[year].map(post => {
-              if (post.displayStyle === 'title_only') {
+              if (post.subsection.displayStyle === 'TITLE_ONLY') {
                 return <TitleOnlyItem key={post.slug} post={post} />;
               }
-              if (post.displayStyle === 'project') {
+              if (post.subsection.displayStyle === 'PROJECT') {
                 return <PostCard key={post.slug} post={post} />;
               }
               return <BlogPostItem key={post.slug} post={post} subsectionSlug={subsectionSlug} />;

@@ -26,7 +26,7 @@ export async function GET(
             publishedAt: true,
             excerpt: true,
             coverImage: true,
-            projectLink: true,
+            projectLink: true, 
             tags: {
               select: {
                 name: true,

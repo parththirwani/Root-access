@@ -23,11 +23,17 @@ export async function GET(
             slug: true,
             publishedAt: true,
             excerpt: true,
+            description: true,
+            coverImage: true,
+            projectLink: true, // Include projectLink
             tags: {
               select: {
                 name: true,
               },
             },
+          },
+          orderBy: {
+            publishedAt: "desc",
           },
         },
         topCategory: {
