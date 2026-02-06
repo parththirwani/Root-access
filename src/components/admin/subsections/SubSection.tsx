@@ -3,6 +3,7 @@
 import { adminApi } from '@/src/lib/api';
 import { Subsection, TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
+import { EmojiPicker } from './EmojiPicker';
 
 type DisplayStyleInput = 'blog' | 'project' | 'title_only';
 
@@ -156,15 +157,9 @@ export function SubsectionsManager() {
             </div>
 
             <div>
-              <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
-                Icon (Emoji)
-              </label>
-              <input
-                type="text"
+              <EmojiPicker
                 value={formData.icon}
-                onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                placeholder="📝"
-                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+                onChange={(emoji) => setFormData({ ...formData, icon: emoji })}
               />
             </div>
           </div>

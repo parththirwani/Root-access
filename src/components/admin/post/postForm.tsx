@@ -139,18 +139,20 @@ export function PostForm({
         )}
       </div>
 
-      {/* Description */}
-      <div className="mb-4">
-        <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Description *</label>
-        <textarea
-          value={formData.description}
-          onChange={(e) => onChange({ ...formData, description: e.target.value })}
-          required
-          placeholder="A brief description"
-          rows={2}
-          className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition resize-none"
-        />
-      </div>
+      {/* Description - Only for blog and project, NOT for title_only */}
+      {displayStyle !== 'title_only' && (
+        <div className="mb-4">
+          <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Description *</label>
+          <textarea
+            value={formData.description}
+            onChange={(e) => onChange({ ...formData, description: e.target.value })}
+            required
+            placeholder="A brief description"
+            rows={2}
+            className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition resize-none"
+          />
+        </div>
+      )}
 
       {/* Project Link (only for project style) */}
       {displayStyle === 'project' && (

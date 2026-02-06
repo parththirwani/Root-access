@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const postsSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
+  description: z.string().optional().default(""), // Optional for title_only posts
   content: z.string().optional(), // Optional - may be empty for project/title_only subsections
   excerpt: z.string().optional(),
   coverImage: z.string().url().optional().or(z.literal("")),
@@ -17,7 +17,7 @@ export const postsSchema = z.object({
 
 export const updatePostSchema = z.object({
   title: z.string().min(1).optional(),
-  description: z.string().min(1).optional(),
+  description: z.string().optional(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
   coverImage: z.string().url().optional().or(z.literal("")),

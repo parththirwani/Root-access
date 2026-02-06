@@ -82,14 +82,19 @@ async function postHandler(
     // Convert markdown to HTML for blog style
     const htmlContent = displayStyle === 'BLOG' ? markdownToHtml(content || '') : '';
     const readTime = displayStyle === 'BLOG' ? calculateReadTime(content || '') : 0;
+    
+    // For TITLE_ONLY, no excerpt or description needed
     const finalExcerpt = displayStyle === 'TITLE_ONLY' 
       ? null 
       : (excerpt || (content ? generateMarkdownExcerpt(content) : description));
 
+    // For TITLE_ONLY, description is empty string
+    const finalDescription = displayStyle === 'TITLE_ONLY' ? '' : (description || '');
+
     const post = await prisma.post.create({
       data: {
         title,
-        description,
+        description: finalDescription,
         slug: postSlug,
         content: htmlContent,
         excerpt: finalExcerpt,

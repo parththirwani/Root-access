@@ -101,12 +101,23 @@ export function PostsManager() {
       return;
     }
 
+    // For title_only, description is optional
+    if (displayStyle !== 'title_only' && !formData.description) {
+      setError('Description is required for this subsection type');
+      return;
+    }
+
     try {
       const tags = formData.tags.split(',').map((t) => t.trim()).filter(Boolean);
-      await adminApi.createPost(selectedSubsection, { 
-        ...formData, 
+      
+      // For title_only posts, send empty description
+      const postData = {
+        ...formData,
+        description: displayStyle === 'title_only' ? '' : formData.description,
         tags,
-      });
+      };
+      
+      await adminApi.createPost(selectedSubsection, postData);
       
       setFormData(INITIAL_FORM_DATA);
       setShowForm(false);
