@@ -25,6 +25,14 @@ export async function POST(req: NextRequest) {
 
         const { email, secretKey, name } = parsedData.data
 
+        const adminCount = await prisma.admin.count()
+        if (adminCount > 0) {
+            return NextResponse.json(
+                { message: "Registration is closed. An admin account already exists." },
+                { status: 403 }
+            )
+        }
+
         const existingUser = await prisma.admin.findUnique({
             where: { email }
         })
