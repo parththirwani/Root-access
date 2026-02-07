@@ -6,15 +6,6 @@ import { HomeContent } from '../components/public/HomeContent';
 export const revalidate = 60;
 
 async function getHomeData() {
-  // Check database availability
-  if (!process.env.DATABASE_URL) {
-    console.warn('[Runtime] DATABASE_URL not available - returning empty data');
-    return {
-      profile: null,
-      subsections: [],
-    };
-  }
-
   try {
     const admin = await prisma.admin.findFirst({
       select: {
@@ -61,7 +52,7 @@ async function getHomeData() {
     };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
-    // Return empty data during failures
+    // Return empty data - database might be empty or unreachable
     return {
       profile: null,
       subsections: [],

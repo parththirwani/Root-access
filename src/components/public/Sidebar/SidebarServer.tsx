@@ -1,21 +1,7 @@
-import Link from 'next/link';
 import { prisma } from '@/src/lib/prisma';
 import { SidebarClient } from './SidebarClient';
 
 export async function PublicSidebarServer() {
-  // Check database availability
-  if (!process.env.DATABASE_URL) {
-    console.warn('[Sidebar] DATABASE_URL not available - using fallback');
-    const fallbackData = {
-      admin: {
-        name: 'Admin',
-        profile: null,
-      },
-      sections: [],
-    };
-    return <SidebarClient layoutData={fallbackData} />;
-  }
-
   try {
     const layoutData = await prisma.admin.findFirst({
       select: {
@@ -74,7 +60,7 @@ export async function PublicSidebarServer() {
   } catch (error) {
     console.error('[Sidebar] Failed to fetch sidebar data:', error);
     
-    // Return a fallback sidebar during failures
+    // Return a fallback sidebar - database might be empty
     const fallbackData = {
       admin: {
         name: 'Admin',
