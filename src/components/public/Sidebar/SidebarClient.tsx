@@ -168,7 +168,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
 
         {/* Bottom Content - Fixed at bottom */}
         {hasSocialLinks && (
-          <div className="p-6 border-t border-neutral-900 flex-shrink-0">
+          <div className="p-6 border-t border-neutral-900 shrink-0">
             <div className="flex flex-wrap gap-3">
               {layoutData.admin.profile?.email && (
                 <Link
