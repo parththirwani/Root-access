@@ -34,13 +34,13 @@ export function PostContent({ post }: { post: Post }) {
 
   return (
     <div className="overflow-hidden">
-      <div className="flex justify-center px-4 sm:px-8 lg:px-20 py-10 sm:py-16">
+      <div className="flex justify-center px-4 sm:px-6 md:px-8 lg:px-20 py-8 sm:py-12 md:py-16">
         <article className="w-full max-w-3xl">
           {/* Copy Button */}
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-4 sm:mb-6">
             <button
               onClick={handleCopyPage}
-              className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white cursor-pointer transition"
+              className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white cursor-pointer transition touch-manipulation"
             >
               <svg
                 className="w-4 h-4"
@@ -60,17 +60,19 @@ export function PostContent({ post }: { post: Post }) {
           </div>
 
           {/* Header */}
-          <header className="mb-12">
-            <h1 className="text-white text-3xl sm:text-[40px] leading-tight mb-3">
+          <header className="mb-8 sm:mb-10 md:mb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-[40px] text-white leading-tight mb-3 wrap-break-word">
               {post.title}
             </h1>
 
             {post.description && (
-              <p className="text-neutral-400 mb-4">{post.description}</p>
+              <p className="text-sm sm:text-base text-neutral-400 mb-3 sm:mb-4 wrap-break-word">
+                {post.description}
+              </p>
             )}
 
             {post.publishedAt && (
-              <time className="text-neutral-500 text-xs">
+              <time className="text-xs text-neutral-500">
                 {new Date(post.publishedAt).toLocaleDateString('en-US', {
                   month: 'long',
                   year: 'numeric',
@@ -84,18 +86,33 @@ export function PostContent({ post }: { post: Post }) {
             <img
               src={post.coverImage}
               alt={post.title}
-              className="rounded-lg mb-12"
+              className="rounded-lg mb-8 sm:mb-10 md:mb-12 w-full h-auto"
             />
           )}
 
-          {/* Body */}
+          {/* Body - Responsive typography */}
           <div
-            className="prose prose-invert max-w-none mb-12"
+            className="
+              prose prose-invert max-w-none mb-8 sm:mb-10 md:mb-12
+              prose-headings:break-words
+              prose-p:break-words
+              prose-a:break-words
+              prose-li:break-words
+              prose-sm sm:prose-base
+              prose-img:rounded-lg
+              prose-img:w-full
+              prose-img:h-auto
+              prose-pre:overflow-x-auto
+              prose-pre:max-w-full
+              prose-code:break-words
+              prose-table:block
+              prose-table:overflow-x-auto
+            "
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {/* Footer */}
-          <footer className="border-t border-black pt-6 flex justify-end">
+          <footer className="border-t border-black pt-4 sm:pt-6 flex justify-end">
             <span className="text-xs text-neutral-500">
               {post.views.toLocaleString()} views
             </span>

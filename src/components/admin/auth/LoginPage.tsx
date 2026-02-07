@@ -14,7 +14,6 @@ export function AdminLoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       router.push('/admin');
@@ -28,9 +27,7 @@ export function AdminLoginPage() {
 
     try {
       await adminApi.login({ email, secretKey });
-      // Update auth state
       await checkAuth();
-      // Router will redirect via useEffect above
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -38,7 +35,6 @@ export function AdminLoginPage() {
     }
   };
 
-  // Show loading while checking auth
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -47,27 +43,26 @@ export function AdminLoginPage() {
     );
   }
 
-  // Don't show login form if already authenticated
   if (isAuthenticated) {
     return null;
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-      <div className="w-full max-w-md px-6">
-        <h1 className="text-[28px] font-normal text-white mb-8 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] px-4">
+      <div className="w-full max-w-md">
+        <h1 className="text-2xl sm:text-[28px] font-normal text-white mb-6 sm:mb-8 text-center">
           Admin Login
         </h1>
 
-        <form onSubmit={handleSubmit} className="bg-[#0a0a0a] p-8 rounded-lg border border-[#1a1a1a]">
+        <form onSubmit={handleSubmit} className="bg-[#0a0a0a] p-6 sm:p-8 rounded-lg border border-[#1a1a1a]">
           {error && (
-            <div className="mb-4 p-3 bg-red-950/50 border border-red-900/50 rounded text-[13px] text-red-400">
+            <div className="mb-4 p-3 bg-red-950/50 border border-red-900/50 rounded text-xs sm:text-[13px] text-red-400 wrap-break-word">
               {error}
             </div>
           )}
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+            <label htmlFor="email" className="block text-xs sm:text-[13px] font-medium text-[#e5e5e5] mb-2">
               Email
             </label>
             <input
@@ -76,12 +71,12 @@ export function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+              className="w-full px-4 py-2 sm:py-2.5 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-sm sm:text-[14px] focus:outline-none focus:border-white transition"
             />
           </div>
 
           <div className="mb-6">
-            <label htmlFor="secretKey" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+            <label htmlFor="secretKey" className="block text-xs sm:text-[13px] font-medium text-[#e5e5e5] mb-2">
               Secret Key
             </label>
             <input
@@ -90,19 +85,19 @@ export function AdminLoginPage() {
               value={secretKey}
               onChange={(e) => setSecretKey(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+              className="w-full px-4 py-2 sm:py-2.5 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-sm sm:text-[14px] focus:outline-none focus:border-white transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-white text-[#0a0a0a] py-2 rounded-lg hover:opacity-90 transition disabled:opacity-50 text-[14px] font-medium mb-4"
+            className="w-full bg-white text-[#0a0a0a] py-2 sm:py-2.5 rounded-lg hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-[14px] font-medium mb-4 touch-manipulation"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
 
-          <p className="text-center text-[13px] text-[#707070]">
+          <p className="text-center text-xs sm:text-[13px] text-[#707070]">
             Don't have an account?{' '}
             <Link href="/admin/signup" className="text-white hover:opacity-70 transition">
               Sign up

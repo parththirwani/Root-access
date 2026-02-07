@@ -22,7 +22,6 @@ export function AdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        // Single API call to get all stats
         const response = await fetch('/api/admin/stats', {
           credentials: 'include',
         });
@@ -49,63 +48,63 @@ export function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="text-[#707070] text-[14px]">Loading dashboard...</div>
+      <div className="text-[#707070] text-sm sm:text-[14px]">Loading dashboard...</div>
     );
   }
 
   return (
     <div>
-      <h1 className="text-[28px] font-normal text-white mb-8">Dashboard</h1>
+      <h1 className="text-2xl sm:text-[28px] font-normal text-white mb-6 sm:mb-8">Dashboard</h1>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {/* Stats Grid - Responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         {cards.map((card) => (
           <Link
             key={card.label}
             href={card.href}
-            className="bg-[#101010] p-6 rounded-xl border border-[#1a1a1a] hover:border-[#2a2a2a] transition group"
+            className="bg-[#101010] p-4 sm:p-6 rounded-xl border border-[#1a1a1a] hover:border-[#2a2a2a] transition group"
           >
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-2xl opacity-60 group-hover:opacity-80 transition">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <span className="text-xl sm:text-2xl opacity-60 group-hover:opacity-80 transition">
                 {card.icon}
               </span>
-              <div className="text-[13px] text-[#707070] group-hover:text-[#e5e5e5] transition">
+              <div className="text-xs sm:text-[13px] text-[#707070] group-hover:text-[#e5e5e5] transition">
                 {card.label}
               </div>
             </div>
-            <div className="text-3xl font-light text-white">
+            <div className="text-2xl sm:text-3xl font-light text-white">
               {card.value}
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-[#101010] p-6 rounded-xl border border-[#1a1a1a]">
-        <h2 className="text-[18px] font-normal text-white mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-3">
+      {/* Quick Actions - Responsive */}
+      <div className="bg-[#101010] p-4 sm:p-6 rounded-xl border border-[#1a1a1a]">
+        <h2 className="text-base sm:text-[18px] font-normal text-white mb-3 sm:mb-4">Quick Actions</h2>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           <Link
             href="/admin/sections"
-            className="px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium"
+            className="px-3 sm:px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-xs sm:text-[13px] font-medium touch-manipulation"
           >
             Create Section
           </Link>
           <Link
             href="/admin/subsections"
-            className="px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium"
+            className="px-3 sm:px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-xs sm:text-[13px] font-medium touch-manipulation"
           >
             Create Subsection
           </Link>
           <Link
             href="/admin/posts"
-            className="px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium"
+            className="px-3 sm:px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-xs sm:text-[13px] font-medium touch-manipulation"
           >
             Create Post
           </Link>
           <Link
             href="/"
             target="_blank"
-            className="px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium"
+            className="px-3 sm:px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-xs sm:text-[13px] font-medium touch-manipulation"
           >
             View Site →
           </Link>

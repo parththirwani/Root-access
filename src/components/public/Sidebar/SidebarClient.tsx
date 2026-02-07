@@ -37,6 +37,7 @@ interface LayoutData {
 export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
   const pathname = usePathname();
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleSection = (sectionId: string) => {
     const newCollapsed = new Set(collapsedSections);
@@ -56,12 +57,16 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
     layoutData.admin.profile.email
   );
 
-  return (
-    <aside className="w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0 flex flex-col">
-      <div className="p-6 flex-1">
+  const SidebarContent = () => (
+    <>
+      <div className="p-4 md:p-6 flex-1">
         {/* Admin Name with Profile Picture */}
-        <div className="mb-8">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-70 transition">
+        <div className="mb-6 md:mb-8">
+          <Link 
+            href="/" 
+            className="flex items-center gap-2 hover:opacity-70 transition"
+            onClick={() => setMobileMenuOpen(false)}
+          >
             <div className="w-5 h-5 rounded-full bg-neutral-700 flex items-center justify-center overflow-hidden">
               {layoutData.admin.profile?.profilePicture ? (
                 <img 
@@ -80,12 +85,13 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
         </div>
 
         {/* Navigation */}
-        <nav className="space-y-6">
+        <nav className="space-y-4 md:space-y-6">
           {/* Home Link */}
           <div>
             <Link 
               href="/" 
               className="flex items-center gap-2 text-[13px] text-neutral-500 hover:text-white transition"
+              onClick={() => setMobileMenuOpen(false)}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -102,6 +108,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-[13px] text-neutral-500 hover:text-white transition"
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -139,6 +146,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
                       <Link
                         href={`/${subsection.slug}`}
                         className="text-[13px] text-neutral-500 hover:text-white transition flex items-center gap-2 group"
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         <span className="opacity-40 group-hover:opacity-60 transition grayscale">
                           {subsection.icon}
@@ -161,7 +169,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
 
       {/* Social Links at Bottom */}
       {hasSocialLinks && (
-        <div className="p-6 border-t border-neutral-900">
+        <div className="p-4 md:p-6 border-t border-neutral-900">
           <div className="flex flex-wrap gap-3">
             {layoutData.admin.profile?.email && (
               <Link
@@ -216,6 +224,44 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
           </div>
         </div>
       )}
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-[#101010] border border-[#2a2a2a] rounded-lg flex items-center justify-center text-white"
+      >
+        {mobileMenuOpen ? (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        )}
+      </button>
+
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Desktop: Fixed, Mobile: Slide-in */}
+      <aside className={`
+        w-64 md:w-48 bg-[#0a0a0a] min-h-screen flex flex-col
+        md:fixed md:left-0 md:top-0
+        fixed left-0 top-0 z-40 transform transition-transform duration-300
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <SidebarContent />
+      </aside>
+    </>
   );
 }
