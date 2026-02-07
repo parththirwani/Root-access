@@ -112,7 +112,7 @@ export function SubsectionContent({
       );
     }
 
-    // Project Card Style
+    // Project Card Style - Professional design without emoji
     if (displayStyle === 'PROJECT') {
       const projectUrl = post.projectLink || '#';
 
@@ -125,20 +125,15 @@ export function SubsectionContent({
             className="block h-full"
           >
             <div className="bg-[#101010] rounded-2xl border border-[#1a1a1a] p-4 sm:p-6 hover:border-[#2a2a2a] transition-all duration-200 h-full flex flex-col cursor-pointer">
+              {/* Header with external link icon */}
               <div className="flex items-start justify-between mb-3 sm:mb-4">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-[#1a1a1a] flex items-center justify-center text-base sm:text-lg">
-                  {post.coverImage ? (
-                    <img
-                      src={post.coverImage}
-                      alt=""
-                      className="w-full h-full object-cover rounded-xl"
-                    />
-                  ) : (
-                    '🚀'
-                  )}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[14px] sm:text-[15px] font-medium text-white group-hover:text-neutral-300 transition wrap-break-word">
+                    {post.title}
+                  </h3>
                 </div>
                 <svg
-                  className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition shrink-0"
+                  className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition shrink-0 ml-2"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -152,14 +147,23 @@ export function SubsectionContent({
                 </svg>
               </div>
 
-              <h3 className="text-[14px] sm:text-[15px] font-normal text-white mb-2 group-hover:text-neutral-300 transition wrap-break-word">
-                {post.title}
-              </h3>
+              {/* Cover Image (if present) */}
+              {post.coverImage && (
+                <div className="mb-3 sm:mb-4 rounded-lg overflow-hidden bg-[#1a1a1a]">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-32 sm:h-40 object-cover"
+                  />
+                </div>
+              )}
 
+              {/* Description */}
               <p className="text-[12px] sm:text-[13px] text-neutral-500 leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-3">
                 {post.description}
               </p>
 
+              {/* Tags */}
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-2 border-t border-[#1a1a1a]">
                   {tags.slice(0, 3).map((tag) => (

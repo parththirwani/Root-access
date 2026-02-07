@@ -34,7 +34,8 @@ export function PostContent({ post }: { post: Post }) {
 
   return (
     <div className="overflow-hidden">
-      <div className="flex justify-center px-4 sm:px-6 md:px-8 lg:px-20 py-8 sm:py-12 md:py-16">
+      {/* Add top padding to create space below sticky breadcrumb */}
+      <div className="flex justify-center px-4 sm:px-6 md:px-8 lg:px-20 pt-6 sm:pt-8 md:pt-10 pb-8 sm:pb-12 md:pb-16">
         <article className="w-full max-w-3xl">
           {/* Copy Button */}
           <div className="flex justify-end mb-4 sm:mb-6">
