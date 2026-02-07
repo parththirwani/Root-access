@@ -35,31 +35,36 @@ export async function generateStaticParams() {
       postSlug: post.slug,
     }));
   } catch (error) {
-    console.warn('Failed to generate static params:', error);
+    console.warn('Failed to generate static params - database not accessible:', error);
     return [];
   }
 }
 
 async function getPostData(postSlug: string) {
-  const post = await prisma.post.findUnique({
-    where: { slug: postSlug, published: true },
-    include: {
-      subsection: {
-        select: {
-          name: true,
-          slug: true,
+  try {
+    const post = await prisma.post.findUnique({
+      where: { slug: postSlug, published: true },
+      include: {
+        subsection: {
+          select: {
+            name: true,
+            slug: true,
+          },
+        },
+        tags: {
+          select: {
+            name: true,
+          },
         },
       },
-      tags: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+    });
 
-  if (!post) return null;
-  return serializePost(post);
+    if (!post) return null;
+    return serializePost(post);
+  } catch (error) {
+    console.error('Failed to fetch post data:', error);
+    return null;
+  }
 }
 
 // Increment views on the server (non-blocking)
@@ -70,7 +75,6 @@ async function incrementViews(postSlug: string) {
       data: { views: { increment: 1 } },
     });
   } catch (error) {
-    // Silently fail - don't block page render
     console.error('Failed to increment views:', error);
   }
 }

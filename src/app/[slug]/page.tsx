@@ -23,55 +23,61 @@ export async function generateStaticParams() {
       slug: sub.slug,
     }));
   } catch (error) {
-    console.warn('Failed to generate static params:', error);
+    console.warn('Failed to generate static params - database not accessible:', error);
+    // Return empty array instead of failing the build
     return [];
   }
 }
 
 async function getSubsectionData(slug: string) {
-  const subsection = await prisma.subsection.findUnique({
-    where: {
-      slug: slug,
-      isVisible: true,
-    },
-    include: {
-      posts: {
-        where: {
-          published: true,
-        },
-        select: {
-          title: true,
-          slug: true,
-          publishedAt: true,
-          excerpt: true,
-          description: true,
-          coverImage: true,
-          projectLink: true,
-          tags: {
-            select: {
-              name: true,
+  try {
+    const subsection = await prisma.subsection.findUnique({
+      where: {
+        slug: slug,
+        isVisible: true,
+      },
+      include: {
+        posts: {
+          where: {
+            published: true,
+          },
+          select: {
+            title: true,
+            slug: true,
+            publishedAt: true,
+            excerpt: true,
+            description: true,
+            coverImage: true,
+            projectLink: true,
+            tags: {
+              select: {
+                name: true,
+              },
             },
           },
+          orderBy: {
+            publishedAt: 'desc',
+          },
         },
-        orderBy: {
-          publishedAt: 'desc',
+        topCategory: {
+          select: {
+            name: true,
+          },
         },
       },
-      topCategory: {
-        select: {
-          name: true,
-        },
-      },
-    },
-  });
+    });
 
-  if (!subsection) return null;
+    if (!subsection) return null;
 
-  // Serialize dates to strings for client components
-  return {
-    ...subsection,
-    posts: serializePosts(subsection.posts),
-  };
+    // Serialize dates to strings for client components
+    return {
+      ...subsection,
+      posts: serializePosts(subsection.posts),
+    };
+  } catch (error) {
+    console.error('Failed to fetch subsection data:', error);
+    return null;
+  }
 }
 
 export default async function Page({
