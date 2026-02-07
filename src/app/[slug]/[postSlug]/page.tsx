@@ -10,8 +10,9 @@ import { PostContent } from '@/src/components/public/PostContent';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  // Skip during build if DB is not accessible
+  // Skip during build if database is not available
   if (!process.env.DATABASE_URL) {
+    console.log('[Build] Skipping static generation for posts - no DATABASE_URL');
     return [];
   }
 
@@ -30,18 +31,25 @@ export async function generateStaticParams() {
       take: 100,
     });
 
+    console.log(`[Build] Generated ${posts.length} post routes`);
     return posts.map((post) => ({
       slug: post.subsection.slug,
       postSlug: post.slug,
     }));
   } catch (error) {
-    console.warn('Failed to generate static params - database not accessible:', error);
+    console.warn('[Build] Failed to generate static params - database not accessible:', error);
     // Return empty array instead of failing the build
     return [];
   }
 }
 
 async function getPostData(postSlug: string) {
+  // Check database availability
+  if (!process.env.DATABASE_URL) {
+    console.warn('[Runtime] DATABASE_URL not available');
+    return null;
+  }
+
   try {
     const post = await prisma.post.findUnique({
       where: { slug: postSlug, published: true },
@@ -63,13 +71,17 @@ async function getPostData(postSlug: string) {
     if (!post) return null;
     return serializePost(post);
   } catch (error) {
-    console.error('Failed to fetch post data:', error);
+    console.error('[Runtime] Failed to fetch post data:', error);
     return null;
   }
 }
 
 // Increment views on the server (non-blocking)
 async function incrementViews(postSlug: string) {
+  if (!process.env.DATABASE_URL) {
+    return;
+  }
+
   try {
     await prisma.post.update({
       where: { slug: postSlug },
@@ -77,7 +89,7 @@ async function incrementViews(postSlug: string) {
     });
   } catch (error) {
     // Silently fail - don't block page render
-    console.error('Failed to increment views:', error);
+    console.error('[Runtime] Failed to increment views:', error);
   }
 }
 

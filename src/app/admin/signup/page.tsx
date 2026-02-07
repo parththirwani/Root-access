@@ -3,14 +3,16 @@ import { prisma } from "@/src/lib/prisma";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
-  try {
-    const adminCount = await prisma.admin.count();
+  if (process.env.DATABASE_URL) {
+    try {
+      const adminCount = await prisma.admin.count();
 
-    if (adminCount > 0) {
-      redirect('/admin/login');
+      if (adminCount > 0) {
+        redirect('/admin/login');
+      }
+    } catch (error) {
+      console.warn('[Runtime] Database not accessible during signup check:', error);
     }
-  } catch (error) {
-    console.warn('Database not accessible during build:', error);
   }
   
   return <AdminSignupPage />;

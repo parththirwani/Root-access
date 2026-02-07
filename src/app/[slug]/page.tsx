@@ -8,7 +8,9 @@ import { SubsectionContent } from '@/src/components/public/SubsectionContent';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
+  // Skip during build if database is not available
   if (!process.env.DATABASE_URL) {
+    console.log('[Build] Skipping static generation for subsections - no DATABASE_URL');
     return [];
   }
 
@@ -19,17 +21,24 @@ export async function generateStaticParams() {
       take: 100,
     });
 
+    console.log(`[Build] Generated ${subsections.length} subsection routes`);
     return subsections.map((sub) => ({
       slug: sub.slug,
     }));
   } catch (error) {
-    console.warn('Failed to generate static params - database not accessible:', error);
+    console.warn('[Build] Failed to generate static params - database not accessible:', error);
     // Return empty array instead of failing the build
     return [];
   }
 }
 
 async function getSubsectionData(slug: string) {
+  // Check database availability
+  if (!process.env.DATABASE_URL) {
+    console.warn('[Runtime] DATABASE_URL not available');
+    return null;
+  }
+
   try {
     const subsection = await prisma.subsection.findUnique({
       where: {
@@ -75,7 +84,7 @@ async function getSubsectionData(slug: string) {
       posts: serializePosts(subsection.posts),
     };
   } catch (error) {
-    console.error('Failed to fetch subsection data:', error);
+    console.error('[Runtime] Failed to fetch subsection data:', error);
     return null;
   }
 }
