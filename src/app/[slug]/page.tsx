@@ -8,14 +8,24 @@ import { SubsectionContent } from '@/src/components/public/SubsectionContent';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const subsections = await prisma.subsection.findMany({
-    where: { isVisible: true },
-    select: { slug: true },
-  });
+  if (!process.env.DATABASE_URL) {
+    return [];
+  }
 
-  return subsections.map((sub) => ({
-    slug: sub.slug,
-  }));
+  try {
+    const subsections = await prisma.subsection.findMany({
+      where: { isVisible: true },
+      select: { slug: true },
+      take: 100,
+    });
+
+    return subsections.map((sub) => ({
+      slug: sub.slug,
+    }));
+  } catch (error) {
+    console.warn('Failed to generate static params:', error);
+    return [];
+  }
 }
 
 async function getSubsectionData(slug: string) {

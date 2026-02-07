@@ -10,22 +10,34 @@ import { PostContent } from '@/src/components/public/PostContent';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    select: {
-      slug: true,
-      subsection: {
-        select: {
-          slug: true,
+  // Skip during build if DB is not accessible
+  if (!process.env.DATABASE_URL) {
+    return [];
+  }
+
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      select: {
+        slug: true,
+        subsection: {
+          select: {
+            slug: true,
+          },
         },
       },
-    },
-  });
+      // Limit to prevent timeout
+      take: 100,
+    });
 
-  return posts.map((post) => ({
-    slug: post.subsection.slug,
-    postSlug: post.slug,
-  }));
+    return posts.map((post) => ({
+      slug: post.subsection.slug,
+      postSlug: post.slug,
+    }));
+  } catch (error) {
+    console.warn('Failed to generate static params:', error);
+    return [];
+  }
 }
 
 async function getPostData(postSlug: string) {
