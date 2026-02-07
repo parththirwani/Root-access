@@ -4,8 +4,19 @@ import { PublicSidebarServer } from '../components/public/Sidebar/SidebarServer'
 import { HomeContent } from '../components/public/HomeContent';
 
 export const revalidate = 60;
+// Add this to prevent build-time errors
+export const dynamic = 'force-dynamic';
 
 async function getHomeData() {
+  // Skip database access during build if DATABASE_URL is not available
+  if (!process.env.DATABASE_URL) {
+    console.log('[Build] Skipping home data fetch - no DATABASE_URL');
+    return {
+      profile: null,
+      subsections: [],
+    };
+  }
+
   try {
     const admin = await prisma.admin.findFirst({
       select: {
@@ -52,7 +63,6 @@ async function getHomeData() {
     };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
-    // Return empty data - database might be empty or unreachable
     return {
       profile: null,
       subsections: [],
