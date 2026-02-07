@@ -2,7 +2,6 @@ import { prisma } from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-    console.log("Admin endpoint")
   try {
     const admin = await prisma.admin.findFirst({
       select: {

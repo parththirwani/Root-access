@@ -1,16 +1,10 @@
 import { prisma } from "@/src/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ slug: string }> }
-) {
+export async function GET(req: NextRequest) {
   try {
-    const { slug } = await context.params; 
-
-    const subsection = await prisma.subsection.findUnique({
+    const subsections = await prisma.subsection.findMany({
       where: {
-        slug: slug, 
         isVisible: true,
       },
       include: {
@@ -26,7 +20,7 @@ export async function GET(
             publishedAt: true,
             excerpt: true,
             coverImage: true,
-            projectLink: true, 
+            projectLink: true,
             tags: {
               select: {
                 name: true,
@@ -45,19 +39,12 @@ export async function GET(
       },
     });
 
-    if (!subsection) {
-      return NextResponse.json(
-        { message: "Subsection not found or not visible" },
-        { status: 404 }
-      );
-    }
-
     return NextResponse.json(
-      { message: "Subsection retrieved", subsection },
+      { message: "Subsections retrieved", subsections },
       { status: 200 }
     );
   } catch (err) {
-    console.error("Error retrieving subsection:", err);
+    console.error("Error retrieving subsections:", err);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }

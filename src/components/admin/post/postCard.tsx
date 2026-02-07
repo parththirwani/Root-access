@@ -6,7 +6,6 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   const tags = post.tags ?? [];
-  console.log("Project link is"+post.projectLink)
 
   return (
     <a
