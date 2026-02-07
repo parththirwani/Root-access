@@ -36,6 +36,7 @@ export async function generateStaticParams() {
     }));
   } catch (error) {
     console.warn('Failed to generate static params - database not accessible:', error);
+    // Return empty array instead of failing the build
     return [];
   }
 }
@@ -75,6 +76,7 @@ async function incrementViews(postSlug: string) {
       data: { views: { increment: 1 } },
     });
   } catch (error) {
+    // Silently fail - don't block page render
     console.error('Failed to increment views:', error);
   }
 }

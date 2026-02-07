@@ -6,49 +6,58 @@ import { HomeContent } from '../components/public/HomeContent';
 export const revalidate = 60;
 
 async function getHomeData() {
-  const admin = await prisma.admin.findFirst({
-    select: {
-      name: true,
-      profile: {
-        select: {
-          id: true,
-          bio: true,
-          xLink: true,
-          instagramLink: true,
-          linkedinLink: true,
-          email: true,
-          resumeUrl: true,
-          profilePicture: true,
+  try {
+    const admin = await prisma.admin.findFirst({
+      select: {
+        name: true,
+        profile: {
+          select: {
+            id: true,
+            bio: true,
+            xLink: true,
+            instagramLink: true,
+            linkedinLink: true,
+            email: true,
+            resumeUrl: true,
+            profilePicture: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  const subsections = await prisma.subsection.findMany({
-    where: {
-      isVisible: true,
-    },
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      icon: true,
-      postCount: true,
-      topCategory: {
-        select: {
-          name: true,
+    const subsections = await prisma.subsection.findMany({
+      where: {
+        isVisible: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        icon: true,
+        postCount: true,
+        topCategory: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-    orderBy: {
-      name: 'asc',
-    },
-  });
+      orderBy: {
+        name: 'asc',
+      },
+    });
 
-  return {
-    profile: admin?.profile || null,
-    subsections,
-  };
+    return {
+      profile: admin?.profile || null,
+      subsections,
+    };
+  } catch (error) {
+    console.error('Failed to fetch home data:', error);
+    // Return empty data during build failures
+    return {
+      profile: null,
+      subsections: [],
+    };
+  }
 }
 
 export default async function Page() {
