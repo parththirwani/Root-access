@@ -91,7 +91,7 @@ export const adminApi = {
       method: 'DELETE',
     }),
 
-  // Posts
+  // Posts (subsection-based endpoints)
   getPosts: (subsectionSlug: string) =>
     fetcher(`/api/admin/subsections/${subsectionSlug}/posts`),
   createPost: (subsectionSlug: string, data: any) =>
@@ -114,6 +114,19 @@ export const adminApi = {
     fetcher(`/api/admin/subsections/${subsectionSlug}/posts/${postSlug}`, {
       method: 'PATCH',
       body: JSON.stringify({ published }),
+    }),
+
+  // Direct post endpoints (by slug only) - NEW
+  getPostBySlug: (postSlug: string) =>
+    fetcher(`/api/admin/posts/${postSlug}`),
+  updatePostBySlug: (postSlug: string, data: any) =>
+    fetcher(`/api/admin/posts/${postSlug}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  deletePostBySlug: (postSlug: string) =>
+    fetcher(`/api/admin/posts/${postSlug}`, {
+      method: 'DELETE',
     }),
 
   // Tags

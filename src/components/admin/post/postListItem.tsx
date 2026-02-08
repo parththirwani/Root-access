@@ -4,9 +4,10 @@ interface PostListItemProps {
   post: Post;
   onTogglePublish: (post: Post) => void;
   onDelete: (post: Post) => void;
+  onEdit: (post: Post) => void;
 }
 
-export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemProps) {
+export function PostListItem({ post, onTogglePublish, onDelete, onEdit }: PostListItemProps) {
   const getDisplayStyleBadge = (style: string) => {
     const styles: Record<string, { bg: string; text: string; label: string }> = {
       'BLOG': { bg: 'bg-blue-950/50', text: 'text-blue-400', label: '📝 Blog' },
@@ -25,8 +26,8 @@ export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemPr
   };
 
   return (
-    <div className="bg-[#101010] p-5 rounded-xl border border-[#1a1a1a] hover:border-[#2a2a2a] transition">
-      <div className="flex items-start justify-between gap-4">
+    <div className="bg-[#101010] p-4 sm:p-5 rounded-xl border border-[#1a1a1a] hover:border-[#2a2a2a] transition">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2 flex-wrap">
             <h3 className="text-[15px] text-white font-medium truncate">{post.title}</h3>
@@ -63,16 +64,22 @@ export function PostListItem({ post, onTogglePublish, onDelete }: PostListItemPr
           )}
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+          <button
+            onClick={() => onEdit(post)}
+            className="px-3 py-1.5 text-[13px] bg-[#1a1a1a] text-white hover:bg-[#2a2a2a] rounded-lg transition touch-manipulation"
+          >
+            Edit
+          </button>
           <button
             onClick={() => onTogglePublish(post)}
-            className="text-[13px] text-[#707070] hover:text-white transition"
+            className="px-3 py-1.5 text-[13px] text-[#707070] hover:text-white transition touch-manipulation"
           >
             {post.published ? 'Unpublish' : 'Publish'}
           </button>
           <button
             onClick={() => onDelete(post)}
-            className="text-[13px] text-red-400 hover:text-red-300 transition"
+            className="px-3 py-1.5 text-[13px] text-red-400 hover:text-red-300 transition touch-manipulation"
           >
             Delete
           </button>

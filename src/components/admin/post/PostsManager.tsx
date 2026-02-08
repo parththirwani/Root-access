@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { SubsectionFilter } from '../subsections/SubSectionFilter';
 import { PostForm } from './postForm';
 import { PostListItem } from './postListItem';
+import { PostEditModal } from './PostEditModal';
 
 const INITIAL_FORM_DATA = {
   title: '',
@@ -29,6 +30,7 @@ export function PostsManager() {
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [error, setError] = useState('');
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   useEffect(() => {
     fetchSections();
@@ -127,6 +129,18 @@ export function PostsManager() {
     }
   };
 
+  const handleEdit = (post: Post) => {
+    setEditingPost(post);
+  };
+
+  const handleCloseEdit = () => {
+    setEditingPost(null);
+  };
+
+  const handleSaveEdit = () => {
+    fetchSections();
+  };
+
   const handleTogglePublish = async (post: Post) => {
     try {
       await adminApi.togglePublish(
@@ -173,11 +187,11 @@ export function PostsManager() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-[28px] font-normal text-white">Posts</h1>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+        <h1 className="text-2xl sm:text-[28px] font-normal text-white">Posts</h1>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium"
+          className="w-full sm:w-auto px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium touch-manipulation"
         >
           {showForm ? 'Cancel' : '+ New Post'}
         </button>
@@ -215,11 +229,12 @@ export function PostsManager() {
             post={post}
             onTogglePublish={handleTogglePublish}
             onDelete={handleDelete}
+            onEdit={handleEdit}
           />
         ))}
 
         {posts.length === 0 && (
-          <div className="bg-[#101010] p-8 rounded-xl border border-[#1a1a1a] text-center">
+          <div className="bg-[#101010] p-6 sm:p-8 rounded-xl border border-[#1a1a1a] text-center">
             <p className="text-[14px] text-[#707070] mb-4">
               {selectedSubsection ? 'No posts in this subsection yet' : 'No posts yet'}
             </p>
@@ -232,6 +247,15 @@ export function PostsManager() {
           </div>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {editingPost && (
+        <PostEditModal
+          post={editingPost}
+          onClose={handleCloseEdit}
+          onSave={handleSaveEdit}
+        />
+      )}
     </div>
   );
 }
