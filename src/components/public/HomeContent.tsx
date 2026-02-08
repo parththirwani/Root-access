@@ -54,9 +54,9 @@ export function HomeContent({ profile, subsections }: HomeContentProps) {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  // Customize markdown rendering for responsiveness
+                  // Customize markdown rendering for responsiveness with justified text
                   p: ({ children }) => (
-                    <p className="text-neutral-300 text-sm sm:text-[15px] leading-relaxed mb-4 last:mb-0 wrap-break-word">
+                    <p className="text-neutral-300 text-sm sm:text-[15px] leading-relaxed mb-4 last:mb-0 wrap-break-word text-justify">
                       {children}
                     </p>
                   ),
@@ -104,7 +104,7 @@ export function HomeContent({ profile, subsections }: HomeContentProps) {
                     </ol>
                   ),
                   li: ({ children }) => (
-                    <li className="leading-relaxed wrap-break-word">{children}</li>
+                    <li className="leading-relaxed wrap-break-word text-justify">{children}</li>
                   ),
                   code: ({ children, className }) => {
                     const isInline = !className;
@@ -122,7 +122,7 @@ export function HomeContent({ profile, subsections }: HomeContentProps) {
                     );
                   },
                   blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-neutral-700 pl-3 sm:pl-4 italic text-neutral-400 mb-4 wrap-break-word">
+                    <blockquote className="border-l-4 border-neutral-700 pl-3 sm:pl-4 italic text-neutral-400 mb-4 wrap-break-word text-justify">
                       {children}
                     </blockquote>
                   ),

@@ -3,10 +3,11 @@ import { updatePostSchema } from "@/src/schema/postsSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { withAuth } from "@/src/lib/authWrapper";
 import { generateSlug, calculateReadTime, handleTags, generateExcerpt } from "@/src/lib/utils";
+import { markdownToHtml, generateMarkdownExcerpt } from "@/src/lib/markdown";
 
 async function getHandler(
   req: NextRequest,
-  context: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ postSlug: string }> }
 ) {
   try {
     const { postSlug } = await context.params;
@@ -18,6 +19,7 @@ async function getHandler(
           select: {
             name: true,
             slug: true,
+            displayStyle: true,
             topCategory: {
               select: {
                 name: true
@@ -36,11 +38,6 @@ async function getHandler(
       );
     }
 
-    await prisma.post.update({
-      where: { slug: postSlug },
-      data: { views: { increment: 1 } }
-    });
-
     return NextResponse.json({ post }, { status: 200 });
 
   } catch (err) {
@@ -54,7 +51,7 @@ async function getHandler(
 
 async function putHandler(
   req: NextRequest,
-  context: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ postSlug: string }> }
 ) {
   try {
     const { postSlug } = await context.params;
@@ -71,13 +68,20 @@ async function putHandler(
 
     if (!parsedData.success) {
       return NextResponse.json(
-        { message: "Invalid input"},
+        { message: "Invalid input", errors: parsedData.error.format() },
         { status: 400 }
       );
     }
 
     const existingPost = await prisma.post.findUnique({
-      where: { slug: postSlug }
+      where: { slug: postSlug },
+      include: {
+        subsection: {
+          select: {
+            displayStyle: true
+          }
+        }
+      }
     });
 
     if (!existingPost) {
@@ -87,10 +91,11 @@ async function putHandler(
       );
     }
 
-    const { title, content, excerpt, coverImage, published, tags, metaTitle, metaDescription } = parsedData.data;
+    const { title, content, excerpt, coverImage, published, tags, metaTitle, metaDescription, description, projectLink } = parsedData.data;
 
     const updateData: any = {};
 
+    // Handle title update
     if (title) {
       updateData.title = title;
       const newSlug = generateSlug(title);
@@ -111,20 +116,55 @@ async function putHandler(
       }
     }
 
-    if (content) {
-      updateData.content = content;
-      updateData.readTime = calculateReadTime(content);
-      
-      if (!excerpt) {
-        updateData.excerpt = generateExcerpt(content);
+    // Handle content update based on display style
+    const displayStyle = existingPost.subsection.displayStyle;
+
+    if (content !== undefined) {
+      if (displayStyle === 'BLOG') {
+        // Convert markdown to HTML for blog posts
+        updateData.content = markdownToHtml(content);
+        updateData.readTime = calculateReadTime(content);
+        
+        // Generate excerpt if not provided
+        if (!excerpt) {
+          updateData.excerpt = generateMarkdownExcerpt(content);
+        }
+      } else {
+        // For non-blog posts, store as-is or empty
+        updateData.content = content || '';
+        updateData.readTime = 0;
       }
     }
 
-    if (excerpt) updateData.excerpt = excerpt;
-    if (coverImage !== undefined) updateData.coverImage = coverImage;
-    if (metaTitle) updateData.metaTitle = metaTitle;
-    if (metaDescription) updateData.metaDescription = metaDescription;
+    // Handle description
+    if (description !== undefined) {
+      updateData.description = displayStyle === 'TITLE_ONLY' ? '' : description;
+    }
 
+    // Handle excerpt
+    if (excerpt !== undefined) {
+      updateData.excerpt = excerpt;
+    }
+
+    // Handle cover image
+    if (coverImage !== undefined) {
+      updateData.coverImage = coverImage || null;
+    }
+
+    // Handle project link
+    if (projectLink !== undefined) {
+      updateData.projectLink = projectLink || null;
+    }
+
+    // Handle meta tags
+    if (metaTitle !== undefined) {
+      updateData.metaTitle = metaTitle;
+    }
+    if (metaDescription !== undefined) {
+      updateData.metaDescription = metaDescription;
+    }
+
+    // Handle publish status
     if (published !== undefined) {
       updateData.published = published;
       if (published && !existingPost.publishedAt) {
@@ -132,6 +172,7 @@ async function putHandler(
       }
     }
 
+    // Handle tags
     if (tags) {
       const tagConnections = await handleTags(tags, prisma);
       
@@ -146,6 +187,7 @@ async function putHandler(
       });
     }
 
+    // Update the post
     const updatedPost = await prisma.post.update({
       where: { slug: postSlug },
       data: updateData,
@@ -154,6 +196,7 @@ async function putHandler(
           select: {
             name: true,
             slug: true,
+            displayStyle: true,
             topCategory: {
               select: {
                 name: true
@@ -181,7 +224,7 @@ async function putHandler(
 
 async function deleteHandler(
   req: NextRequest,
-  context: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ postSlug: string }> }
 ) {
   try {
     const { postSlug } = await context.params;
@@ -226,7 +269,7 @@ async function deleteHandler(
 
 async function patchHandler(
   req: NextRequest,
-  context: { params: Promise<{ slug: string; postSlug: string }> }
+  context: { params: Promise<{ postSlug: string }> }
 ) {
   try {
     const { postSlug } = await context.params;

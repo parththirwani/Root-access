@@ -91,14 +91,16 @@ export function PostContent({ post }: { post: Post }) {
             />
           )}
 
-          {/* Body - Responsive typography */}
+          {/* Body - Responsive typography with justified text */}
           <div
             className="
               prose prose-invert max-w-none mb-8 sm:mb-10 md:mb-12
               prose-headings:break-words
               prose-p:break-words
+              prose-p:text-justify
               prose-a:break-words
               prose-li:break-words
+              prose-li:text-justify
               prose-sm sm:prose-base
               prose-img:rounded-lg
               prose-img:w-full
