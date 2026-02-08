@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 interface Tag {
@@ -35,6 +35,9 @@ export function SubsectionContent({
   slug: string;
 }) {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [showLeftScroll, setShowLeftScroll] = useState(false);
+  const [showRightScroll, setShowRightScroll] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const allTags = new Set<string>();
   subsection.posts?.forEach((post) =>
@@ -42,6 +45,44 @@ export function SubsectionContent({
   );
 
   const uniqueTags = ['All', ...Array.from(allTags)];
+
+  // Check scroll position to show/hide navigation buttons
+  const checkScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    setShowLeftScroll(scrollLeft > 0);
+    setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [uniqueTags.length]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const scrollAmount = 200;
+    const targetScroll = direction === 'left' 
+      ? container.scrollLeft - scrollAmount 
+      : container.scrollLeft + scrollAmount;
+
+    container.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth',
+    });
+  };
 
   const filteredPosts =
     activeFilter === 'All'
@@ -235,23 +276,56 @@ export function SubsectionContent({
           )}
         </div>
 
-        {/* Filters */}
+        {/* Filters with Navigation Buttons */}
         {uniqueTags.length > 1 && (
           <div className="mb-8 sm:mb-10 pb-4 border-b border-[#1a1a1a]">
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              {uniqueTags.map((tag) => (
+            <div className="relative group">
+              {/* Left Scroll Button */}
+              {showLeftScroll && (
                 <button
-                  key={tag}
-                  onClick={() => setActiveFilter(tag)}
-                  className={`px-3 py-1.5 text-xs sm:text-sm rounded-lg whitespace-nowrap cursor-pointer transition ${
-                    activeFilter === tag
-                      ? 'bg-white text-[#101011]'
-                      : 'bg-[#1a1a1a] text-neutral-400 hover:bg-[#252525] hover:text-white'
-                  }`}
+                  onClick={() => scroll('left')}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#101011] border border-[#2a2a2a] rounded-lg flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-600 transition opacity-0 group-hover:opacity-100 shadow-lg"
+                  aria-label="Scroll left"
                 >
-                  {tag}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
                 </button>
-              ))}
+              )}
+
+              {/* Tags Container */}
+              <div 
+                ref={scrollContainerRef}
+                className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {uniqueTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => setActiveFilter(tag)}
+                    className={`px-3 py-1.5 text-xs sm:text-sm rounded-lg whitespace-nowrap cursor-pointer transition ${
+                      activeFilter === tag
+                        ? 'bg-white text-[#101011]'
+                        : 'bg-[#1a1a1a] text-neutral-400 hover:bg-[#252525] hover:text-white'
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+
+              {/* Right Scroll Button */}
+              {showRightScroll && (
+                <button
+                  onClick={() => scroll('right')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#101011] border border-[#2a2a2a] rounded-lg flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-600 transition opacity-0 group-hover:opacity-100 shadow-lg"
+                  aria-label="Scroll right"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         )}
@@ -283,7 +357,7 @@ export function SubsectionContent({
         )}
       </div>
 
-      {/* Add custom scrollbar hiding for horizontal scroll */}
+      {/* Add custom scrollbar hiding */}
       <style jsx global>{`
         .scrollbar-hide {
           -ms-overflow-style: none;
