@@ -1,46 +1,75 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "../contexts/authContext";
+import { prisma } from "@/src/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { unstable_cache } from "next/cache";
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const getLayoutData = unstable_cache(
+  async () => {
+    const [admin, sections] = await Promise.all([
+      prisma.admin.findFirst({
+        select: {
+          name: true,
+          profile: {
+            select: {
+              id: true,
+              bio: true,
+              xLink: true,
+              instagramLink: true,
+              linkedinLink: true,
+              email: true,
+              resumeUrl: true,
+              profilePicture: true,
+            },
+          },
+        },
+      }),
+      prisma.topCategory.findMany({
+        where: { isVisible: true },
+        select: {
+          id: true,
+          name: true,
+          isVisible: true,
+          subsections: {
+            where: { isVisible: true },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              icon: true,
+              postCount: true,
+            },
+            orderBy: { name: 'asc' },
+          },
+        },
+        orderBy: { name: 'asc' },
+      }),
+    ]);
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: {
-    default: "Parth Thirwani Portfolio",
-    template: "Parth Thirwani"
+    return { admin, sections };
   },
-  description: "Personal portfolio and blog",
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'Parth Thirwani',
-  },
-};
+  ['layout-data'],
+  { revalidate: 60 }
+);
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </body>
-    </html>
-  );
+export async function GET(req: NextRequest) {
+  try {
+    const { admin, sections } = await getLayoutData();
+
+    if (!admin) {
+      return NextResponse.json({ message: "Admin not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { admin: { name: admin.name, profile: admin.profile }, sections },
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+        },
+      }
+    );
+  } catch (error) {
+    console.error("GET layout data error:", error);
+    return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
+  }
 }

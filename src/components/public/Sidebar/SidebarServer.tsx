@@ -1,74 +1,69 @@
 import { prisma } from '@/src/lib/prisma';
 import { SidebarClient } from './SidebarClient';
+import { unstable_cache } from 'next/cache';
 
-export async function PublicSidebarServer() {
-  try {
-    const layoutData = await prisma.admin.findFirst({
-      select: {
-        name: true,
-        profile: {
-          select: {
-            xLink: true,
-            instagramLink: true,
-            linkedinLink: true,
-            email: true,
-            resumeUrl: true,
-            profilePicture: true,
+const getSidebarData = unstable_cache(
+  async () => {
+    const [layoutData, sections] = await Promise.all([
+      prisma.admin.findFirst({
+        select: {
+          name: true,
+          profile: {
+            select: {
+              xLink: true,
+              instagramLink: true,
+              linkedinLink: true,
+              email: true,
+              resumeUrl: true,
+              profilePicture: true,
+            },
           },
         },
-      },
-    });
-
-    const sections = await prisma.topCategory.findMany({
-      where: {
-        isVisible: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        isVisible: true,
-        subsections: {
-          where: {
-            isVisible: true,
-          },
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            icon: true,
-            postCount: true,
-          },
-          orderBy: {
-            name: 'asc',
+      }),
+      prisma.topCategory.findMany({
+        where: { isVisible: true },
+        select: {
+          id: true,
+          name: true,
+          isVisible: true,
+          subsections: {
+            where: { isVisible: true },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              icon: true,
+              postCount: true,
+            },
+            orderBy: { name: 'asc' },
           },
         },
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    });
+        orderBy: { name: 'asc' },
+      }),
+    ]);
 
-    const data = {
+    return {
       admin: {
         name: layoutData?.name || 'Admin',
         profile: layoutData?.profile || null,
       },
       sections,
     };
+  },
+  ['sidebar-data'],
+  { revalidate: 60 }
+);
 
+export async function PublicSidebarServer() {
+  try {
+    const data = await getSidebarData();
     return <SidebarClient layoutData={data} />;
   } catch (error) {
     console.error('[Sidebar] Failed to fetch sidebar data:', error);
-    
-    // Return a fallback sidebar - database might be empty
-    const fallbackData = {
-      admin: {
-        name: 'Admin',
-        profile: null,
-      },
-      sections: [],
-    };
-
-    return <SidebarClient layoutData={fallbackData} />;
+    return (
+      <SidebarClient
+        layoutData={{ admin: { name: 'Admin', profile: null }, sections: [] }}
+      />
+    );
   }
 }

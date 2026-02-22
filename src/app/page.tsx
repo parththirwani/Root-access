@@ -1,74 +1,52 @@
 import { Suspense } from 'react';
 import { prisma } from '@/src/lib/prisma';
+import { unstable_cache } from 'next/cache';
 import { PublicSidebarServer } from '../components/public/Sidebar/SidebarServer';
 import { HomeContent } from '../components/public/HomeContent';
 
 export const revalidate = 60;
-// Add this to prevent build-time errors
-export const dynamic = 'force-dynamic';
 
-async function getHomeData() {
-  // Skip database access during build if DATABASE_URL is not available
-  if (!process.env.DATABASE_URL) {
-    console.log('[Build] Skipping home data fetch - no DATABASE_URL');
-    return {
-      profile: null,
-      subsections: [],
-    };
-  }
+const getHomeData = unstable_cache(
+  async () => {
+    if (!process.env.DATABASE_URL) return { profile: null, subsections: [] };
 
-  try {
-    const admin = await prisma.admin.findFirst({
-      select: {
-        name: true,
-        profile: {
-          select: {
-            id: true,
-            bio: true,
-            xLink: true,
-            instagramLink: true,
-            linkedinLink: true,
-            email: true,
-            resumeUrl: true,
-            profilePicture: true,
+    const [admin, subsections] = await Promise.all([
+      prisma.admin.findFirst({
+        select: {
+          name: true,
+          profile: {
+            select: {
+              id: true,
+              bio: true,
+              xLink: true,
+              instagramLink: true,
+              linkedinLink: true,
+              email: true,
+              resumeUrl: true,
+              profilePicture: true,
+            },
           },
         },
-      },
-    });
-
-    const subsections = await prisma.subsection.findMany({
-      where: {
-        isVisible: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        icon: true,
-        postCount: true,
-        topCategory: {
-          select: {
-            name: true,
-          },
+      }),
+      prisma.subsection.findMany({
+        where: { isVisible: true },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          icon: true,
+          postCount: true,
+          topCategory: { select: { name: true } },
         },
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    });
+        orderBy: { name: 'asc' },
+      }),
+    ]);
 
-    return {
-      profile: admin?.profile || null,
-      subsections,
-    };
-  } catch (error) {
-    console.error('[Runtime] Failed to fetch home data:', error);
-    return {
-      profile: null,
-      subsections: [],
-    };
-  }
-}
+    return { profile: admin?.profile || null, subsections };
+  },
+  ['home-data'],
+  { revalidate: 60 }
+);
 
 export default async function Page() {
   const data = await getHomeData();
@@ -79,7 +57,6 @@ export default async function Page() {
         <Suspense fallback={<SidebarSkeleton />}>
           <PublicSidebarServer />
         </Suspense>
-
         <main className="ml-0 md:ml-48 flex-1 flex items-start justify-center p-6 md:p-12">
           <HomeContent profile={data.profile} subsections={data.subsections} />
         </main>
