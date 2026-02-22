@@ -1,15 +1,17 @@
 import { Suspense } from 'react';
 import { prisma } from '@/src/lib/prisma';
-import { unstable_cache } from 'next/cache';
 import { PublicSidebarServer } from '../components/public/Sidebar/SidebarServer';
 import { HomeContent } from '../components/public/HomeContent';
 
 export const revalidate = 60;
 
-const getHomeData = unstable_cache(
-  async () => {
-    if (!process.env.DATABASE_URL) return { profile: null, subsections: [] };
+async function getHomeData() {
+  if (!process.env.DATABASE_URL) {
+    console.log('[Build] Skipping home data fetch - no DATABASE_URL');
+    return { profile: null, subsections: [] };
+  }
 
+  try {
     const [admin, subsections] = await Promise.all([
       prisma.admin.findFirst({
         select: {
@@ -43,10 +45,11 @@ const getHomeData = unstable_cache(
     ]);
 
     return { profile: admin?.profile || null, subsections };
-  },
-  ['home-data'],
-  { revalidate: 60 }
-);
+  } catch (error) {
+    console.error('[Runtime] Failed to fetch home data:', error);
+    return { profile: null, subsections: [] };
+  }
+}
 
 export default async function Page() {
   const data = await getHomeData();
@@ -68,14 +71,12 @@ export default async function Page() {
 function SidebarSkeleton() {
   return (
     <aside className="w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0 hidden md:block">
-      <div className="p-6">
-        <div className="animate-pulse">
-          <div className="h-5 bg-neutral-800 rounded mb-8"></div>
-          <div className="space-y-3">
-            <div className="h-4 bg-neutral-800 rounded"></div>
-            <div className="h-4 bg-neutral-800 rounded"></div>
-            <div className="h-4 bg-neutral-800 rounded"></div>
-          </div>
+      <div className="p-6 animate-pulse">
+        <div className="h-5 bg-neutral-800 rounded mb-8"></div>
+        <div className="space-y-3">
+          <div className="h-4 bg-neutral-800 rounded"></div>
+          <div className="h-4 bg-neutral-800 rounded"></div>
+          <div className="h-4 bg-neutral-800 rounded"></div>
         </div>
       </div>
     </aside>
