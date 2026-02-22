@@ -11,19 +11,20 @@ interface BreadcrumbNavProps {
 
 export function BreadcrumbNav({ items }: BreadcrumbNavProps) {
   return (
-    <nav className="sticky top-0 z-10 border-b border-black px-4 sm:px-6 md:px-12 lg:px-20 py-2 sm:py-3 bg-[#101010]">
-      <div className="flex items-center gap-2 text-xs sm:text-[13px] overflow-x-auto scrollbar-hide">
+    <nav className="flex items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3 gap-2">
+      {/* Breadcrumb trail */}
+      <div className="flex items-center gap-1.5 text-xs sm:text-[13px] min-w-0 flex-1">
         {items.map((item, index) => (
-          <div key={index} className="flex items-center gap-2 shrink-0">
+          <div key={index} className="flex items-center gap-1.5 min-w-0">
             {item.href ? (
-              <Link 
+              <Link
                 href={item.href}
-                className="text-neutral-500 hover:text-white transition truncate max-w-37.5 sm:max-w-none"
+                className="text-neutral-500 hover:text-white transition shrink-0 max-w-20 sm:max-w-50 truncate"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className="text-neutral-400 truncate max-w-50 sm:max-w-none">
+              <span className="text-neutral-400 truncate min-w-0">
                 {item.label}
               </span>
             )}
@@ -34,15 +35,9 @@ export function BreadcrumbNav({ items }: BreadcrumbNavProps) {
         ))}
       </div>
 
-      <style jsx global>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+      {/* Invisible spacer matching the fixed hamburger button size (w-10 h-10),
+          only shown on mobile so breadcrumb text never slides underneath it */}
+      <div className="w-10 shrink-0 md:hidden" aria-hidden="true" />
     </nav>
   );
 }

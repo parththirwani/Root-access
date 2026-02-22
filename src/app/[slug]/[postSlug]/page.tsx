@@ -10,7 +10,6 @@ import { PostContent } from '@/src/components/public/PostContent';
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  // Skip during build if database is not available
   if (!process.env.DATABASE_URL) {
     console.log('[Build] Skipping static generation for posts - no DATABASE_URL');
     return [];
@@ -27,7 +26,6 @@ export async function generateStaticParams() {
           },
         },
       },
-      // Limit to prevent timeout
       take: 100,
     });
 
@@ -38,13 +36,11 @@ export async function generateStaticParams() {
     }));
   } catch (error) {
     console.warn('[Build] Failed to generate static params - database not accessible:', error);
-    // Return empty array instead of failing the build
     return [];
   }
 }
 
 async function getPostData(postSlug: string) {
-  // Check database availability
   if (!process.env.DATABASE_URL) {
     console.warn('[Runtime] DATABASE_URL not available');
     return null;
@@ -78,9 +74,7 @@ async function getPostData(postSlug: string) {
 
 // Increment views on the server (non-blocking)
 async function incrementViews(postSlug: string) {
-  if (!process.env.DATABASE_URL) {
-    return;
-  }
+  if (!process.env.DATABASE_URL) return;
 
   try {
     await prisma.post.update({
@@ -88,7 +82,6 @@ async function incrementViews(postSlug: string) {
       data: { views: { increment: 1 } },
     });
   } catch (error) {
-    // Silently fail - don't block page render
     console.error('[Runtime] Failed to increment views:', error);
   }
 }
@@ -105,16 +98,20 @@ export default async function Page({
     notFound();
   }
 
+  // Fire and forget - don't await
   incrementViews(postSlug);
 
   return (
+    // No margin here — sidebar handles its own fixed positioning
     <div className="min-h-screen bg-[#0a0a0a] flex">
       <Suspense fallback={<SidebarSkeleton />}>
         <PublicSidebarServer />
       </Suspense>
 
-      <main className="flex-1 lg:ml-48">
-        <div className="p-4 sm:p-6">
+      {/* Offset for desktop sidebar; on mobile sidebar is hidden */}
+      <main className="flex-1 md:ml-48 min-w-0">
+        <div className="p-2 sm:p-4">
+          {/* Sticky Breadcrumb */}
           <div className="sticky top-0 z-50 bg-[#101010]/95 backdrop-blur border-b border-black rounded-t-2xl">
             <BreadcrumbNav
               items={[
@@ -124,7 +121,8 @@ export default async function Page({
             />
           </div>
 
-          <div className="bg-[#101010] rounded-b-2xl border border-black">
+          {/* Content card */}
+          <div className="bg-[#101010] rounded-b-2xl border border-black border-t-0">
             <PostContent post={post} />
           </div>
         </div>
@@ -135,7 +133,7 @@ export default async function Page({
 
 function SidebarSkeleton() {
   return (
-    <aside className="w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0">
+    <aside className="hidden md:block w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0">
       <div className="p-6 animate-pulse">
         <div className="h-5 bg-neutral-800 rounded mb-8"></div>
         <div className="space-y-3">

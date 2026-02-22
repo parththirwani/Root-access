@@ -34,17 +34,16 @@ export function PostContent({ post }: { post: Post }) {
 
   return (
     <div className="overflow-hidden">
-      {/* Add top padding to create space below sticky breadcrumb */}
-      <div className="flex justify-center px-4 sm:px-6 md:px-8 lg:px-20 pt-6 sm:pt-8 md:pt-10 pb-8 sm:pb-12 md:pb-16">
-        <article className="w-full max-w-3xl">
+      <div className="flex justify-center px-4 sm:px-6 md:px-10 lg:px-16 pt-6 sm:pt-8 md:pt-10 pb-10 sm:pb-14 md:pb-16">
+        <article className="w-full max-w-2xl">
           {/* Copy Button */}
           <div className="flex justify-end mb-4 sm:mb-6">
             <button
               onClick={handleCopyPage}
-              className="flex items-center gap-2 text-xs text-neutral-500 hover:text-white cursor-pointer transition touch-manipulation"
+              className="flex items-center gap-1.5 text-xs text-neutral-500 hover:text-white cursor-pointer transition touch-manipulation py-1"
             >
               <svg
-                className="w-4 h-4"
+                className="w-3.5 h-3.5 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -61,13 +60,13 @@ export function PostContent({ post }: { post: Post }) {
           </div>
 
           {/* Header */}
-          <header className="mb-8 sm:mb-10 md:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-[40px] text-white leading-tight mb-3 wrap-break-word">
+          <header className="mb-7 sm:mb-9 md:mb-12">
+            <h1 className="text-[26px] sm:text-3xl md:text-[38px] text-white leading-tight mb-3 wrap-break-word hyphens-auto">
               {post.title}
             </h1>
 
             {post.description && (
-              <p className="text-sm sm:text-base text-neutral-400 mb-3 sm:mb-4 wrap-break-word">
+              <p className="text-sm sm:text-[15px] text-neutral-400 mb-3 wrap-break-word leading-relaxed">
                 {post.description}
               </p>
             )}
@@ -82,40 +81,80 @@ export function PostContent({ post }: { post: Post }) {
             )}
           </header>
 
-          {/* Image */}
+          {/* Cover Image */}
           {post.coverImage && (
             <img
               src={post.coverImage}
               alt={post.title}
-              className="rounded-lg mb-8 sm:mb-10 md:mb-12 w-full h-auto"
+              className="rounded-lg mb-7 sm:mb-10 w-full h-auto"
             />
           )}
 
-          {/* Body - Responsive typography with justified text */}
+          {/* Body */}
           <div
             className="
-              prose prose-invert max-w-none mb-8 sm:mb-10 md:mb-12
-              prose-headings:break-words
-              prose-p:break-words
-              prose-p:text-justify
-              prose-a:break-words
-              prose-li:break-words
-              prose-li:text-justify
+              prose prose-invert max-w-none mb-8 sm:mb-12
               prose-sm sm:prose-base
+              prose-p:text-neutral-300
+              prose-p:leading-relaxed
+              prose-p:text-justify
+              prose-p:break-words
+              prose-headings:text-white
+              prose-headings:break-words
+              prose-headings:leading-tight
+              prose-h1:text-2xl sm:prose-h1:text-3xl
+              prose-h2:text-xl sm:prose-h2:text-2xl
+              prose-h3:text-lg sm:prose-h3:text-xl
+              prose-a:text-white
+              prose-a:underline
+              prose-a:break-all
+              prose-strong:text-white
+              prose-code:text-neutral-300
+              prose-code:bg-[#1a1a1a]
+              prose-code:px-1
+              prose-code:py-0.5
+              prose-code:rounded
+              prose-code:text-xs
+              prose-code:sm:text-sm
+              prose-code:before:content-none
+              prose-code:after:content-none
+              prose-code:break-all
+              prose-pre:overflow-x-auto
+              prose-pre:max-w-full
+              prose-pre:text-xs
+              prose-pre:sm:text-sm
+              prose-pre:rounded-lg
+              prose-pre:p-3
+              prose-pre:sm:p-4
+              prose-blockquote:border-neutral-600
+              prose-blockquote:text-neutral-400
               prose-img:rounded-lg
               prose-img:w-full
               prose-img:h-auto
-              prose-pre:overflow-x-auto
-              prose-pre:max-w-full
-              prose-code:break-words
+              prose-ul:text-neutral-300
+              prose-ol:text-neutral-300
+              prose-li:text-neutral-300
+              prose-li:break-words
               prose-table:block
               prose-table:overflow-x-auto
+              prose-table:text-sm
+              prose-td:break-words
+              prose-th:break-words
+              [&_pre]:overflow-x-auto
+              [&_pre]:max-w-full
+              [&_pre_code]:break-normal
+              [&_pre_code]:whitespace-pre
+              [&_code]:wrap-break-word
+              [&_table]:w-full
+              [&_img]:rounded-lg
+              [&_img]:w-full
+              [&_img]:h-auto
             "
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {/* Footer */}
-          <footer className="border-t border-black pt-4 sm:pt-6 flex justify-end">
+          <footer className="border-t border-black pt-4 flex justify-end">
             <span className="text-xs text-neutral-500">
               {post.views.toLocaleString()} views
             </span>

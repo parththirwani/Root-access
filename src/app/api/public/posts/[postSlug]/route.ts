@@ -9,7 +9,7 @@ export async function GET(
     const { postSlug } = await context.params;
 
     const post = await prisma.post.findUnique({
-      where: { slug: postSlug , published: true, },
+      where: { slug: postSlug, published: true },
       include: {
         subsection: {
           select: {
@@ -19,10 +19,10 @@ export async function GET(
         },
         tags: {
           select: {
-            name: true
-          }
-        }
-      }
+            name: true,
+          },
+        },
+      },
     });
 
     if (!post) {
@@ -31,10 +31,9 @@ export async function GET(
         { status: 404 }
       );
     }
-
     await prisma.post.update({
       where: { slug: postSlug },
-      data: { views: { increment: 1 } }
+      data: { views: { increment: 1 } },
     });
 
     return NextResponse.json({ post }, { status: 200 });
