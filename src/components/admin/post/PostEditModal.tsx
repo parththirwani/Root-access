@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Post } from '@/src/types';
 import { MarkdownEditor } from '../post/MarkDownEditor';
 
@@ -18,14 +18,70 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
     excerpt: post.excerpt || '',
     coverImage: post.coverImage || '',
     published: post.published,
-    tags: post.tags.map(t => t.name).join(', '),
+    tags: post.tags.map((t) => t.name).join(', '),
     projectLink: post.projectLink || '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [coverUploadError, setCoverUploadError] = useState('');
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
-  // Get display style as string to avoid Prisma enum issues in client component
   const displayStyle = post.subsection.displayStyle as string;
+  const isBlog      = displayStyle === 'BLOG';
+  const isProject   = displayStyle === 'PROJECT';
+  const isTitleOnly = displayStyle === 'TITLE_ONLY';
+
+  const getDisplayStyleInfo = (style: string) => {
+    const info: Record<string, { emoji: string; label: string; desc: string }> = {
+      BLOG:       { emoji: '📝', label: 'Blog Post',  desc: 'Full article with content' },
+      PROJECT:    { emoji: '🚀', label: 'Project',    desc: 'Card with external link'   },
+      TITLE_ONLY: { emoji: '📌', label: 'Title Only', desc: 'Simple title list'         },
+    };
+    return info[style] || info['BLOG'];
+  };
+
+  const styleInfo = getDisplayStyleInfo(displayStyle);
+
+  // Reuse the same /api/admin/upload endpoint your profile picture uses.
+  // It sends base64 → Cloudinary → returns { url, publicId }
+  const handleCoverUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setCoverUploadError('Please select an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setCoverUploadError('Image must be under 5MB');
+      return;
+    }
+
+    setCoverUploading(true);
+    setCoverUploadError('');
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      try {
+        const response = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ image: reader.result }),
+        });
+        if (!response.ok) throw new Error('Upload failed');
+        const data = await response.json();
+        setFormData((prev) => ({ ...prev, coverImage: data.url }));
+      } catch {
+        setCoverUploadError('Upload failed. Make sure CLOUDINARY_* env vars are set.');
+      } finally {
+        setCoverUploading(false);
+      }
+    };
+    reader.onerror = () => {
+      setCoverUploadError('Failed to read file');
+      setCoverUploading(false);
+    };
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,20 +89,20 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
     setLoading(true);
 
     try {
-      const tags = formData.tags.split(',').map((t) => t.trim()).filter(Boolean);
+      const tags = formData.tags
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean);
 
-      // Use the correct endpoint: /api/admin/subsections/{subsectionSlug}/posts/{postSlug}
-      const response = await fetch(`/api/admin/subsections/${post.subsection.slug}/posts/${post.slug}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          ...formData,
-          tags,
-        }),
-      });
+      const response = await fetch(
+        `/api/admin/subsections/${post.subsection.slug}/posts/${post.slug}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ ...formData, tags }),
+        }
+      );
 
       if (!response.ok) {
         const data = await response.json();
@@ -62,32 +118,16 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
     }
   };
 
-  const getDisplayStyleInfo = (style: string) => {
-    const info: Record<string, { emoji: string; label: string; desc: string }> = {
-      'BLOG': { emoji: '📝', label: 'Blog Post', desc: 'Full article with content' },
-      'PROJECT': { emoji: '🚀', label: 'Project', desc: 'Card with external link' },
-      'TITLE_ONLY': { emoji: '📌', label: 'Title Only', desc: 'Simple title list' },
-    };
-    return info[style] || info['BLOG'];
-  };
-
-  const styleInfo = getDisplayStyleInfo(displayStyle);
-  
-  // Type-safe display style checks using string comparison
-  // This works in client components without importing Prisma enums
-  const isBlog = displayStyle === 'BLOG';
-  const isProject = displayStyle === 'PROJECT';
-  const isTitleOnly = displayStyle === 'TITLE_ONLY';
-
   return (
     <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
+
+        {/* ── Header ── */}
         <div className="sticky top-0 bg-[#0a0a0a] border-b border-[#1a1a1a] p-4 sm:p-6 flex items-center justify-between z-10">
           <div>
             <h2 className="text-xl sm:text-2xl text-white font-normal">Edit Post</h2>
-            <p className="text-sm text-neutral-500 mt-1">
-              {post.subsection.name} • {styleInfo.emoji} {styleInfo.label}
+            <p className="text-sm text-neutral-500 mt-0.5">
+              {post.subsection.name} · {styleInfo.emoji} {styleInfo.label}
             </p>
           </div>
           <button
@@ -100,57 +140,126 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6">
+        {/* ── Form ── */}
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
           {error && (
-            <div className="mb-4 p-3 bg-red-950/50 border border-red-900/50 rounded-lg text-[13px] text-red-400">
+            <div className="p-3 bg-red-950/50 border border-red-900/50 rounded-lg text-[13px] text-red-400">
               {error}
             </div>
           )}
 
           {/* Display Style Info */}
-          <div className="mb-4 p-4 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
+          <div className="p-3 bg-[#1a1a1a] rounded-lg border border-[#2a2a2a]">
             <div className="flex items-center gap-2 text-[13px]">
               <span className="text-lg">{styleInfo.emoji}</span>
               <div>
-                <div className="text-white font-medium">{styleInfo.label}</div>
-                <div className="text-[#707070]">{styleInfo.desc}</div>
+                <span className="text-white font-medium">{styleInfo.label}</span>
+                <span className="text-[#707070] ml-2">{styleInfo.desc}</span>
               </div>
             </div>
           </div>
 
-          {/* Title and Cover Image */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div className={!isTitleOnly ? '' : 'sm:col-span-2'}>
-              <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Title *</label>
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                required
-                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
-              />
-            </div>
+          {/* ── Title ── */}
+          <div>
+            <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+              Title *
+            </label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              required
+              className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+            />
+          </div>
 
-            {!isTitleOnly && (
-              <div>
-                <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
-                  Cover Image URL
-                </label>
+          {/* ── Cover Image (blog + project only) ── */}
+          {!isTitleOnly && (
+            <div>
+              <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
+                Cover Image
+              </label>
+
+              {/* Preview thumbnail */}
+              {formData.coverImage && (
+                <div className="relative group mb-2 w-full h-40 rounded-lg overflow-hidden bg-[#1a1a1a]">
+                  <img
+                    src={formData.coverImage}
+                    alt="Cover preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, coverImage: '' })}
+                    className="absolute top-2 right-2 w-6 h-6 bg-black/70 hover:bg-black rounded-full flex items-center justify-center text-white text-xs opacity-0 group-hover:opacity-100 transition"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
+              {coverUploadError && (
+                <p className="text-xs text-red-400 mb-2">{coverUploadError}</p>
+              )}
+
+              {/* Hidden file input */}
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleCoverUpload(file);
+                  e.target.value = '';
+                }}
+              />
+
+              <div className="flex gap-2">
+                {/* Upload button — hits /api/admin/upload → Cloudinary */}
+                <button
+                  type="button"
+                  onClick={() => coverInputRef.current?.click()}
+                  disabled={coverUploading}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] whitespace-nowrap disabled:opacity-50"
+                >
+                  {coverUploading ? (
+                    <>
+                      <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      Upload
+                    </>
+                  )}
+                </button>
+
+                {/* URL fallback */}
                 <input
                   type="url"
                   value={formData.coverImage}
                   onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                  placeholder="https://..."
-                  className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
+                  placeholder="or paste an image URL..."
+                  className="flex-1 px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
                 />
               </div>
-            )}
-          </div>
+              <p className="text-[11px] text-[#707070] mt-1.5">
+                Uploads go to Cloudinary (max 5MB) · You can also paste any public image URL
+              </p>
+            </div>
+          )}
 
-          {/* Description - Only for blog and project */}
+          {/* ── Description (blog + project only) ── */}
           {!isTitleOnly && (
-            <div className="mb-4">
+            <div>
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
                 Description *
               </label>
@@ -158,16 +267,16 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
-                placeholder="A brief description"
+                placeholder="A short description shown in post listings"
                 rows={2}
                 className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition resize-none"
               />
             </div>
           )}
 
-          {/* Project Link (only for project style) */}
+          {/* ── Project Link (project only) ── */}
           {isProject && (
-            <div className="mb-4">
+            <div>
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
                 Project Link *
               </label>
@@ -176,15 +285,15 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
                 value={formData.projectLink}
                 onChange={(e) => setFormData({ ...formData, projectLink: e.target.value })}
                 required
-                placeholder="https://project-url.com"
+                placeholder="https://github.com/you/project"
                 className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
               />
             </div>
           )}
 
-          {/* Content (only for blog style) */}
+          {/* ── Markdown Content (blog only) ── */}
           {isBlog && (
-            <div className="mb-4">
+            <div>
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
                 Content (Markdown) *
               </label>
@@ -192,65 +301,80 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
                 value={formData.content}
                 onChange={(value) => setFormData({ ...formData, content: value })}
               />
+              <p className="text-[11px] text-[#707070] mt-1.5">
+                Drag &amp; drop images into the editor or use the Image button in the toolbar — they upload to Cloudinary automatically
+              </p>
             </div>
           )}
 
-          {/* Excerpt (optional for blog and project) */}
+          {/* ── Excerpt (blog + project only) ── */}
           {!isTitleOnly && (
-            <div className="mb-4">
+            <div>
               <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
-                Excerpt (optional)
+                Excerpt{' '}
+                <span className="font-normal text-[#707070]">(optional — auto-generated if empty)</span>
               </label>
               <textarea
                 value={formData.excerpt}
                 onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                 rows={2}
-                placeholder="Auto-generated if left empty"
+                placeholder="Short summary for SEO and link previews..."
                 className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition resize-none"
               />
             </div>
           )}
 
-          {/* Tags */}
-          <div className="mb-4">
+          {/* ── Tags ── */}
+          <div>
             <label className="block text-[13px] font-medium text-[#e5e5e5] mb-2">
-              Tags (comma-separated)
+              Tags{' '}
+              <span className="font-normal text-[#707070]">(comma-separated)</span>
             </label>
             <input
               type="text"
               value={formData.tags}
               onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-              placeholder="AI, Memory, Claude"
+              placeholder="PYTHON, REINFORCEMENT-LEARNING, ML"
               className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
             />
+            <p className="text-[11px] text-[#707070] mt-1">Tags are automatically uppercased</p>
           </div>
 
-          {/* Publish Checkbox */}
-          <div className="mb-6">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={formData.published}
-                onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-                className="w-4 h-4 rounded"
-              />
-              <span className="text-[13px] text-[#e5e5e5]">Published</span>
+          {/* ── Publish Toggle ── */}
+          <div>
+            <label className="flex items-center gap-3 cursor-pointer">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, published: !formData.published })}
+                className={`relative w-10 h-5 rounded-full transition-colors focus:outline-none ${
+                  formData.published ? 'bg-white' : 'bg-[#2a2a2a]'
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 w-4 h-4 rounded-full transition-transform ${
+                    formData.published ? 'translate-x-5 bg-[#0a0a0a]' : 'translate-x-0.5 bg-[#707070]'
+                  }`}
+                />
+              </button>
+              <span className="text-[13px] text-[#e5e5e5]">
+                {formData.published ? 'Published' : 'Draft'}
+              </span>
             </label>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sticky bottom-0 bg-[#0a0a0a] pt-4 border-t border-[#1a1a1a]">
+          {/* ── Sticky action bar ── */}
+          <div className="flex flex-col sm:flex-row gap-3 sticky bottom-0 bg-[#0a0a0a] pt-4 pb-2 border-t border-[#1a1a1a] -mx-4 sm:-mx-6 px-4 sm:px-6">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium disabled:opacity-50 touch-manipulation"
+              className="flex-1 px-4 py-2 bg-white text-[#0a0a0a] rounded-lg hover:opacity-90 transition text-[13px] font-medium disabled:opacity-50"
             >
               {loading ? 'Saving...' : 'Save Changes'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium touch-manipulation"
+              className="flex-1 px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium"
             >
               Cancel
             </button>
