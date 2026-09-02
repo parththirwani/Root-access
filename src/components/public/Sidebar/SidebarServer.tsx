@@ -33,7 +33,11 @@ const getSidebarData = unstable_cache(
               name: true,
               slug: true,
               icon: true,
-              postCount: true,
+              _count: {
+                select: {
+                  posts: { where: { published: true } },
+                },
+              },
             },
             orderBy: { name: 'asc' },
           },
@@ -42,12 +46,23 @@ const getSidebarData = unstable_cache(
       }),
     ]);
 
+    const sectionsWithCounts = sections.map((section) => ({
+      ...section,
+      subsections: section.subsections.map((sub) => ({
+        id: sub.id,
+        name: sub.name,
+        slug: sub.slug,
+        icon: sub.icon,
+        postCount: sub._count.posts,
+      })),
+    }));
+
     return {
       admin: {
         name: layoutData?.name || 'Admin',
         profile: layoutData?.profile || null,
       },
-      sections,
+      sections: sectionsWithCounts,
     };
   },
   ['sidebar-data'],

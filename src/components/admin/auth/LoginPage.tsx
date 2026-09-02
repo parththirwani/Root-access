@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { adminApi } from '@/src/lib/api';
 import { useAuth } from '@/src/contexts/authContext';
+import { FullScreenLoader, Spinner } from '../../ui/Spinner';
 
 export function AdminLoginPage() {
   const router = useRouter();
@@ -36,11 +37,7 @@ export function AdminLoginPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-        <div className="text-[#707070]">Loading...</div>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   if (isAuthenticated) {
@@ -94,7 +91,13 @@ export function AdminLoginPage() {
             disabled={loading}
             className="w-full bg-white text-[#0a0a0a] py-2 sm:py-2.5 rounded-lg hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-[14px] font-medium mb-4 touch-manipulation"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <Spinner size="sm" className="border-white/40 border-t-[#0a0a0a]" /> Login
+              </span>
+            ) : (
+              'Login'
+            )}
           </button>
 
           <p className="text-center text-xs sm:text-[13px] text-[#707070]">

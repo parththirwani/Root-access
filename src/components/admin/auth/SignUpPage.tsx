@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { FullScreenLoader, Spinner } from '../../ui/Spinner';
 
 export function AdminSignupPage() {
   const router = useRouter();
@@ -69,11 +70,7 @@ export function AdminSignupPage() {
 
   // Show loading state while checking eligibility
   if (checkingEligibility) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-        <div className="text-[#707070] text-sm sm:text-[14px]">Checking signup availability...</div>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   return (
@@ -143,7 +140,13 @@ export function AdminSignupPage() {
             disabled={loading}
             className="w-full bg-white text-[#0a0a0a] py-2 sm:py-2.5 rounded-lg hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-[14px] font-medium mb-4 touch-manipulation"
           >
-            {loading ? 'Creating account...' : 'Sign Up'}
+            {loading ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <Spinner size="sm" className="border-white/40 border-t-[#0a0a0a]" /> Sign Up
+              </span>
+            ) : (
+              'Sign Up'
+            )}
           </button>
 
           <p className="text-center text-xs sm:text-[13px] text-[#707070]">

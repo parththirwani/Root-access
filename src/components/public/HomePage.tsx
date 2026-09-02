@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { PublicSidebar } from './Sidebar';
+import { FullScreenLoader } from '../ui/Spinner';
 
 interface Profile {
   id: string;
@@ -35,11 +36,7 @@ export function HomePage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <div className="text-neutral-500">Loading...</div>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   return (

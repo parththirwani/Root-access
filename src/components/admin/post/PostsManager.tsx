@@ -7,6 +7,7 @@ import { SubsectionFilter } from '../subsections/SubSectionFilter';
 import { PostForm } from './postForm';
 import { PostListItem } from './postListItem';
 import { PostEditModal } from './PostEditModal';
+import { ContentLoader } from '../../ui/Spinner';
 
 const INITIAL_FORM_DATA = {
   title: '',
@@ -182,7 +183,7 @@ export function PostsManager() {
   const currentDisplayStyle = selectedSubsection ? getSubsectionDisplayStyle(selectedSubsection) : 'blog';
 
   if (loading) {
-    return <div className="text-[#707070] text-[14px]">Loading posts...</div>;
+    return <ContentLoader />;
   }
 
   return (

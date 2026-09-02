@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { publicApi } from '@/src/lib/api';
 import { PublicSidebar } from './Sidebar';
 import { Post } from '@/src/types';
+import { FullScreenLoader } from '../ui/Spinner';
 
 interface SubsectionPageProps {
   slug: string;
@@ -41,11 +42,7 @@ export function SubsectionPage({ slug }: SubsectionPageProps) {
   }, [slug]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#101011] flex items-center justify-center">
-        <span className="text-sm text-neutral-500">Loading...</span>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   if (!subsection || error) {

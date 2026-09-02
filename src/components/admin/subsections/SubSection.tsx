@@ -4,6 +4,7 @@ import { adminApi } from '@/src/lib/api';
 import { Subsection, TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
 import { EmojiPicker } from './EmojiPicker';
+import { ContentLoader } from '../../ui/Spinner';
 
 type DisplayStyleInput = 'blog' | 'project' | 'title_only';
 
@@ -115,7 +116,7 @@ export function SubsectionsManager() {
   };
 
   if (loading) {
-    return <div className="text-[#707070] text-[14px]">Loading subsections...</div>;
+    return <ContentLoader />;
   }
 
   return (

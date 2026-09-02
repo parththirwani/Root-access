@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { adminApi } from '@/src/lib/api';
 import { useAuth } from '@/src/contexts/authContext';
+import { FullScreenLoader } from '../ui/Spinner';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -37,11 +38,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-        <div className="text-[#707070]">Loading...</div>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   if (!isAuthenticated) {

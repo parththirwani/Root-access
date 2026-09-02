@@ -4,6 +4,7 @@
 import { adminApi } from '@/src/lib/api';
 import { Profile } from '@/src/types';
 import { useEffect, useState, useRef } from 'react';
+import { ContentLoader, Spinner } from '../../ui/Spinner';
 
 export function ProfileManager() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -119,7 +120,7 @@ export function ProfileManager() {
   };
 
   if (loading) {
-    return <div className="text-[#707070] text-[14px]">Loading profile...</div>;
+    return <ContentLoader />;
   }
 
   return (
@@ -176,7 +177,7 @@ export function ProfileManager() {
                 disabled={uploading}
                 className="px-4 py-2 bg-[#1a1a1a] text-white rounded-lg hover:bg-[#2a2a2a] transition text-[13px] font-medium disabled:opacity-50"
               >
-                {uploading ? 'Uploading...' : 'Change Picture'}
+                {uploading ? <Spinner size="sm" /> : 'Change Picture'}
               </button>
               <p className="text-[11px] text-[#707070] mt-2">
                 JPG, PNG or GIF. Max 5MB.

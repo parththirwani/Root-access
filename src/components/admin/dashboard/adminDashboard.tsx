@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ContentLoader } from '../../ui/Spinner';
 
 interface Stats {
   sections: number;
@@ -49,11 +50,7 @@ export function AdminDashboard() {
   ];
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <div className="w-8 h-8 border-2 border-[#2a2a2a] border-t-white rounded-full animate-spin"></div>
-      </div>
-    );
+    return <ContentLoader />;
   }
 
   return (

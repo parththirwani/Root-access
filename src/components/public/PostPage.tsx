@@ -7,6 +7,7 @@ import { publicApi } from '@/src/lib/api';
 
 import { BreadcrumbNav } from './BreadcrumbNav';
 import { PublicSidebar } from './Sidebar';
+import { FullScreenLoader } from '../ui/Spinner';
 
 interface PostPageProps {
   slug: string;
@@ -55,11 +56,7 @@ export function PostPage({ slug, postSlug }: PostPageProps) {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <span className="text-neutral-500 text-sm">Loading…</span>
-      </div>
-    );
+    return <FullScreenLoader />;
   }
 
   if (!post || error) {

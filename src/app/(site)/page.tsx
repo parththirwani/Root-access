@@ -35,14 +35,24 @@ async function getHomeData() {
           name: true,
           slug: true,
           icon: true,
-          postCount: true,
+          _count: {
+            select: {
+              posts: { where: { published: true } },
+            },
+          },
           topCategory: { select: { name: true } },
         },
         orderBy: { name: 'asc' },
       }),
     ]);
 
-    return { profile: admin?.profile || null, subsections };
+    return {
+      profile: admin?.profile || null,
+      subsections: subsections.map((sub) => ({
+        ...sub,
+        postCount: sub._count.posts,
+      })),
+    };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
     return { profile: null, subsections: [] };

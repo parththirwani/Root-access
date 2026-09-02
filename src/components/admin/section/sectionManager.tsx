@@ -3,6 +3,7 @@
 import { adminApi } from '@/src/lib/api';
 import { TopCategory } from '@/src/types';
 import { useEffect, useState } from 'react';
+import { ContentLoader } from '../../ui/Spinner';
 
 export function SectionsManager() {
   const [sections, setSections] = useState<TopCategory[]>([]);
@@ -64,7 +65,7 @@ export function SectionsManager() {
   };
 
   if (loading) {
-    return <div className="text-[#707070] text-[14px]">Loading sections...</div>;
+    return <ContentLoader />;
   }
 
   return (

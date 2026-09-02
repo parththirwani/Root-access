@@ -3,6 +3,7 @@
 import { adminApi } from '@/src/lib/api';
 import { Tag } from '@/src/types';
 import { useEffect, useState } from 'react';
+import { ContentLoader } from '../../ui/Spinner';
 
 export function TagsManager() {
   const [tags, setTags] = useState<Tag[]>([]);
@@ -52,7 +53,7 @@ export function TagsManager() {
   };
 
   if (loading) {
-    return <div className="text-[#707070] text-[14px]">Loading tags...</div>;
+    return <ContentLoader />;
   }
 
   return (

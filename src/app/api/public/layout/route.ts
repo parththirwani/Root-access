@@ -38,7 +38,11 @@ export async function GET(req: NextRequest) {
               name: true,
               slug: true,
               icon: true,
-              postCount: true,
+              _count: {
+                select: {
+                  posts: { where: { published: true } },
+                },
+              },
             },
             orderBy: {
               name: 'asc',
@@ -58,12 +62,23 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    const sectionsWithCounts = sections.map((section) => ({
+      ...section,
+      subsections: section.subsections.map((sub) => ({
+        id: sub.id,
+        name: sub.name,
+        slug: sub.slug,
+        icon: sub.icon,
+        postCount: sub._count.posts,
+      })),
+    }));
+
     return NextResponse.json({
       admin: {
         name: admin.name,
         profile: admin.profile,
       },
-      sections,
+      sections: sectionsWithCounts,
     }, { status: 200 });
   } catch (error) {
     console.error("GET layout data error:", error);
