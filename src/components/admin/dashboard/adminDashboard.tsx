@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Stats {
   sections: number;
@@ -11,6 +12,7 @@ interface Stats {
 }
 
 export function AdminDashboard() {
+  const router = useRouter();
   const [stats, setStats] = useState<Stats>({
     sections: 0,
     subsections: 0,
@@ -55,6 +57,17 @@ export function AdminDashboard() {
   return (
     <div>
       <h1 className="text-2xl sm:text-[28px] font-normal text-white mb-6 sm:mb-8">Dashboard</h1>
+
+      <button
+        onClick={() => router.push('/')}
+        className="mb-6 sm:mb-8 w-full sm:w-auto px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition text-xs sm:text-[13px] font-medium touch-manipulation flex items-center justify-center gap-2"
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+        </span>
+        Live
+      </button>
 
       {/* Stats Grid - Responsive */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
