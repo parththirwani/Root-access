@@ -1,10 +1,8 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/src/lib/prisma';
 import { serializePost } from '@/src/lib/serialize';
 
 import { BreadcrumbNav } from '@/src/components/public/BreadcrumbNav';
-import { PublicSidebarServer } from '@/src/components/public/Sidebar/SidebarServer';
 import { PostContent } from '@/src/components/public/PostContent';
 
 export const revalidate = 60;
@@ -102,12 +100,7 @@ export default async function Page({
   incrementViews(postSlug);
 
   return (
-    // No margin here — sidebar handles its own fixed positioning
     <div className="min-h-screen bg-[#0a0a0a] flex">
-      <Suspense fallback={<SidebarSkeleton />}>
-        <PublicSidebarServer />
-      </Suspense>
-
       {/* Offset for desktop sidebar; on mobile sidebar is hidden */}
       <main className="flex-1 md:ml-48 min-w-0">
         <div className="p-2 sm:p-4">
@@ -128,19 +121,5 @@ export default async function Page({
         </div>
       </main>
     </div>
-  );
-}
-
-function SidebarSkeleton() {
-  return (
-    <aside className="hidden md:block w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0">
-      <div className="p-6 animate-pulse">
-        <div className="h-5 bg-neutral-800 rounded mb-8"></div>
-        <div className="space-y-3">
-          <div className="h-4 bg-neutral-800 rounded"></div>
-          <div className="h-4 bg-neutral-800 rounded"></div>
-        </div>
-      </div>
-    </aside>
   );
 }

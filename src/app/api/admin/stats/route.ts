@@ -16,8 +16,8 @@ async function getHandler(req: NextRequest) {
         },
       }),
       prisma.tag.count(),
-      prisma.post.aggregate({
-        _count: true,
+      prisma.post.count({
+        where: { published: true },
       }),
     ]);
 
@@ -26,7 +26,7 @@ async function getHandler(req: NextRequest) {
     return NextResponse.json({
       sections: sections.length,
       subsections: totalSubsections,
-      posts: postStats._count,
+      posts: postStats,
       tags,
     }, { status: 200 });
   } catch (error) {

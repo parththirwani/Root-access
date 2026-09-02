@@ -50,7 +50,9 @@ export function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="text-[#707070] text-sm sm:text-[14px]">Loading dashboard...</div>
+      <div className="flex items-center justify-center py-24">
+        <div className="w-8 h-8 border-2 border-[#2a2a2a] border-t-white rounded-full animate-spin"></div>
+      </div>
     );
   }
 

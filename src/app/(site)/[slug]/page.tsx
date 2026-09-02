@@ -1,9 +1,7 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/src/lib/prisma';
 import { serializePosts } from '@/src/lib/serialize';
 import { unstable_cache } from 'next/cache';
-import { PublicSidebarServer } from '@/src/components/public/Sidebar/SidebarServer';
 import { SubsectionContent } from '@/src/components/public/SubsectionContent';
 
 export const revalidate = 60;
@@ -69,27 +67,8 @@ export default async function Page({
   if (!subsection) notFound();
 
   return (
-    <div className="min-h-screen bg-[#101011]">
-      <div className="flex">
-        <Suspense fallback={<SidebarSkeleton />}>
-          <PublicSidebarServer />
-        </Suspense>
-        <SubsectionContent subsection={subsection} slug={slug} />
-      </div>
+    <div className="min-h-screen bg-[#101011] flex">
+      <SubsectionContent subsection={subsection} slug={slug} />
     </div>
-  );
-}
-
-function SidebarSkeleton() {
-  return (
-    <aside className="hidden md:block w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0">
-      <div className="p-6 animate-pulse">
-        <div className="h-5 bg-neutral-800 rounded mb-8"></div>
-        <div className="space-y-3">
-          <div className="h-4 bg-neutral-800 rounded"></div>
-          <div className="h-4 bg-neutral-800 rounded"></div>
-        </div>
-      </div>
-    </aside>
   );
 }
