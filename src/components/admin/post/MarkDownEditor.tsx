@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { markdownToHtml } from '@/src/lib/markdown';
 
 interface MarkdownEditorProps {
   value: string;
@@ -113,45 +114,8 @@ export function MarkdownEditor({ value, onChange, placeholder }: MarkdownEditorP
     { label: '🔗',  title: 'Link',           action: () => insertAtCursor('[', '](url)', 'link text') },
   ];
 
-  // Simple preview renderer (mirrors markdown.ts logic for live preview)
-  const renderPreview = (md: string) => {
-    let html = md;
-    // Code blocks
-    html = html.replace(/```([a-z]*)\n([\s\S]*?)```/gim,
-      '<pre class="bg-[#1a1a1a] p-4 rounded-lg overflow-x-auto my-4 text-sm"><code>$2</code></pre>');
-    // Inline code
-    html = html.replace(/`([^`]+)`/g,
-      '<code class="bg-[#1a1a1a] px-2 py-0.5 rounded text-sm text-neutral-300">$1</code>');
-    // Images
-    html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
-      '<img src="$2" alt="$1" class="rounded-lg my-4 max-w-full w-full" loading="lazy" />');
-    // Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" class="text-white underline">$1</a>');
-    // Headers
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold text-white mt-6 mb-2">$1</h3>');
-    html = html.replace(/^## (.*$)/gim,  '<h2 class="text-2xl font-semibold text-white mt-8 mb-3">$1</h2>');
-    html = html.replace(/^# (.*$)/gim,   '<h1 class="text-3xl font-bold text-white mt-8 mb-4">$1</h1>');
-    // Bold / Italic
-    html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
-    html = html.replace(/\*([^*\n]+)\*/g,   '<em>$1</em>');
-    // Blockquote
-    html = html.replace(/^> (.*$)/gim,
-      '<blockquote class="border-l-4 border-neutral-600 pl-4 my-3 italic text-neutral-400">$1</blockquote>');
-    // Dividers
-    html = html.replace(/^---$/gim, '<hr class="my-6 border-t border-[#2a2a2a]" />');
-    // Lists
-    html = html.replace(/^- (.*$)/gim,    '<li class="ml-5 mb-1 list-disc text-neutral-300">$1</li>');
-    html = html.replace(/^\d+\. (.*$)/gim,'<li class="ml-5 mb-1 list-decimal text-neutral-300">$1</li>');
-    // Paragraphs
-    html = html.split('\n\n').map(p => {
-      p = p.trim();
-      if (!p || p.startsWith('<')) return p;
-      return `<p class="mb-4 leading-relaxed text-neutral-300">${p.replace(/\n/g, '<br />')}</p>`;
-    }).join('\n');
-
-    return html;
-  };
+  // Live preview reuses the same renderer as the published page (lib/markdown.ts)
+  const renderPreview = (md: string) => markdownToHtml(md);
 
   return (
     <div className="border border-[#2a2a2a] rounded-lg overflow-hidden bg-[#0a0a0a]">

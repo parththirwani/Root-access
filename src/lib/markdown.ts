@@ -4,24 +4,30 @@ export function markdownToHtml(markdown: string): string {
   let html = markdown;
 
   // ── 1. Code blocks FIRST (protect their content from further processing) ──
+  // NOTE: placeholders use private-use unicode so markdown rules
+  // (especially _italic_ which broke %%INLINECODE_0%%) can't corrupt them.
+  const PH_A = 'QQQROOT';
+  const PH_B = 'QQQ';
   const codeBlocks: string[] = [];
   html = html.replace(/```([a-z]*)\n([\s\S]*?)```/gim, (match, lang, code) => {
     const language = lang || 'plaintext';
     const idx = codeBlocks.length;
+    const escaped = code.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     codeBlocks.push(
-      `<pre class="bg-[#1a1a1a] p-4 rounded-lg overflow-x-auto my-6 text-sm"><code class="language-${language} text-neutral-300">${code.trim()}</code></pre>`
+      `<pre class="bg-[#1a1a1a] p-4 rounded-lg overflow-x-auto my-6 text-sm"><code class="language-${language} text-neutral-300">${escaped}</code></pre>`
     );
-    return `%%CODEBLOCK_${idx}%%`;
+    return `${PH_A}BLOCK${idx}${PH_B}`;
   });
 
   // ── 2. Inline code ──
   const inlineCodes: string[] = [];
   html = html.replace(/`([^`]+)`/g, (match, code) => {
     const idx = inlineCodes.length;
+    const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     inlineCodes.push(
-      `<code class="bg-[#1a1a1a] px-2 py-0.5 rounded text-sm text-neutral-300">${code}</code>`
+      `<code class="bg-[#1a1a1a] px-2 py-0.5 rounded text-sm text-neutral-300">${escaped}</code>`
     );
-    return `%%INLINECODE_${idx}%%`;
+    return `${PH_A}CODE${idx}${PH_B}`;
   });
 
   // ── 3. Images (BEFORE links so ![...](...) doesn't get confused) ──
@@ -97,7 +103,7 @@ export function markdownToHtml(markdown: string): string {
     if (/^<(h[1-6]|ul|ol|pre|blockquote|hr|img|div|table|thead|tbody|tr)/.test(block)) {
       return block;
     }
-    if (block.startsWith('%%CODEBLOCK') || block.startsWith('%%INLINECODE')) {
+    if (block.startsWith(PH_A)) {
       return block;
     }
     return `<p class="mb-4 leading-relaxed text-neutral-300">${block.replace(/\n/g, '<br />')}</p>`;
@@ -105,10 +111,10 @@ export function markdownToHtml(markdown: string): string {
 
   // ── 12. Restore protected blocks ──
   inlineCodes.forEach((code, i) => {
-    html = html.replace(`%%INLINECODE_${i}%%`, code);
+    html = html.split(`${PH_A}CODE${i}${PH_B}`).join(code);
   });
   codeBlocks.forEach((block, i) => {
-    html = html.replace(`%%CODEBLOCK_${i}%%`, block);
+    html = html.split(`${PH_A}BLOCK${i}${PH_B}`).join(block);
   });
 
   return html;
