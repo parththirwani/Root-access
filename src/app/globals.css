@@ -296,7 +296,7 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .site-header { min-height: 88px; }
 .site-header-inner { width: min(100% - 40px, 1392px); margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 36px; min-height: 88px; }
 .site-brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-weight: 600; font-size: 14px; letter-spacing: -.025em; white-space: nowrap; }
-.site-brand img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; filter: grayscale(1); }
+.site-brand img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
 .site-brand:hover { opacity: .7; }
 .site-navigation { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 23px; }
 .site-navigation a, .site-theme-button { color: var(--site-muted); text-decoration: none; font-size: 14px; line-height: 28px; transition: color .18s ease; }
