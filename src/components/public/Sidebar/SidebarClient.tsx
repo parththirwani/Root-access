@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 interface LayoutData {
@@ -41,13 +42,16 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
   };
 
   const profile = layoutData.admin.profile;
+  const avatarSrc = profile?.profilePicture?.startsWith('https://res.cloudinary.com/')
+    ? profile.profilePicture.replace('/image/upload/', '/image/upload/f_auto,q_auto,c_fill,w_96,h_96/')
+    : profile?.profilePicture;
   const links = layoutData.sections.flatMap((section) => section.subsections);
 
   return (
     <header className="site-header">
       <div className="site-header-inner">
         <Link href="/" className="site-brand" aria-label={`${layoutData.admin.name}, home`}>
-          {profile?.profilePicture && <img src={profile.profilePicture} alt="" width="36" height="36" />}
+          {avatarSrc && <Image src={avatarSrc} alt="" width={36} height={36} unoptimized />}
           <span>{layoutData.admin.name}</span>
         </Link>
 

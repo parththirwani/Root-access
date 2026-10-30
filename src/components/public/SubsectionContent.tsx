@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Post {
   title: string;
@@ -37,7 +38,7 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
     const external = isProject && !!post.projectLink;
     const body = (
       <>
-        {isProject && post.coverImage && <img className="project-cover" src={post.coverImage} alt="" loading="lazy" />}
+        {isProject && post.coverImage && <Image className="project-cover" src={post.coverImage} alt="" width={640} height={400} unoptimized loading="lazy" />}
         <span className="archive-post-content">
           <span className="archive-post-title">{post.title}{external && <span className="external-mark" aria-label="external link"> ↗</span>}</span>
           {!titleOnly && (post.description || post.excerpt) && <span className="archive-post-description">{post.description || post.excerpt}</span>}
