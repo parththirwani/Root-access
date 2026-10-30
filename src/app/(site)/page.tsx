@@ -46,9 +46,9 @@ async function getHomeData() {
       }),
       prisma.post.findMany({
         where: { published: true, subsection: { slug: 'projects', isVisible: true } },
-        select: { title: true, slug: true, projectLink: true },
+        select: { title: true, slug: true, projectLink: true, coverImage: true },
         orderBy: { publishedAt: 'desc' },
-        take: 6,
+        take: 20,
       }),
     ]);
 

@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { GenerativeBackground } from './GenerativeBackground';
 import { SocialLinks } from './SocialLinks';
+import { ProjectLogo } from './ProjectLogo';
 
 interface Profile {
   id: string;
@@ -29,6 +30,7 @@ interface ProjectLink {
   title: string;
   slug: string;
   projectLink: string | null;
+  coverImage: string | null;
 }
 
 export function HomeContent({ profile, subsections, name, projects }: { profile: Profile | null; subsections: Subsection[]; name: string; projects: ProjectLink[] }) {
@@ -51,12 +53,12 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
       </div>}
       {body.length > 0 && <div className="site-prose home-bio-rest"><ReactMarkdown remarkPlugins={[remarkGfm]}>{body.join('\n\n')}</ReactMarkdown></div>}
 
-      {projects.length > 0 && <div className="home-projects" aria-label="Selected projects">
+      {projects.length > 0 && <div className="home-projects" aria-label="Projects">
         <span className="home-projects-label">Projects</span>
         <div className="home-project-links">{projects.map((project) => {
           return project.projectLink
-            ? <a key={project.slug} href={project.projectLink} target="_blank" rel="noopener noreferrer">{project.title}</a>
-            : <span key={project.slug}>{project.title}</span>;
+            ? <a key={project.slug} href={project.projectLink} target="_blank" rel="noopener noreferrer"><ProjectLogo image={project.coverImage} compact />{project.title}</a>
+            : <span key={project.slug}><ProjectLogo image={project.coverImage} compact />{project.title}</span>;
         })}</div>
       </div>}
 

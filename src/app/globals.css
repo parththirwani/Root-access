@@ -431,7 +431,7 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .home-projects { display: flex; align-items: baseline; gap: 12px; margin-top: 24px; color: var(--site-muted); font-size: 14px; }
 .home-projects-label { flex: none; }
 .home-project-links { display: flex; flex-wrap: wrap; gap: 5px; }
-.home-project-links a, .home-project-links span { display: inline-block; padding: 1px 6px; border-radius: 3px; background: var(--site-hover); color: var(--site-muted); text-decoration: none; font-size: 13px; line-height: 1.6; transition: color .18s ease, background-color .18s ease; }
+.home-project-links a, .home-project-links > span { display: inline-flex; align-items: center; gap: 5px; padding: 2px 7px; border-radius: 3px; background: var(--site-hover); color: var(--site-muted); text-decoration: none; font-size: 13px; line-height: 1.6; transition: color .18s ease, background-color .18s ease; }
 .home-project-links a:hover { color: var(--site-link); background: var(--site-line); }
 
 /* The archive follows the reference's quiet timeline and oversized year markers. */
@@ -468,8 +468,12 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .project-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 18px; margin-top: 24px; }
 .project-item a { display: flex; align-items: center; min-height: 78px; padding: 10px 13px; gap: 16px; border-radius: 6px; transition: background-color .18s ease; }
 .project-item a:hover { background: var(--site-hover); }
-.project-icon { display: grid; place-items: center; flex: none; width: 34px; height: 34px; font-size: 23px; font-weight: 300; color: var(--site-muted); }
-.project-icon img { width: 34px; height: 34px; object-fit: contain; border-radius: 4px; opacity: .82; }
+.project-logo { display: grid; place-items: center; flex: none; width: 34px; height: 34px; color: var(--site-muted); }
+.project-logo img { width: 34px; height: 34px; object-fit: contain; }
+.project-logo svg { width: 24px; height: 24px; }
+.project-logo--compact { width: 17px; height: 17px; }
+.project-logo--compact img { width: 17px; height: 17px; }
+.project-logo--compact svg { width: 14px; height: 14px; }
 .project-item .archive-post-title { font-size: 16px; line-height: 1.35; }
 .project-item .archive-post-description { font-size: 13px; line-height: 1.4; margin-top: 3px; }
 .project-item .archive-post-tags { display: none; }

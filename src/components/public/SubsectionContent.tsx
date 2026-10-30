@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { GenerativeBackground } from './GenerativeBackground';
+import { ProjectLogo } from './ProjectLogo';
 
 interface Post {
   title: string;
@@ -41,7 +41,7 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
     const external = isProject && !!post.projectLink;
     const body = (
       <>
-        {isProject && <span className="project-icon" aria-hidden="true">{post.coverImage ? <Image src={post.coverImage} alt="" width={48} height={48} unoptimized loading="lazy" /> : post.title.slice(0, 1)}</span>}
+        {isProject && <ProjectLogo image={post.coverImage} />}
         <span className="archive-post-content">
           <span className="archive-post-title">{post.title}{external && <span className="external-mark" aria-label="external link"> ↗</span>}</span>
           {!titleOnly && (post.description || post.excerpt) && <span className="archive-post-description">{post.description || post.excerpt}</span>}
