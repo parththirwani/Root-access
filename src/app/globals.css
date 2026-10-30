@@ -347,7 +347,6 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .home-contact-links { display: flex; flex-wrap: wrap; gap: 10px 20px; }
 .home-contact-links a { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--site-subtle); }
 .home-contact-links a:hover { text-decoration-color: var(--site-text); }
-.site-footer { color: var(--site-subtle); font-size: 12px; padding: 30px 0 40px; }
 .archive-page { padding-top: 35px; padding-bottom: 110px; }
 .archive-kicker { color: var(--site-muted); margin: 0 0 9px; font-size: 13px; }
 .archive-summary { color: var(--site-muted); font-size: 14px; margin: 12px 0 0; }
@@ -418,7 +417,7 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 /* Generative art lives in its own layer and fades beneath the reading column. */
 .site-shell,
 .site-shell.dark { background-image: none; }
-.site-header, .site-footer, .site-shell > main { position: relative; z-index: 1; }
+.site-header, .site-shell > main { position: relative; z-index: 1; }
 .home-page > :not(canvas), .archive-page > :not(canvas) { position: relative; z-index: 1; }
 .generative-background { position: fixed; inset: 0; pointer-events: none; width: 100vw; height: 100dvh; z-index: 0; }
 .generative-background--roots { mask-image: radial-gradient(ellipse 54% 78% at 50% 48%, transparent 42%, #000 88%); }

@@ -16,7 +16,6 @@ export default function SiteLayout({
         <PublicSidebarServer />
       </Suspense>
       {children}
-      <footer className="site-footer"><div className="site-container">© {new Date().getFullYear()} Parth Thirwani</div></footer>
     </div>
   );
 }

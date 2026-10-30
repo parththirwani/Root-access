@@ -4,11 +4,11 @@ import { HomeContent } from '../../components/public/HomeContent';
 export const revalidate = 60;
 
 const featuredProjectSlugs = [
-  'chatterstack',
+  'runes-ai',
   'mimir',
   'newshog',
+  'chatterstack',
   'rate-limit-visualizer',
-  'runes-ai',
 ] as const;
 
 async function getHomeData() {
