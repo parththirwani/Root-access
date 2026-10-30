@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { GenerativeBackground } from './GenerativeBackground';
 
 interface Post {
   title: string;
@@ -32,26 +33,31 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
   const years = Array.from(new Set(filtered.map((post) => post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated')));
   const isProject = subsection.displayStyle === 'PROJECT';
   const titleOnly = subsection.displayStyle === 'TITLE_ONLY';
+  const isArticle = subsection.displayStyle === 'BLOG';
 
   const renderPost = (post: Post) => {
-    const href = isProject && post.projectLink ? post.projectLink : `/${slug}/${post.slug}`;
     const external = isProject && !!post.projectLink;
     const body = (
       <>
-        {isProject && post.coverImage && <Image className="project-cover" src={post.coverImage} alt="" width={640} height={400} unoptimized loading="lazy" />}
+        {isProject && <span className="project-icon" aria-hidden="true">{post.coverImage ? <Image src={post.coverImage} alt="" width={48} height={48} unoptimized loading="lazy" /> : post.title.slice(0, 1)}</span>}
         <span className="archive-post-content">
           <span className="archive-post-title">{post.title}{external && <span className="external-mark" aria-label="external link"> ↗</span>}</span>
           {!titleOnly && (post.description || post.excerpt) && <span className="archive-post-description">{post.description || post.excerpt}</span>}
           {isProject && post.tags.length > 0 && <span className="archive-post-tags">{post.tags.map((tag) => tag.name).join(' · ')}</span>}
         </span>
-        {!isProject && <time className="archive-post-date" dateTime={post.publishedAt ?? undefined}>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</time>}
+        {!isProject && !titleOnly && <time className="archive-post-date" dateTime={post.publishedAt ?? undefined}>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</time>}
       </>
     );
-    return <li key={post.slug} className={isProject ? 'project-item' : 'archive-post'}><Link href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{body}</Link></li>;
+    return <li key={post.slug} className={isProject ? 'project-item' : titleOnly ? 'simple-item' : 'archive-post'}>
+      {isArticle ? <Link href={`/${slug}/${post.slug}`}>{body}</Link>
+        : external ? <a href={post.projectLink!} target="_blank" rel="noopener noreferrer">{body}</a>
+          : <div className="archive-static">{body}</div>}
+    </li>;
   };
 
   return (
     <main id="main-content" className="site-container archive-page">
+      <GenerativeBackground />
       <div className="archive-heading">
         {subsection.topCategory && <p className="archive-kicker">{subsection.topCategory.name}</p>}
         <h1 className="site-title">{subsection.name}</h1>
@@ -63,7 +69,7 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
         </div>
       )}
       {filtered.length === 0 && <p className="archive-empty">No posts yet.</p>}
-      {isProject ? <ul className="project-grid">{filtered.map(renderPost)}</ul> : years.map((year) => (
+      {isProject ? <ul className="project-grid">{filtered.map(renderPost)}</ul> : titleOnly ? <ul className="simple-list">{filtered.map(renderPost)}</ul> : years.map((year) => (
         <section className="archive-year" key={year} aria-labelledby={`year-${year}`}>
           <h2 id={`year-${year}`}>{year}</h2>
           <ul>{filtered.filter((post) => (post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated') === year).map(renderPost)}</ul>

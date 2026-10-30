@@ -6,11 +6,11 @@ export const revalidate = 60;
 async function getHomeData() {
   if (!process.env.DATABASE_URL) {
     console.log('[Build] Skipping home data fetch - no DATABASE_URL');
-    return { name: 'Parth Thirwani', profile: null, subsections: [] };
+    return { name: 'Parth Thirwani', profile: null, subsections: [], projects: [] };
   }
 
   try {
-    const [admin, subsections] = await Promise.all([
+    const [admin, subsections, projects] = await Promise.all([
       prisma.admin.findFirst({
         select: {
           name: true,
@@ -44,6 +44,12 @@ async function getHomeData() {
         },
         orderBy: { name: 'asc' },
       }),
+      prisma.post.findMany({
+        where: { published: true, subsection: { slug: 'projects', isVisible: true } },
+        select: { title: true, slug: true, projectLink: true },
+        orderBy: { publishedAt: 'desc' },
+        take: 6,
+      }),
     ]);
 
     return {
@@ -53,10 +59,11 @@ async function getHomeData() {
         ...sub,
         postCount: sub._count.posts,
       })),
+      projects,
     };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
-    return { name: 'Parth Thirwani', profile: null, subsections: [] };
+    return { name: 'Parth Thirwani', profile: null, subsections: [], projects: [] };
   }
 }
 
@@ -64,6 +71,6 @@ export default async function Page() {
   const data = await getHomeData();
 
   return (
-    <main id="main-content"><HomeContent name={data.name} profile={data.profile} subsections={data.subsections} /></main>
+    <main id="main-content"><HomeContent name={data.name} profile={data.profile} subsections={data.subsections} projects={data.projects} /></main>
   );
 }

@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 
   try {
     const posts = await prisma.post.findMany({
-      where: { published: true },
+      where: { published: true, subsection: { displayStyle: 'BLOG' } },
       select: {
         slug: true,
         subsection: {
@@ -52,6 +52,7 @@ async function getPostData(postSlug: string) {
           select: {
             name: true,
             slug: true,
+            displayStyle: true,
           },
         },
         tags: {
@@ -92,7 +93,7 @@ export default async function Page({
   const { slug, postSlug } = await params;
   const post = await getPostData(postSlug);
 
-  if (!post) {
+  if (!post || post.subsection.slug !== slug || post.subsection.displayStyle !== 'BLOG') {
     notFound();
   }
 

@@ -1,6 +1,9 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { GenerativeBackground } from './GenerativeBackground';
+import { SocialLinks } from './SocialLinks';
 
 interface Profile {
   id: string;
@@ -22,7 +25,14 @@ interface Subsection {
   topCategory: { name: string };
 }
 
-export function HomeContent({ profile, subsections, name }: { profile: Profile | null; subsections: Subsection[]; name: string }) {
+interface ProjectLink {
+  title: string;
+  slug: string;
+  projectLink: string | null;
+}
+
+export function HomeContent({ profile, subsections, name, projects }: { profile: Profile | null; subsections: Subsection[]; name: string; projects: ProjectLink[] }) {
+  const [intro, ...body] = (profile?.bio || '').split(/\n\s*\n/);
   const groups = subsections.reduce((acc, subsection) => {
     (acc[subsection.topCategory.name] ??= []).push(subsection);
     return acc;
@@ -30,10 +40,25 @@ export function HomeContent({ profile, subsections, name }: { profile: Profile |
 
   return (
     <div className="site-container home-page">
+      <GenerativeBackground />
       <h1 className="site-title">{name}</h1>
       <div className="site-prose home-bio">
-        {profile?.bio ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{profile.bio}</ReactMarkdown> : <p>Welcome! Configure your profile in the admin panel.</p>}
+        {profile?.bio ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{intro}</ReactMarkdown> : <p>Welcome! Configure your profile in the admin panel.</p>}
       </div>
+      {profile?.bio?.includes('CodeMate AI') && <div className="home-affiliation">
+        <span>Working at</span>
+        <a href="https://codemate.ai/" target="_blank" rel="noopener noreferrer"><Image src="/brands/codemate.ico" width={17} height={17} alt="" unoptimized /> CodeMate AI</a>
+      </div>}
+      {body.length > 0 && <div className="site-prose home-bio-rest"><ReactMarkdown remarkPlugins={[remarkGfm]}>{body.join('\n\n')}</ReactMarkdown></div>}
+
+      {projects.length > 0 && <div className="home-projects" aria-label="Selected projects">
+        <span className="home-projects-label">Projects</span>
+        <div className="home-project-links">{projects.map((project) => {
+          return project.projectLink
+            ? <a key={project.slug} href={project.projectLink} target="_blank" rel="noopener noreferrer">{project.title}</a>
+            : <span key={project.slug}>{project.title}</span>;
+        })}</div>
+      </div>}
 
       {subsections.length > 0 && (
         <section className="home-index" aria-labelledby="explore-heading">
@@ -46,7 +71,7 @@ export function HomeContent({ profile, subsections, name }: { profile: Profile |
                   <li key={item.id}>
                     <Link href={`/${item.slug}`}>
                       <span>{item.name}</span>
-                      <span className="home-index-count">{item.postCount} {item.postCount === 1 ? 'post' : 'posts'}</span>
+                      <span className="home-index-count">{item.postCount} {item.postCount === 1 ? 'entry' : 'entries'}</span>
                     </Link>
                   </li>
                 ))}
@@ -59,12 +84,7 @@ export function HomeContent({ profile, subsections, name }: { profile: Profile |
       {profile && (profile.email || profile.xLink || profile.linkedinLink || profile.instagramLink) && (
         <section className="home-contact" aria-labelledby="contact-heading">
           <h2 id="contact-heading" className="site-section-heading">Find me on</h2>
-          <div className="home-contact-links">
-            {profile.email && <a href={`mailto:${profile.email}`}>Email</a>}
-            {profile.xLink && <a href={profile.xLink} target="_blank" rel="noopener noreferrer">X</a>}
-            {profile.linkedinLink && <a href={profile.linkedinLink} target="_blank" rel="noopener noreferrer">LinkedIn</a>}
-            {profile.instagramLink && <a href={profile.instagramLink} target="_blank" rel="noopener noreferrer">Instagram</a>}
-          </div>
+          <SocialLinks profile={profile} />
         </section>
       )}
     </div>

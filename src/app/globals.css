@@ -301,6 +301,15 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .site-navigation { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 23px; }
 .site-navigation a, .site-theme-button { color: var(--site-muted); text-decoration: none; font-size: 14px; line-height: 28px; transition: color .18s ease; }
 .site-navigation a:hover, .site-navigation a[aria-current="page"], .site-theme-button:hover { color: var(--site-text); }
+.site-navigation { gap: 8px 17px; }
+.site-desktop-socials { display: flex; align-items: center; }
+.site-social-links { display: flex; flex-wrap: wrap; align-items: center; gap: 9px 18px; }
+.site-social-links a { display: inline-flex; align-items: center; gap: 5px; color: var(--site-muted); text-decoration: none; font-size: 14px; line-height: 28px; white-space: nowrap; }
+.site-social-links a:hover { color: var(--site-link); }
+.site-social-links svg { flex: none; }
+.site-social-links.is-compact { gap: 8px; }
+.site-social-links.is-compact a { width: 29px; height: 34px; justify-content: center; }
+.site-social-links.is-compact span { display: none; }
 .site-navigation a[aria-current="page"] { font-weight: 600; }
 .site-theme-button { border: 0; background: none; cursor: pointer; font-size: 20px; padding: 0 4px; min-width: 30px; min-height: 36px; }
 .site-menu-button, .site-mobile-socials { display: none; }
@@ -404,4 +413,80 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 }
 @media (prefers-reduced-motion: reduce) {
   .site-shell *, .site-shell *::before, .site-shell *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
+
+/* Generative art lives in its own layer and fades beneath the reading column. */
+.site-shell,
+.site-shell.dark { background-image: none; }
+.site-header, .site-footer, .site-shell > main { position: relative; z-index: 1; }
+.home-page > :not(canvas), .archive-page > :not(canvas) { position: relative; z-index: 1; }
+.generative-background { position: fixed; inset: 0; pointer-events: none; width: 100vw; height: 100dvh; z-index: 0; }
+.generative-background--roots { mask-image: radial-gradient(ellipse 54% 78% at 50% 48%, transparent 42%, #000 88%); }
+.home-page .generative-background--roots { opacity: .8; }
+.home-affiliation { display: flex; align-items: center; gap: 8px; margin-top: 22px; color: var(--site-text); font-size: 15px; }
+.home-affiliation a { display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px 1px 4px; border-radius: 3px; background: var(--site-hover); color: var(--site-muted); text-decoration: none; font-size: 14px; }
+.home-affiliation a:hover { color: var(--site-link); }
+.home-affiliation img { width: 17px; height: 17px; object-fit: contain; }
+.home-bio-rest { margin-top: 22px; }
+.home-projects { display: flex; align-items: baseline; gap: 12px; margin-top: 24px; color: var(--site-muted); font-size: 14px; }
+.home-projects-label { flex: none; }
+.home-project-links { display: flex; flex-wrap: wrap; gap: 5px; }
+.home-project-links a, .home-project-links span { display: inline-block; padding: 1px 6px; border-radius: 3px; background: var(--site-hover); color: var(--site-muted); text-decoration: none; font-size: 13px; line-height: 1.6; transition: color .18s ease, background-color .18s ease; }
+.home-project-links a:hover { color: var(--site-link); background: var(--site-line); }
+
+/* The archive follows the reference's quiet timeline and oversized year markers. */
+.archive-year { margin-top: 40px; }
+.archive-year h2 {
+  position: relative;
+  height: 126px;
+  margin: 0 0 1px -42px;
+  color: transparent;
+  font-size: clamp(78px, 11vw, 128px);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -.075em;
+  -webkit-text-stroke: 1.5px rgb(160 160 160 / .22);
+  pointer-events: none;
+  user-select: none;
+}
+.archive-post a { align-items: baseline; padding: 10px 0 13px; }
+.archive-post .archive-static { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 10px 0 13px; }
+.project-item .archive-static { display: flex; align-items: center; min-height: 78px; padding: 10px 13px; gap: 16px; }
+.simple-list { list-style: none; padding: 0; margin: 46px 0 0; }
+.simple-item { border-bottom: 1px solid var(--site-line); }
+.simple-item .archive-static { display: block; padding: 17px 0; }
+.simple-item .archive-post-title { color: var(--site-text); font-size: 17px; line-height: 1.55; }
+.simple-item .archive-post-content { display: block; }
+.archive-post-title { font-size: 18px; font-weight: 400; }
+.archive-post-description { font-size: 13px; opacity: .75; }
+.archive-post-date { font-size: 13px; }
+.archive-heading { margin-bottom: 44px; }
+.archive-filters { margin: 25px 0 24px; }
+
+/* Project entries use compact icons and descriptions rather than large cards. */
+.archive-page:has(.project-grid) { width: min(100% - 72px, 1130px); }
+.project-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 18px; margin-top: 24px; }
+.project-item a { display: flex; align-items: center; min-height: 78px; padding: 10px 13px; gap: 16px; border-radius: 6px; transition: background-color .18s ease; }
+.project-item a:hover { background: var(--site-hover); }
+.project-icon { display: grid; place-items: center; flex: none; width: 34px; height: 34px; font-size: 23px; font-weight: 300; color: var(--site-muted); }
+.project-icon img { width: 34px; height: 34px; object-fit: contain; border-radius: 4px; opacity: .82; }
+.project-item .archive-post-title { font-size: 16px; line-height: 1.35; }
+.project-item .archive-post-description { font-size: 13px; line-height: 1.4; margin-top: 3px; }
+.project-item .archive-post-tags { display: none; }
+
+@media (max-width: 900px) {
+  .project-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .home-projects { display: block; }
+  .home-projects-label { display: block; margin-bottom: 8px; }
+  .archive-page:has(.project-grid) { width: min(100% - 40px, 656px); }
+  .project-grid { grid-template-columns: 1fr; gap: 2px; }
+  .archive-year h2 { height: 95px; margin-left: -10px; font-size: 86px; }
+  .archive-post-title { font-size: 16px; }
+  .generative-background--roots { opacity: .58; }
+}
+@media (max-width: 850px) {
+  .site-desktop-socials { display: none; }
+  .site-mobile-socials .site-social-links { gap: 12px 18px; }
 }

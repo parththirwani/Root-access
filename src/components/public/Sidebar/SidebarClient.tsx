@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { SocialLinks } from '../SocialLinks';
 
 interface LayoutData {
   admin: {
@@ -65,14 +66,12 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
             <Link key={link.id} href={`/${link.slug}`} onClick={() => setMenuOpen(false)} aria-current={pathname === `/${link.slug}` || pathname.startsWith(`/${link.slug}/`) ? 'page' : undefined}>{link.name}</Link>
           ))}
           {profile?.resumeUrl && <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">Resume <span aria-hidden="true">↗</span></a>}
+          {profile && <div className="site-desktop-socials"><SocialLinks profile={profile} compact /></div>}
           <button className="site-theme-button" type="button" onClick={toggleTheme} aria-label="Toggle color scheme" title="Toggle color scheme">
             ◐
           </button>
           <div className="site-mobile-socials">
-            {profile?.email && <a href={`mailto:${profile.email}`}>Email</a>}
-            {profile?.xLink && <a href={profile.xLink} target="_blank" rel="noopener noreferrer">X</a>}
-            {profile?.linkedinLink && <a href={profile.linkedinLink} target="_blank" rel="noopener noreferrer">LinkedIn</a>}
-            {profile?.instagramLink && <a href={profile.instagramLink} target="_blank" rel="noopener noreferrer">Instagram</a>}
+            {profile && <SocialLinks profile={profile} />}
           </div>
         </nav>
       </div>
