@@ -3,6 +3,14 @@ import { HomeContent } from '../../components/public/HomeContent';
 
 export const revalidate = 60;
 
+const featuredProjectSlugs = [
+  'chatterstack',
+  'mimir',
+  'newshog',
+  'rate-limit-visualizer',
+  'runes-ai',
+] as const;
+
 async function getHomeData() {
   if (!process.env.DATABASE_URL) {
     console.log('[Build] Skipping home data fetch - no DATABASE_URL');
@@ -45,10 +53,12 @@ async function getHomeData() {
         orderBy: { name: 'asc' },
       }),
       prisma.post.findMany({
-        where: { published: true, subsection: { slug: 'projects', isVisible: true } },
+        where: {
+          published: true,
+          slug: { in: [...featuredProjectSlugs] },
+          subsection: { slug: 'projects', isVisible: true },
+        },
         select: { title: true, slug: true, projectLink: true, coverImage: true },
-        orderBy: { publishedAt: 'desc' },
-        take: 20,
       }),
     ]);
 
@@ -59,7 +69,10 @@ async function getHomeData() {
         ...sub,
         postCount: sub._count.posts,
       })),
-      projects,
+      projects: featuredProjectSlugs.flatMap((slug) => {
+        const project = projects.find((item) => item.slug === slug);
+        return project ? [project] : [];
+      }),
     };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
