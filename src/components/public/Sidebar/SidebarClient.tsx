@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { SocialLinks } from '../SocialLinks';
+import { orderSections } from '@/src/lib/siteOrder';
 
 interface LayoutData {
   admin: {
@@ -46,7 +47,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
   const avatarSrc = profile?.profilePicture?.startsWith('https://res.cloudinary.com/')
     ? profile.profilePicture.replace('/image/upload/', '/image/upload/f_auto,q_auto,c_fill,w_96,h_96/')
     : profile?.profilePicture;
-  const links = layoutData.sections.flatMap((section) => section.subsections);
+  const links = orderSections(layoutData.sections.flatMap((section) => section.subsections));
 
   return (
     <header className="site-header">

@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { GenerativeBackground } from './GenerativeBackground';
 import { SocialLinks } from './SocialLinks';
 import { ProjectLogo } from './ProjectLogo';
+import { orderCategories, orderSections } from '@/src/lib/siteOrder';
 
 interface Profile {
   id: string;
@@ -39,6 +40,8 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
     (acc[subsection.topCategory.name] ??= []).push(subsection);
     return acc;
   }, {} as Record<string, Subsection[]>);
+  const orderedGroups = orderCategories(Object.keys(groups).map((name) => ({ name })))
+    .map(({ name }) => [name, orderSections(groups[name])] as const);
 
   return (
     <div className="site-container home-page">
@@ -65,7 +68,7 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
       {subsections.length > 0 && (
         <section className="home-index" aria-labelledby="explore-heading">
           <h2 id="explore-heading" className="site-section-heading">Explore</h2>
-          {Object.entries(groups).sort(([a], [b]) => a.localeCompare(b)).map(([category, items]) => (
+          {orderedGroups.map(([category, items]) => (
             <div className="home-index-group" key={category}>
               <h3>{category}</h3>
               <ul>
