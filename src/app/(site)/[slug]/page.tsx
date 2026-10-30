@@ -37,6 +37,7 @@ const getSubsectionData = (slug: string) =>
               title: true,
               slug: true,
               publishedAt: true,
+              archiveYear: true,
               excerpt: true,
               description: true,
               coverImage: true,

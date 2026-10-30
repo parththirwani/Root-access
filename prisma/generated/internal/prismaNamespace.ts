@@ -955,6 +955,7 @@ export const PostScalarFieldEnum = {
   coverImage: 'coverImage',
   published: 'published',
   publishedAt: 'publishedAt',
+  archiveYear: 'archiveYear',
   subsectionId: 'subsectionId',
   views: 'views',
   readTime: 'readTime',

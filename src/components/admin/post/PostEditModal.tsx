@@ -20,6 +20,7 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
     published: post.published,
     tags: post.tags.map((t) => t.name).join(', '),
     projectLink: post.projectLink || '',
+    archiveYear: post.archiveYear,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -285,6 +286,16 @@ export function PostEditModal({ post, onClose, onSave }: PostEditModalProps) {
                 placeholder="https://github.com/you/project"
                 className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
               />
+            </div>
+          )}
+
+          {isProject && (
+            <div>
+              <label htmlFor="edit-post-archive-year" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Archive year</label>
+              <input id="edit-post-archive-year" type="number" min="1900" max="2100" value={formData.archiveYear ?? ''}
+                onChange={(e) => setFormData({ ...formData, archiveYear: e.target.value ? Number(e.target.value) : null })}
+                placeholder="Uses publish year if empty"
+                className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition" />
             </div>
           )}
 

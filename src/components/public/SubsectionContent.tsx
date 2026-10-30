@@ -9,6 +9,7 @@ interface Post {
   title: string;
   slug: string;
   publishedAt: string | null;
+  archiveYear: number | null;
   excerpt: string | null;
   description: string;
   coverImage: string | null;
@@ -30,7 +31,8 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
   const filtered = posts
     .filter((post) => activeFilter === 'All' || post.tags.some((tag) => tag.name === activeFilter))
     .sort((a, b) => new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime());
-  const years = Array.from(new Set(filtered.map((post) => post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated')));
+  const yearOf = (post: Post) => post.archiveYear ?? (post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated');
+  const years = Array.from(new Set(filtered.map(yearOf))).sort((a, b) => Number(b) - Number(a));
   const isProject = subsection.displayStyle === 'PROJECT';
   const titleOnly = subsection.displayStyle === 'TITLE_ONLY';
   const isArticle = subsection.displayStyle === 'BLOG';
@@ -69,10 +71,10 @@ export function SubsectionContent({ subsection, slug }: { subsection: Subsection
         </div>
       )}
       {filtered.length === 0 && <p className="archive-empty">No posts yet.</p>}
-      {isProject ? <ul className="project-grid">{filtered.map(renderPost)}</ul> : titleOnly ? <ul className="simple-list">{filtered.map(renderPost)}</ul> : years.map((year) => (
+      {titleOnly ? <ul className="simple-list">{filtered.map(renderPost)}</ul> : years.map((year) => (
         <section className="archive-year" key={year} aria-labelledby={`year-${year}`}>
           <h2 id={`year-${year}`}>{year}</h2>
-          <ul>{filtered.filter((post) => (post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated') === year).map(renderPost)}</ul>
+          <ul className={isProject ? 'project-grid' : undefined}>{filtered.filter((post) => yearOf(post) === year).map(renderPost)}</ul>
         </section>
       ))}
     </main>

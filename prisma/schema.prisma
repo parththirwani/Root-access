@@ -67,6 +67,7 @@ model Post {
   coverImage      String?
   published       Boolean    @default(false)
   publishedAt     DateTime?
+  archiveYear     Int?
   subsectionId    String
   views           Int        @default(0)
   readTime        Int?

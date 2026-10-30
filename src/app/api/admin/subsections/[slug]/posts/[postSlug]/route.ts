@@ -91,7 +91,7 @@ async function putHandler(
       );
     }
 
-    const { title, content, excerpt, coverImage, published, tags, metaTitle, metaDescription, description, projectLink } = parsedData.data;
+    const { title, content, excerpt, coverImage, published, tags, metaTitle, metaDescription, description, projectLink, archiveYear } = parsedData.data;
 
     const updateData: any = {};
 
@@ -154,6 +154,10 @@ async function putHandler(
     // Handle project link
     if (projectLink !== undefined) {
       updateData.projectLink = projectLink || null;
+    }
+
+    if (archiveYear !== undefined && displayStyle === 'PROJECT') {
+      updateData.archiveYear = archiveYear;
     }
 
     // Handle meta tags

@@ -12,6 +12,7 @@ interface PostFormData {
   published: boolean;
   tags: string;
   projectLink: string;
+  archiveYear: number | null;
 }
 
 type DisplayStyleInput = 'blog' | 'project' | 'title_only';
@@ -274,6 +275,16 @@ export function PostForm({
             placeholder="https://github.com/you/project"
             className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition"
           />
+        </div>
+      )}
+
+      {displayStyle === 'project' && (
+        <div className="mb-4">
+          <label htmlFor="new-post-archive-year" className="block text-[13px] font-medium text-[#e5e5e5] mb-2">Archive year</label>
+          <input id="new-post-archive-year" type="number" min="1900" max="2100" value={formData.archiveYear ?? ''}
+            onChange={(e) => onChange({ ...formData, archiveYear: e.target.value ? Number(e.target.value) : null })}
+            placeholder="Uses publish year if empty"
+            className="w-full px-4 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded-lg text-white text-[14px] focus:outline-none focus:border-white transition" />
         </div>
       )}
 

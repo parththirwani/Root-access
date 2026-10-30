@@ -48,6 +48,7 @@ async function postHandler(
       metaDescription,
       description,
       projectLink,
+      archiveYear,
     } = parsedData.data;
 
     const subsection = await prisma.subsection.findUnique({
@@ -105,6 +106,7 @@ async function postHandler(
         metaTitle: metaTitle || title,
         metaDescription: metaDescription || finalExcerpt,
         projectLink: projectLink || null,
+        archiveYear: displayStyle === 'PROJECT' ? (archiveYear ?? null) : null,
         subsectionId: subsection.id,
         tags: {
           connect: tagConnections,

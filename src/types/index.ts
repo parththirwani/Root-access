@@ -44,6 +44,7 @@ export interface Post {
   coverImage: string | null;
   published: boolean;
   publishedAt: string | null;
+  archiveYear: number | null;
   views: number;
   readTime: number | null;
   metaTitle: string | null;

@@ -27,11 +27,13 @@ export type AggregatePost = {
 }
 
 export type PostAvgAggregateOutputType = {
+  archiveYear: number | null
   views: number | null
   readTime: number | null
 }
 
 export type PostSumAggregateOutputType = {
+  archiveYear: number | null
   views: number | null
   readTime: number | null
 }
@@ -45,6 +47,7 @@ export type PostMinAggregateOutputType = {
   coverImage: string | null
   published: boolean | null
   publishedAt: Date | null
+  archiveYear: number | null
   subsectionId: string | null
   views: number | null
   readTime: number | null
@@ -65,6 +68,7 @@ export type PostMaxAggregateOutputType = {
   coverImage: string | null
   published: boolean | null
   publishedAt: Date | null
+  archiveYear: number | null
   subsectionId: string | null
   views: number | null
   readTime: number | null
@@ -85,6 +89,7 @@ export type PostCountAggregateOutputType = {
   coverImage: number
   published: number
   publishedAt: number
+  archiveYear: number
   subsectionId: number
   views: number
   readTime: number
@@ -99,11 +104,13 @@ export type PostCountAggregateOutputType = {
 
 
 export type PostAvgAggregateInputType = {
+  archiveYear?: true
   views?: true
   readTime?: true
 }
 
 export type PostSumAggregateInputType = {
+  archiveYear?: true
   views?: true
   readTime?: true
 }
@@ -117,6 +124,7 @@ export type PostMinAggregateInputType = {
   coverImage?: true
   published?: true
   publishedAt?: true
+  archiveYear?: true
   subsectionId?: true
   views?: true
   readTime?: true
@@ -137,6 +145,7 @@ export type PostMaxAggregateInputType = {
   coverImage?: true
   published?: true
   publishedAt?: true
+  archiveYear?: true
   subsectionId?: true
   views?: true
   readTime?: true
@@ -157,6 +166,7 @@ export type PostCountAggregateInputType = {
   coverImage?: true
   published?: true
   publishedAt?: true
+  archiveYear?: true
   subsectionId?: true
   views?: true
   readTime?: true
@@ -264,6 +274,7 @@ export type PostGroupByOutputType = {
   coverImage: string | null
   published: boolean
   publishedAt: Date | null
+  archiveYear: number | null
   subsectionId: string
   views: number
   readTime: number | null
@@ -307,6 +318,7 @@ export type PostWhereInput = {
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  archiveYear?: Prisma.IntNullableFilter<"Post"> | number | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
   views?: Prisma.IntFilter<"Post"> | number
   readTime?: Prisma.IntNullableFilter<"Post"> | number | null
@@ -329,6 +341,7 @@ export type PostOrderByWithRelationInput = {
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archiveYear?: Prisma.SortOrderInput | Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -354,6 +367,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  archiveYear?: Prisma.IntNullableFilter<"Post"> | number | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
   views?: Prisma.IntFilter<"Post"> | number
   readTime?: Prisma.IntNullableFilter<"Post"> | number | null
@@ -376,6 +390,7 @@ export type PostOrderByWithAggregationInput = {
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archiveYear?: Prisma.SortOrderInput | Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -404,6 +419,7 @@ export type PostScalarWhereWithAggregatesInput = {
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
+  archiveYear?: Prisma.IntNullableWithAggregatesFilter<"Post"> | number | null
   subsectionId?: Prisma.StringWithAggregatesFilter<"Post"> | string
   views?: Prisma.IntWithAggregatesFilter<"Post"> | number
   readTime?: Prisma.IntNullableWithAggregatesFilter<"Post"> | number | null
@@ -424,6 +440,7 @@ export type PostCreateInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   views?: number
   readTime?: number | null
   metaTitle?: string | null
@@ -445,6 +462,7 @@ export type PostUncheckedCreateInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   subsectionId: string
   views?: number
   readTime?: number | null
@@ -466,6 +484,7 @@ export type PostUpdateInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -487,6 +506,7 @@ export type PostUncheckedUpdateInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -508,6 +528,7 @@ export type PostCreateManyInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   subsectionId: string
   views?: number
   readTime?: number | null
@@ -528,6 +549,7 @@ export type PostUpdateManyMutationInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -547,6 +569,7 @@ export type PostUncheckedUpdateManyInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -577,6 +600,7 @@ export type PostCountOrderByAggregateInput = {
   coverImage?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archiveYear?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrder
@@ -589,6 +613,7 @@ export type PostCountOrderByAggregateInput = {
 }
 
 export type PostAvgOrderByAggregateInput = {
+  archiveYear?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrder
 }
@@ -602,6 +627,7 @@ export type PostMaxOrderByAggregateInput = {
   coverImage?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archiveYear?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrder
@@ -622,6 +648,7 @@ export type PostMinOrderByAggregateInput = {
   coverImage?: Prisma.SortOrder
   published?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archiveYear?: Prisma.SortOrder
   subsectionId?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrder
@@ -634,6 +661,7 @@ export type PostMinOrderByAggregateInput = {
 }
 
 export type PostSumOrderByAggregateInput = {
+  archiveYear?: Prisma.SortOrder
   views?: Prisma.SortOrder
   readTime?: Prisma.SortOrder
 }
@@ -739,6 +767,7 @@ export type PostCreateWithoutSubsectionInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   views?: number
   readTime?: number | null
   metaTitle?: string | null
@@ -759,6 +788,7 @@ export type PostUncheckedCreateWithoutSubsectionInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   views?: number
   readTime?: number | null
   metaTitle?: string | null
@@ -808,6 +838,7 @@ export type PostScalarWhereInput = {
   coverImage?: Prisma.StringNullableFilter<"Post"> | string | null
   published?: Prisma.BoolFilter<"Post"> | boolean
   publishedAt?: Prisma.DateTimeNullableFilter<"Post"> | Date | string | null
+  archiveYear?: Prisma.IntNullableFilter<"Post"> | number | null
   subsectionId?: Prisma.StringFilter<"Post"> | string
   views?: Prisma.IntFilter<"Post"> | number
   readTime?: Prisma.IntNullableFilter<"Post"> | number | null
@@ -828,6 +859,7 @@ export type PostCreateWithoutTagsInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   views?: number
   readTime?: number | null
   metaTitle?: string | null
@@ -848,6 +880,7 @@ export type PostUncheckedCreateWithoutTagsInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   subsectionId: string
   views?: number
   readTime?: number | null
@@ -889,6 +922,7 @@ export type PostCreateManySubsectionInput = {
   coverImage?: string | null
   published?: boolean
   publishedAt?: Date | string | null
+  archiveYear?: number | null
   views?: number
   readTime?: number | null
   metaTitle?: string | null
@@ -908,6 +942,7 @@ export type PostUpdateWithoutSubsectionInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -928,6 +963,7 @@ export type PostUncheckedUpdateWithoutSubsectionInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -948,6 +984,7 @@ export type PostUncheckedUpdateManyWithoutSubsectionInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -967,6 +1004,7 @@ export type PostUpdateWithoutTagsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -987,6 +1025,7 @@ export type PostUncheckedUpdateWithoutTagsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1007,6 +1046,7 @@ export type PostUncheckedUpdateManyWithoutTagsInput = {
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archiveYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   subsectionId?: Prisma.StringFieldUpdateOperationsInput | string
   views?: Prisma.IntFieldUpdateOperationsInput | number
   readTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -1058,6 +1098,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   coverImage?: boolean
   published?: boolean
   publishedAt?: boolean
+  archiveYear?: boolean
   subsectionId?: boolean
   views?: boolean
   readTime?: boolean
@@ -1081,6 +1122,7 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   coverImage?: boolean
   published?: boolean
   publishedAt?: boolean
+  archiveYear?: boolean
   subsectionId?: boolean
   views?: boolean
   readTime?: boolean
@@ -1102,6 +1144,7 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   coverImage?: boolean
   published?: boolean
   publishedAt?: boolean
+  archiveYear?: boolean
   subsectionId?: boolean
   views?: boolean
   readTime?: boolean
@@ -1123,6 +1166,7 @@ export type PostSelectScalar = {
   coverImage?: boolean
   published?: boolean
   publishedAt?: boolean
+  archiveYear?: boolean
   subsectionId?: boolean
   views?: boolean
   readTime?: boolean
@@ -1134,7 +1178,7 @@ export type PostSelectScalar = {
   projectLink?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "excerpt" | "coverImage" | "published" | "publishedAt" | "subsectionId" | "views" | "readTime" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt" | "description" | "projectLink", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "slug" | "content" | "excerpt" | "coverImage" | "published" | "publishedAt" | "archiveYear" | "subsectionId" | "views" | "readTime" | "metaTitle" | "metaDescription" | "createdAt" | "updatedAt" | "description" | "projectLink", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subsection?: boolean | Prisma.SubsectionDefaultArgs<ExtArgs>
   tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>
@@ -1162,6 +1206,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     coverImage: string | null
     published: boolean
     publishedAt: Date | null
+    archiveYear: number | null
     subsectionId: string
     views: number
     readTime: number | null
@@ -1604,6 +1649,7 @@ export interface PostFieldRefs {
   readonly coverImage: Prisma.FieldRef<"Post", 'String'>
   readonly published: Prisma.FieldRef<"Post", 'Boolean'>
   readonly publishedAt: Prisma.FieldRef<"Post", 'DateTime'>
+  readonly archiveYear: Prisma.FieldRef<"Post", 'Int'>
   readonly subsectionId: Prisma.FieldRef<"Post", 'String'>
   readonly views: Prisma.FieldRef<"Post", 'Int'>
   readonly readTime: Prisma.FieldRef<"Post", 'Int'>

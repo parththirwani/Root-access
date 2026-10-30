@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
             description: true,
             slug: true,
             publishedAt: true,
+            archiveYear: true,
             excerpt: true,
             coverImage: true,
             projectLink: true,

@@ -18,6 +18,7 @@ const INITIAL_FORM_DATA = {
   published: false,
   tags: '',
   projectLink: '',
+  archiveYear: null as number | null,
 };
 
 type DisplayStyleInput = 'blog' | 'project' | 'title_only';
