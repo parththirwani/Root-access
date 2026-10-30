@@ -1,11 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-
-interface Tag {
-  name: string;
-}
 
 interface Post {
   title: string;
@@ -15,358 +11,63 @@ interface Post {
   description: string;
   coverImage: string | null;
   projectLink: string | null;
-  tags: Tag[];
+  tags: Array<{ name: string }>;
 }
 
 interface Subsection {
   name: string;
   displayStyle: string;
   posts?: Post[];
-  topCategory?: {
-    name: string;
-  };
+  topCategory?: { name: string };
 }
 
-export function SubsectionContent({
-  subsection,
-  slug,
-}: {
-  subsection: Subsection;
-  slug: string;
-}) {
+export function SubsectionContent({ subsection, slug }: { subsection: Subsection; slug: string }) {
   const [activeFilter, setActiveFilter] = useState('All');
-  const [showLeftScroll, setShowLeftScroll] = useState(false);
-  const [showRightScroll, setShowRightScroll] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  const allTags = new Set<string>();
-  subsection.posts?.forEach((post) =>
-    post.tags?.forEach((tag) => allTags.add(tag.name))
-  );
-
-  const uniqueTags = ['All', ...Array.from(allTags)];
-
-  // Check scroll position to show/hide navigation buttons
-  const checkScroll = () => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const { scrollLeft, scrollWidth, clientWidth } = container;
-    setShowLeftScroll(scrollLeft > 0);
-    setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10);
-  };
-
-  useEffect(() => {
-    checkScroll();
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', checkScroll);
-      window.addEventListener('resize', checkScroll);
-      return () => {
-        container.removeEventListener('scroll', checkScroll);
-        window.removeEventListener('resize', checkScroll);
-      };
-    }
-  }, [uniqueTags.length]);
-
-  const scroll = (direction: 'left' | 'right') => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const scrollAmount = 200;
-    const targetScroll = direction === 'left' 
-      ? container.scrollLeft - scrollAmount 
-      : container.scrollLeft + scrollAmount;
-
-    container.scrollTo({
-      left: targetScroll,
-      behavior: 'smooth',
-    });
-  };
-
-  const filteredPosts =
-    activeFilter === 'All'
-      ? subsection.posts ?? []
-      : subsection.posts?.filter((post) =>
-          post.tags?.some((tag) => tag.name === activeFilter)
-        ) ?? [];
-
-  // Sort posts by publishedAt descending
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
-    const dateA = new Date(a.publishedAt ?? 0).getTime();
-    const dateB = new Date(b.publishedAt ?? 0).getTime();
-    return dateB - dateA;
-  });
-
-  // Group by year
-  const postsByYear: Record<string, Post[]> = {};
-  sortedPosts.forEach((post) => {
-    const year = new Date(post.publishedAt ?? Date.now())
-      .getFullYear()
-      .toString();
-    if (!postsByYear[year]) {
-      postsByYear[year] = [];
-    }
-    postsByYear[year].push(post);
-  });
-
-  const sortedYears = Object.keys(postsByYear).sort((a, b) => +b - +a);
-  const displayStyle = subsection.displayStyle;
+  const posts = subsection.posts ?? [];
+  const tags = ['All', ...Array.from(new Set(posts.flatMap((post) => post.tags.map((tag) => tag.name))))];
+  const filtered = posts
+    .filter((post) => activeFilter === 'All' || post.tags.some((tag) => tag.name === activeFilter))
+    .sort((a, b) => new Date(b.publishedAt ?? 0).getTime() - new Date(a.publishedAt ?? 0).getTime());
+  const years = Array.from(new Set(filtered.map((post) => post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated')));
+  const isProject = subsection.displayStyle === 'PROJECT';
+  const titleOnly = subsection.displayStyle === 'TITLE_ONLY';
 
   const renderPost = (post: Post) => {
-    const tags = post.tags ?? [];
-    const date = new Date(post.publishedAt ?? Date.now()).toLocaleDateString(
-      'en-US',
-      {
-        day: 'numeric',
-        month: 'short',
-      }
+    const href = isProject && post.projectLink ? post.projectLink : `/${slug}/${post.slug}`;
+    const external = isProject && !!post.projectLink;
+    const body = (
+      <>
+        {isProject && post.coverImage && <img className="project-cover" src={post.coverImage} alt="" loading="lazy" />}
+        <span className="archive-post-content">
+          <span className="archive-post-title">{post.title}{external && <span className="external-mark" aria-label="external link"> ↗</span>}</span>
+          {!titleOnly && (post.description || post.excerpt) && <span className="archive-post-description">{post.description || post.excerpt}</span>}
+          {isProject && post.tags.length > 0 && <span className="archive-post-tags">{post.tags.map((tag) => tag.name).join(' · ')}</span>}
+        </span>
+        {!isProject && <time className="archive-post-date" dateTime={post.publishedAt ?? undefined}>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</time>}
+      </>
     );
-
-    // Title Only Style
-    if (displayStyle === 'TITLE_ONLY') {
-      return (
-        <div key={post.slug} className="block">
-          <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
-            <time className="text-xs text-neutral-600 sm:pt-1 sm:w-12 shrink-0">
-              {date}
-            </time>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-[15px] font-normal text-neutral-300 leading-snug mb-1 wrap-break-word">
-                {post.title}
-              </h3>
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag.name}
-                      className="px-2 py-1 text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Project Card Style - Professional design without emoji
-    if (displayStyle === 'PROJECT') {
-      const projectUrl = post.projectLink || '#';
-
-      return (
-        <div key={post.slug} className="block group h-full">
-          <Link
-            href={projectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block h-full"
-          >
-            <div className="bg-[#101010] rounded-2xl border border-[#1a1a1a] p-4 sm:p-6 hover:border-[#2a2a2a] transition-all duration-200 h-full flex flex-col cursor-pointer">
-              {/* Header with external link icon */}
-              <div className="flex items-start justify-between mb-3 sm:mb-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[14px] sm:text-[15px] font-medium text-white group-hover:text-neutral-300 transition wrap-break-word">
-                    {post.title}
-                  </h3>
-                </div>
-                <svg
-                  className="w-4 h-4 text-neutral-600 group-hover:text-neutral-400 transition shrink-0 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </div>
-
-              {/* Cover Image (if present) */}
-              {post.coverImage && (
-                <div className="mb-3 sm:mb-4 rounded-lg overflow-hidden bg-[#1a1a1a]">
-                  <img
-                    src={post.coverImage}
-                    alt={post.title}
-                    className="w-full h-32 sm:h-40 object-cover"
-                  />
-                </div>
-              )}
-
-              {/* Description */}
-              <p className="text-[12px] sm:text-[13px] text-neutral-500 leading-relaxed mb-3 sm:mb-4 flex-1 line-clamp-3">
-                {post.description}
-              </p>
-
-              {/* Tags */}
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 pt-2 border-t border-[#1a1a1a]">
-                  {tags.slice(0, 3).map((tag) => (
-                    <span
-                      key={tag.name}
-                      className="px-2 py-1 text-[10px] sm:text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </Link>
-        </div>
-      );
-    }
-
-    // Blog Style
-    return (
-      <Link
-        key={post.slug}
-        href={`/${slug}/${post.slug}`}
-        className="block group"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
-          <time className="text-xs text-neutral-600 sm:pt-1 sm:w-12 shrink-0">
-            {date}
-          </time>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-[15px] font-normal text-neutral-300 group-hover:text-white transition leading-snug mb-1 wrap-break-word">
-              {post.title}
-            </h3>
-            {post.description && (
-              <p className="text-[13px] text-neutral-500 leading-relaxed mb-2 line-clamp-2">
-                {post.description}
-              </p>
-            )}
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag.name}
-                    className="px-2 py-1 text-[11px] rounded bg-[#1a1a1a] text-neutral-600"
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </Link>
-    );
+    return <li key={post.slug} className={isProject ? 'project-item' : 'archive-post'}><Link href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{body}</Link></li>;
   };
 
   return (
-    <main className="flex-1 md:ml-48 px-4 sm:px-6 md:px-12 py-6 sm:py-10 md:py-12">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 sm:mb-10 md:mb-12">
-          <h1 className="text-xl sm:text-2xl md:text-3xl text-white font-light mb-2 wrap-break-word">
-            {subsection.name}
-          </h1>
-          {subsection.topCategory && (
-            <p className="text-sm text-neutral-500">
-              {subsection.topCategory.name}
-            </p>
-          )}
-        </div>
-
-        {/* Filters with Navigation Buttons */}
-        {uniqueTags.length > 1 && (
-          <div className="mb-8 sm:mb-10 pb-4 border-b border-[#1a1a1a]">
-            <div className="relative group">
-              {/* Left Scroll Button */}
-              {showLeftScroll && (
-                <button
-                  onClick={() => scroll('left')}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#101011] border border-[#2a2a2a] rounded-lg flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-600 transition opacity-0 group-hover:opacity-100 shadow-lg"
-                  aria-label="Scroll left"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-              )}
-
-              {/* Tags Container */}
-              <div 
-                ref={scrollContainerRef}
-                className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide scroll-smooth"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {uniqueTags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => setActiveFilter(tag)}
-                    className={`px-3 py-1.5 text-xs sm:text-sm rounded-lg whitespace-nowrap cursor-pointer transition ${
-                      activeFilter === tag
-                        ? 'bg-white text-[#101011]'
-                        : 'bg-[#1a1a1a] text-neutral-400 hover:bg-[#252525] hover:text-white'
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-
-              {/* Right Scroll Button */}
-              {showRightScroll && (
-                <button
-                  onClick={() => scroll('right')}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#101011] border border-[#2a2a2a] rounded-lg flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-600 transition opacity-0 group-hover:opacity-100 shadow-lg"
-                  aria-label="Scroll right"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Posts Layout */}
-        {displayStyle === 'PROJECT' ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {sortedPosts.map((post) => renderPost(post))}
-          </div>
-        ) : (
-          <div className="space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24">
-            {sortedYears.map((year) => (
-              <div key={year} className="space-y-4 sm:space-y-6">
-                <h2 className="text-xs sm:text-sm uppercase tracking-wider text-neutral-500">
-                  {year}
-                </h2>
-                <div className="space-y-6 sm:space-y-8">
-                  {postsByYear[year].map((post) => renderPost(post))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {sortedPosts.length === 0 && (
-          <p className="text-sm text-neutral-500 mt-12 sm:mt-20 text-center">
-            No posts yet.
-          </p>
-        )}
+    <main id="main-content" className="site-container archive-page">
+      <div className="archive-heading">
+        {subsection.topCategory && <p className="archive-kicker">{subsection.topCategory.name}</p>}
+        <h1 className="site-title">{subsection.name}</h1>
+        <p className="archive-summary">{posts.length} {posts.length === 1 ? 'entry' : 'entries'}</p>
       </div>
-
-      {/* Add custom scrollbar hiding */}
-      <style jsx global>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+      {tags.length > 1 && (
+        <div className="archive-filters" role="group" aria-label="Filter by tag">
+          {tags.map((tag) => <button key={tag} type="button" onClick={() => setActiveFilter(tag)} aria-pressed={activeFilter === tag}>{tag}</button>)}
+        </div>
+      )}
+      {filtered.length === 0 && <p className="archive-empty">No posts yet.</p>}
+      {isProject ? <ul className="project-grid">{filtered.map(renderPost)}</ul> : years.map((year) => (
+        <section className="archive-year" key={year} aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`}>{year}</h2>
+          <ul>{filtered.filter((post) => (post.publishedAt ? new Date(post.publishedAt).getFullYear() : 'Undated') === year).map(renderPost)}</ul>
+        </section>
+      ))}
     </main>
   );
 }

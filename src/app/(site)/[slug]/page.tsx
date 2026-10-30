@@ -67,8 +67,6 @@ export default async function Page({
   if (!subsection) notFound();
 
   return (
-    <div className="min-h-screen bg-[#101011] flex">
-      <SubsectionContent subsection={subsection} slug={slug} />
-    </div>
+    <SubsectionContent subsection={subsection} slug={slug} />
   );
 }

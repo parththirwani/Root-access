@@ -6,7 +6,7 @@ export const revalidate = 60;
 async function getHomeData() {
   if (!process.env.DATABASE_URL) {
     console.log('[Build] Skipping home data fetch - no DATABASE_URL');
-    return { profile: null, subsections: [] };
+    return { name: 'Parth Thirwani', profile: null, subsections: [] };
   }
 
   try {
@@ -47,6 +47,7 @@ async function getHomeData() {
     ]);
 
     return {
+      name: admin?.name || 'Parth Thirwani',
       profile: admin?.profile || null,
       subsections: subsections.map((sub) => ({
         ...sub,
@@ -55,7 +56,7 @@ async function getHomeData() {
     };
   } catch (error) {
     console.error('[Runtime] Failed to fetch home data:', error);
-    return { profile: null, subsections: [] };
+    return { name: 'Parth Thirwani', profile: null, subsections: [] };
   }
 }
 
@@ -63,10 +64,6 @@ export default async function Page() {
   const data = await getHomeData();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex">
-      <main className="ml-0 md:ml-48 flex-1 flex items-start justify-center p-6 md:p-12">
-        <HomeContent profile={data.profile} subsections={data.subsections} />
-      </main>
-    </div>
+    <main id="main-content"><HomeContent name={data.name} profile={data.profile} subsections={data.subsections} /></main>
   );
 }

@@ -59,7 +59,7 @@ const getSidebarData = unstable_cache(
 
     return {
       admin: {
-        name: layoutData?.name || 'Admin',
+        name: layoutData?.name || 'Parth Thirwani',
         profile: layoutData?.profile || null,
       },
       sections: sectionsWithCounts,
@@ -77,7 +77,7 @@ export async function PublicSidebarServer() {
     console.error('[Sidebar] Failed to fetch sidebar data:', error);
     return (
       <SidebarClient
-        layoutData={{ admin: { name: 'Admin', profile: null }, sections: [] }}
+        layoutData={{ admin: { name: 'Parth Thirwani', profile: null }, sections: [] }}
       />
     );
   }

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "../contexts/authContext";
 
 
 const geistSans = Geist({
@@ -16,10 +15,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Parth Thirwani Portfolio",
-    template: "Parth Thirwani"
+    default: "Parth Thirwani",
+    template: "%s | Parth Thirwani"
   },
-  description: "Personal portfolio and blog",
+  description: "Parth Thirwani is a founding engineer working on agent memory and context engineering.",
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -37,9 +36,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        {children}
       </body>
     </html>
   );

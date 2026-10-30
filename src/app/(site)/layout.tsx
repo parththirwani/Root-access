@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import Link from 'next/link';
 import { PublicSidebarServer } from '@/src/components/public/Sidebar/SidebarServer';
 
 export const revalidate = 60;
@@ -9,26 +10,19 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="site-shell dark">
+      <a className="site-skip-link" href="#main-content">Skip to content</a>
       <Suspense fallback={<SidebarSkeleton />}>
         <PublicSidebarServer />
       </Suspense>
       {children}
-    </>
+      <footer className="site-footer"><div className="site-container">© {new Date().getFullYear()} Parth Thirwani</div></footer>
+    </div>
   );
 }
 
 function SidebarSkeleton() {
   return (
-    <aside className="hidden md:block w-48 bg-[#0a0a0a] min-h-screen fixed left-0 top-0">
-      <div className="p-6 animate-pulse">
-        <div className="h-5 bg-neutral-800 rounded mb-8"></div>
-        <div className="space-y-3">
-          <div className="h-4 bg-neutral-800 rounded"></div>
-          <div className="h-4 bg-neutral-800 rounded"></div>
-          <div className="h-4 bg-neutral-800 rounded"></div>
-        </div>
-      </div>
-    </aside>
+    <header className="site-header"><div className="site-header-inner"><Link className="site-brand" href="/">Parth Thirwani</Link></div></header>
   );
 }

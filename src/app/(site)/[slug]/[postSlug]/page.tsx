@@ -100,26 +100,9 @@ export default async function Page({
   incrementViews(postSlug);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex">
-      {/* Offset for desktop sidebar; on mobile sidebar is hidden */}
-      <main className="flex-1 md:ml-48 min-w-0">
-        <div className="p-2 sm:p-4">
-          {/* Sticky Breadcrumb */}
-          <div className="sticky top-0 z-50 bg-[#101010]/95 backdrop-blur border-b border-black rounded-t-2xl">
-            <BreadcrumbNav
-              items={[
-                { label: post.subsection.name, href: `/${slug}` },
-                { label: post.title },
-              ]}
-            />
-          </div>
-
-          {/* Content card */}
-          <div className="bg-[#101010] rounded-b-2xl border border-black border-t-0">
-            <PostContent post={post} />
-          </div>
-        </div>
-      </main>
-    </div>
+    <main id="main-content" className="site-container post-page">
+      <BreadcrumbNav items={[{ label: post.subsection.name, href: `/${slug}` }, { label: post.title }]} />
+      <PostContent post={post} />
+    </main>
   );
 }
