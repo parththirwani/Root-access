@@ -48,7 +48,7 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
         {profile?.bio ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{intro}</ReactMarkdown> : <p>Welcome! Configure your profile in the admin panel.</p>}
       </div>
       {profile?.bio?.includes('CodeMate AI') && <div className="home-affiliation">
-        <span>Working at</span>
+        <span>Founding engineer at</span>
         <a href="https://codemate.ai/" target="_blank" rel="noopener noreferrer"><Image src="/brands/codemate.ico" width={17} height={17} alt="" unoptimized /> CodeMate AI</a>
       </div>}
       {body.length > 0 && <div className="site-prose home-bio-rest"><ReactMarkdown remarkPlugins={[remarkGfm]}>{body.join('\n\n')}</ReactMarkdown></div>}

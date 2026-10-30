@@ -5,9 +5,9 @@ export const revalidate = 60;
 
 const featuredProjectSlugs = [
   'runes-ai',
-  'mimir',
-  'newshog',
   'chatterstack',
+  'newshog',
+  'mimir',
   'rate-limit-visualizer',
 ] as const;
 
