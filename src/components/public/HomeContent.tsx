@@ -57,7 +57,7 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
       {body.length > 0 && <div className="site-prose home-bio-rest"><ReactMarkdown remarkPlugins={[remarkGfm]}>{body.join('\n\n')}</ReactMarkdown></div>}
 
       {projects.length > 0 && <div className="home-projects" aria-label="Projects">
-        <span className="home-projects-label">Projects</span>
+        <span className="home-projects-label">Created</span>
         <div className="home-project-links">{projects.map((project) => {
           return project.projectLink
             ? <a key={project.slug} href={project.projectLink} target="_blank" rel="noopener noreferrer"><ProjectLogo image={project.coverImage} compact />{project.title}</a>
