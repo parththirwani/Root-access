@@ -422,7 +422,8 @@ html:has(.site-shell:not(.dark)) { color-scheme: light; scrollbar-color: #ddd #f
 .generative-background { position: fixed; inset: 0; pointer-events: none; width: 100vw; height: 100dvh; z-index: 0; }
 .generative-background--roots { mask-image: radial-gradient(ellipse 54% 78% at 50% 48%, transparent 42%, #000 88%); }
 .home-page .generative-background--roots { opacity: .8; }
-.home-affiliation { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 22px; color: var(--site-text); font-size: 15px; }
+.home-affiliation { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 16px; color: var(--site-text); font-size: 15px; }
+.home-affiliation + .home-bio { margin-top: 14px; }
 .home-affiliation a { display: inline-flex; align-items: center; gap: 5px; padding: 1px 7px 1px 4px; border-radius: 3px; background: var(--site-hover); color: var(--site-muted); text-decoration: none; font-size: 14px; }
 .home-affiliation a:hover { color: var(--site-link); }
 .home-affiliation img { width: 17px; height: 17px; object-fit: contain; }

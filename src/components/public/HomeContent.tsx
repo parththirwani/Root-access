@@ -47,13 +47,13 @@ export function HomeContent({ profile, subsections, name, projects }: { profile:
     <div className="site-container home-page">
       <GenerativeBackground />
       <h1 className="site-title">{name}</h1>
-      <div className="site-prose home-bio">
-        {profile?.bio ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{intro}</ReactMarkdown> : <p>Welcome! Configure your profile in the admin panel.</p>}
-      </div>
       {profile && <div className="home-affiliation">
         <span>Founding engineer at</span>
         <a href="https://codemate.ai/" target="_blank" rel="noopener noreferrer"><Image src="/brands/codemate.ico" width={17} height={17} alt="" unoptimized /> CodeMate AI</a>
       </div>}
+      <div className="site-prose home-bio">
+        {profile?.bio ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{intro}</ReactMarkdown> : <p>Welcome! Configure your profile in the admin panel.</p>}
+      </div>
       {body.length > 0 && <div className="site-prose home-bio-rest"><ReactMarkdown remarkPlugins={[remarkGfm]}>{body.join('\n\n')}</ReactMarkdown></div>}
 
       {projects.length > 0 && <div className="home-projects" aria-label="Projects">
