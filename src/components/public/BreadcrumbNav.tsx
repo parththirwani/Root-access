@@ -7,7 +7,7 @@ export function BreadcrumbNav({ items }: { items: Array<{ label: string; href?: 
       {items.map((item, index) => (
         <span key={index} className="breadcrumb-item">
           <span aria-hidden="true">/</span>
-          {item.href ? <Link href={item.href}>{item.label}</Link> : <span aria-current="page">{item.label}</span>}
+          {item.href ? <Link href={item.href} title={item.label}>{item.label}</Link> : <span aria-current="page" title={item.label}>{item.label}</span>}
         </span>
       ))}
     </nav>

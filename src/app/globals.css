@@ -372,12 +372,14 @@ html:not(.dark) .site-shell .site-brand { color: #111; }
 .archive-post-tags { display: block; color: var(--site-subtle); font-size: 12px; margin-top: 9px; }
 .external-mark { color: var(--site-subtle); font-size: 14px; }
 .post-page { padding-top: 35px; padding-bottom: 110px; }
-.site-breadcrumb { display: flex; gap: 7px; flex-wrap: wrap; color: var(--site-muted); font-size: 13px; margin-bottom: 40px; }
+.site-breadcrumb { display: flex; align-items: center; gap: 7px; flex-wrap: nowrap; white-space: nowrap; color: var(--site-muted); font-size: 13px; margin-bottom: 40px; }
+.site-breadcrumb > a { flex: none; }
 .site-breadcrumb a { text-decoration: none; }
 .site-breadcrumb a:hover { color: var(--site-text); }
-.breadcrumb-item { display: inline-flex; gap: 7px; }
-.breadcrumb-item:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.breadcrumb-item:last-child > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.breadcrumb-item { display: inline-flex; align-items: center; flex: none; gap: 7px; }
+.breadcrumb-item > span[aria-hidden] { flex: none; }
+.breadcrumb-item:last-child { flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.breadcrumb-item:last-child > :last-child { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .article-header time { display: block; color: var(--site-muted); font-size: 13px; margin-bottom: 13px; }
 .article-description { color: var(--site-muted); font-size: 17px; line-height: 1.6; margin: 18px 0 0; }
 .article-cover { width: 100%; height: auto; border-radius: 4px; margin: 34px 0; }
