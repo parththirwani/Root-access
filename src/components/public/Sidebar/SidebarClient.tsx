@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ArticleIcon, LightbulbIcon, NewspaperIcon, QuotesIcon, BookOpenIcon, FileTextIcon, LinkSimpleIcon, ListIcon, XIcon } from '@phosphor-icons/react';
+import { ArticleIcon, LightbulbIcon, NewspaperIcon, QuotesIcon, BookOpenIcon, LinkSimpleIcon, ListIcon, XIcon } from '@phosphor-icons/react';
 import { SocialLinks } from '../SocialLinks';
 import { orderSections } from '@/src/lib/siteOrder';
 import { ThemeToggleButton } from '@/src/components/spaceui/theme-toggle';
@@ -95,8 +95,7 @@ export function SidebarClient({ layoutData }: { layoutData: LayoutData }) {
             </Link>;
           })}
           {profile?.resumeUrl && <a href={profile.resumeUrl} aria-label="Resume" title="Resume" target="_blank" rel="noopener noreferrer">
-            <FileTextIcon className="site-nav-icon" size={19} aria-hidden="true" />
-            <span className="site-nav-label">Resume <span aria-hidden="true">↗</span></span>
+            <span className="site-nav-label">Resume</span>
           </a>}
           {profile && <div className="site-desktop-socials"><SocialLinks profile={profile} compact /></div>}
           <ThemeToggleButton className="site-theme-button" buttonVariant="ghost" size="md" title="Toggle color scheme" />
