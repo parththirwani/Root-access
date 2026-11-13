@@ -310,9 +310,11 @@ html:not(.dark) .site-shell .site-brand { color: #111; }
 .site-social-links svg { flex: none; }
 .site-social-links.is-compact { gap: 8px; }
 .site-social-links.is-compact a { width: 29px; height: 34px; justify-content: center; }
+.site-mobile-socials .site-social-links.is-compact a { width: 44px; height: 44px; }
 .site-social-links.is-compact span { display: none; }
 .site-navigation a[aria-current="page"] { font-weight: 600; }
 .site-theme-button { border: 0; background: none; cursor: pointer; font-size: 20px; padding: 0 4px; min-width: 30px; min-height: 36px; }
+.site-nav-icon { display: none; }
 .site-menu-button, .site-mobile-socials { display: none; }
 .site-title { font-size: clamp(32px, 4vw, 40px); line-height: 1.2; letter-spacing: -.052em; font-weight: 650; margin: 0; }
 .site-section-heading { font-size: 19px; line-height: 1.35; font-weight: 600; letter-spacing: -.03em; margin: 0 0 21px; }
@@ -395,11 +397,19 @@ html:not(.dark) .site-shell .site-brand { color: #111; }
 @media (max-width: 850px) {
   .site-header-inner { min-height: 88px; }
   .site-header { min-height: 88px; }
-  .site-menu-button { display: inline-block; border: none; background: none; color: var(--site-text); padding: 10px 0 10px 16px; cursor: pointer; font-size: 14px; }
-  .site-navigation { display: none; position: absolute; z-index: 20; top: 88px; left: 0; right: 0; padding: 18px 24px 25px; background: var(--site-bg); border-bottom: 1px solid var(--site-line); box-shadow: 0 18px 30px rgb(0 0 0 / .06); }
-  .site-navigation.is-open { display: flex; align-items: flex-start; flex-direction: column; gap: 4px; }
-  .site-navigation > a { width: 100%; padding: 7px 0; font-size: 16px; }
-  .site-mobile-socials { display: flex; flex-wrap: wrap; gap: 14px; border-top: 1px solid var(--site-line); padding-top: 16px; margin-top: 12px; }
+  .site-header-inner { gap: 12px; }
+  .site-menu-button { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; padding: 0; border: 0; background: none; color: var(--site-text); cursor: pointer; }
+  /* The header's stacking context stays above main, including this compact popup. */
+  .site-navigation { display: none; position: absolute; z-index: 20; top: 72px; right: 20px; width: min(264px, calc(100vw - 40px)); max-height: calc(100dvh - 92px); overflow-y: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 2px 4px; padding: 10px; background: var(--site-bg); border: 1px solid var(--site-line); border-radius: 8px; box-shadow: 0 12px 28px rgb(0 0 0 / .12); }
+  .site-navigation.is-open { display: grid; }
+  .site-navigation > a { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 6px; font-size: 14px; border-radius: 4px; }
+  .site-navigation > a:hover { background: var(--site-hover); }
+  .site-navigation > .site-theme-button { justify-self: end; min-width: 44px; min-height: 44px; }
+  .site-mobile-socials { display: block; grid-column: 1 / -1; border-top: 1px solid var(--site-line); padding-top: 8px; margin-top: 6px; }
+  .site-mobile-socials .site-social-links { gap: 0; justify-content: space-between; }
+  .site-nav-icon { display: block; flex: none; }
+  .site-navigation a[aria-current="page"] { color: var(--site-strong); }
+
 }
 @media (max-width: 600px) {
   .site-container { width: min(100% - 56px, 656px); }
@@ -418,6 +428,7 @@ html:not(.dark) .site-shell .site-brand { color: #111; }
 }
 
 .site-header, .site-shell > main { position: relative; z-index: 1; }
+.site-header { z-index: 2; }
 .home-page > :not(canvas), .archive-page > :not(canvas) { position: relative; z-index: 1; }
 .generative-background { position: fixed; inset: 0; pointer-events: none; width: 100vw; height: 100dvh; z-index: 0; }
 .generative-background--roots { mask-image: radial-gradient(ellipse 54% 78% at 50% 48%, transparent 42%, #000 88%); }
@@ -492,7 +503,7 @@ html:not(.dark) .site-shell .site-brand { color: #111; }
 }
 @media (max-width: 850px) {
   .site-desktop-socials { display: none; }
-  .site-mobile-socials .site-social-links { gap: 12px 18px; }
+  .site-mobile-socials .site-social-links { gap: 0; }
 }
 
 @theme inline {
